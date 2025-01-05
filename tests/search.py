@@ -1,16 +1,195 @@
 
-# Copyright 2011 Jaap Karssenberg <jaap.karssenberg@gmail.com>
+# Copyright 2011-2025 Jaap Karssenberg <jaap.karssenberg@gmail.com>
 
 import tests
 
+from zim.parse.searchquery import *
 from zim.search import *
 from zim.notebook import Path
 from zim.plugins import indexed_fts
 
-class TestSearchRegex(tests.TestCase):
+
+# some aliases to define queries
+_t = SearchQueryTerm
+_any = lambda t: SearchQueryTerm('any', t)
+_and = lambda *t: SearchQuery(OPERATOR_AND, t)
+_or = lambda *t: SearchQuery(OPERATOR_OR, t)
+_q = _and # toplevel is default an AND group
+
+
+def _not(t):
+	t.negate = True
+	return t
+
+
+class TestParseSearchQuery(tests.TestCase):
+
+	def testKeywordParsing(self):
+		keywords = {'links'}
+		for string, wanted in (
+			('links:Foo', _q(_t('links', 'Foo'))),
+			('links: Foo', _q(_t('links', 'Foo'))),
+			('Links:Foo', _q(_t('links', 'Foo'))),
+			('Links: Foo', _q(_t('links', 'Foo'))),
+			('Links:', _q(_any('Links:'))),
+				# edge case, looking for literal occurrence, not a keyword, falls back to default
+			('"Links:Foo"',	_q(_any('Links:Foo'))),
+				# quoted string, not a keyword, falls back to default
+			('links Foo', _and(_any('links'), _any('Foo'))),
+		):
+			query = parse_search_query(string, keywords)
+			#print('====', string, '\n', query, '\n', wanted)
+			self.assertEqual(query, wanted)
+
+	def testImplicitKeywordMatch(self):
+		keywords = {'tag': {'regex': search_tag_re}}
+		for string, wanted in (
+			('tag:Foo', _q(_t('tag', 'Foo'))),
+			('@Foo', _q(_t('tag', '@Foo'))),
+			('"@Foo"', _q(_any('@Foo'))),
+		):
+			query = parse_search_query(string, keywords)
+			#print('====', string, '\n', query, '\n', wanted)
+			self.assertEqual(query, wanted)
+
+	def testOperatorPrecedence(self):
+		# Example from docs:
+		#	Order of precedence: AND, OR, NOT
+		#	so "foo AND NOT bar OR baz" means AND(foo, OR(NOT(bar), baz))
+		#
+		#	'foo OR bar AND dus'
+		#	gives all pages that contain "dus" plus either "foo" or "bar" or both.
+		#
+		keywords = {'links'}
+		for string, wanted in (
+			('foo AND NOT bar OR baz',
+				_and(_any('foo'), _or(_not(_any('bar')), _any('baz')))),
+			('foo OR bar AND dus',
+				_and(_or(_any('foo'), _any('bar')), _any('dus'))),
+			('foo OR bar OR test AND dus', # multiple OR at the start
+				_and(_or(_any('foo'), _any('bar'), _any('test')), _any('dus'))),
+			('dus AND foo OR bar OR test AND dus', # multiple OR in the middle
+				_and(_any('dus'), _or(_any('foo'), _any('bar'), _any('test')), _any('dus'))),
+			('dus AND foo OR bar OR test', # multiple OR at the end
+				_and(_any('dus'), _or(_any('foo'), _any('bar'), _any('test')))),
+			('foo OR bar OR test', # only OR -> skip top-level AND group
+				_or(_any('foo'), _any('bar'), _any('test'))),
+		):
+			query = parse_search_query(string, keywords)
+			#print('====', string, '\n', query, '\n', wanted)
+			self.assertEqual(query, wanted)
+
+	def testNotOperator(self):
+		keywords = {'links'}
+		for string, wanted in (
+			('NOT links: Foo', _q(_not(_t('links', 'Foo')))),
+			('NOTlinks: Foo', _and(_any('NOTlinks:'), _any('Foo'))),
+				# not an operator, fallback to string with default keyword
+			('-links:Foo', _q(_not(_t('links', 'Foo')))),
+			('- links:Foo', _q(_not(_t('links', 'Foo')))),
+			('-Links:', _q(_not(_any('Links:')))),
+			('-"Links:Foo"', _q(_not(_any('Links:Foo')))),
+			('-links Foo', _and(_not(_any('links')), _any('Foo'))),
+			('-links +Foo', _and(_not(_any('links')), _any('Foo'))),
+			('NOT links Foo', _and(_not(_any('links')), _any('Foo'))),
+			('links -Foo', _and(_any('links'), _not(_any('Foo')))),
+			('+links -Foo', _and(_any('links'), _not(_any('Foo')))),
+			('links NOT Foo', _and(_any('links'), _not(_any('Foo')))),
+			('NOT links -Foo', _and(_not(_any('links')), _not(_any('Foo')))),
+		):
+			query = parse_search_query(string, keywords)
+			#print('====', string, '\n', query, '\n', wanted)
+			self.assertEqual(query, wanted)
+
+	def testQuotedStrings(self):
+		# Examples from docs
+		keywords = {'linksto'}
+		for string, wanted in (
+			('"foo bar" and "+1"', _and(_any('foo bar'), _any('+1'))),
+			('NOT LinksTo: ":Done"', _q(_not(_t('linksto', ':Done')))),
+		):
+			query = parse_search_query(string, keywords)
+			#print('====', string, '\n', query, '\n', wanted)
+			self.assertEqual(query, wanted)
+
+	def testExplicitGrouping(self):
+		keywords = {'links'}
+		for string, wanted in (
+			('foo OR (bar baz)', # group at end
+				_or(_any('foo'), _and(_any('bar'), _any('baz')))),
+			('(bar baz) OR foo', # group at start
+				_or(_and(_any('bar'), _any('baz')), _any('foo'))),
+			('foo OR (bar baz) OR some', # group in middle
+				_or(_any('foo'), _and(_any('bar'), _any('baz')), _any('some'))),
+			('(bar baz)', # only group
+				_and(_and(_any('bar'), _any('baz')))),
+			('foo OR (bar (test OR TEST))', # Nested group
+				_or(_any('foo'), _and(_any('bar'), _or(_any('test'), _any('TEST'))))),
+			('foo OR ((test OR TEST) bar)', # Nested group
+				_or(_any('foo'), _and(_or(_any('test'), _any('TEST')), _any('bar')))),
+			('foo OR (bar (test OR TEST) baz)', # Nested group
+				_or(_any('foo'), _and(_any('bar'), _or(_any('test'), _any('TEST')), _any('baz')))),
+			('foo AND NOT bar OR baz', # Apply NOT to term
+				_and(_any('foo'), _or(_not(_any('bar')), _any('baz')))),
+			('foo AND NOT (bar OR baz)', # Apply NOT to group
+				_and(_any('foo'), _not(_or(_any('bar'), _any('baz'))))),
+			('foo AND NOT ( bar OR baz )', # with spaces
+				_and(_any('foo'), _not(_or(_any('bar'), _any('baz'))))),
+		):
+			query = parse_search_query(string, keywords)
+			#print('====', string, '\n', query, '\n', wanted)
+			self.assertEqual(query, wanted)
+
+	def testStrayOperatorsRaiseError(self):
+		keywords = {'links'}
+		for string in (
+			# groups cannot start with OR or multiple AND
+			'AND +foo bar', 'OR foo bar', 'foo (OR bar)',
+			# groups cannot end with AND, OR or NOT
+			'foo OR', 'foo AND', 'foo NOT', 'foo (bar NOT) baz',
+			# AND and OR cannot follow another AND, OR or NOT operator
+			'foo AND OR bar', 'foo OR AND bar', 'foo NOT AND bar',
+			# groups cannot be empty - including toplevel - and "( )"
+			'', '    ', '( )', 'AND', 'NOT',
+			# raises unmatched ( or )
+			'(foo', 'bar)', 'foo (bar OR baz))', 'foo (bar OR (baz)',
+			# more weird edge cases
+			'(foo +)',
+		):
+			#print('====', string)
+			with self.assertRaises(SearchQueryValidationError):
+				query = parse_search_query(string, keywords)
+				print("GOT:", query)
+
+
+class TestSearchQueryToFindQuery(tests.TestCase):
 
 	def runTest(self):
-		'''Test regex compilation for search terms'''
+		from zim.gui.pageview.find import FindQuery, FIND_CASE_SENSITIVE, FIND_WHOLE_WORD, FIND_REGEX
+
+		for string, wanted in (
+			('Foo', FindQuery('Foo')), # TODO: should use FIND_WHOLE_WORD
+			('*Foo*', FindQuery('Foo')),
+			('Foo Bar', FindQuery('Foo|Bar', FIND_REGEX)),
+			('Foo -Bar', FindQuery('Foo')),
+			('Links: Foo', None), # no content match in this query
+			('Tag: Foo', FindQuery('@Foo')),
+			('@Foo', FindQuery('@Foo')),
+			('@Foo Bar', FindQuery(re.escape('@Foo') + '|Bar', FIND_REGEX)),
+				# re.escape() behavior changed in 3.7 older versions also escape the "@"
+			('Foo... Bar', FindQuery('Foo\\.\\.\\.|Bar', FIND_REGEX)),
+			('NOT foo', None),
+		):
+			squery = parse_page_search_query(string)
+			fquery = find_query_from_search_query(squery)
+			#print('====', string, '\n', squery, '\n', fquery, '\n', wanted)
+			self.assertEqual(fquery, wanted)
+
+
+class TestSearchRegex(tests.TestCase):
+	'''Test regex compilation for search terms'''
+
+	def testContentMatches(self):
 		regex_func = SearchSelection(None)._content_regex
 
 		for word, regex in (
@@ -21,7 +200,6 @@ class TestSearchRegex(tests.TestCase):
 			('foo$', r'\bfoo\$'),
 			('foo bar', r'\bfoo\ bar\b'),
 		):
-			#print '>>', word, regex
 			self.assertEqual(regex_func(word).pattern, re.compile(regex, re.I | re.U).pattern)
 
 		self.assertIn(regex_func('汉字').pattern, ('汉字', r'\汉\字'))
@@ -40,64 +218,107 @@ class TestSearchRegex(tests.TestCase):
 		new, n = regex.subn('', text)
 		self.assertEqual(n, 5)
 
+	def testNameMatches(self):
+		regex_func = SearchSelection(None)._name_regex
 
-class TestQuery(tests.TestCase):
-
-	def testKeywordParsingLinks(self):
-		query = Query('Links:Foo')
-		self.assertEqual(query.root, [QueryTerm('linksfrom', 'Foo')])
-
-		query = Query('Links: Foo')
-		self.assertEqual(query.root, [QueryTerm('linksfrom', 'Foo')])
-
-		query = Query('Links:') # edge case, looking for literal occurrence
-		self.assertEqual(query.root, [QueryTerm('contentorname', 'Links:')])
-
-		query = Query('"Links:Foo"')
-		self.assertEqual(query.root, [QueryTerm('contentorname', 'Links:Foo')])
-
-	def testFindInput(self):
-		for query_input, wanted_find_input in (
-			('Foo', ('Foo', False)),
-			('*Foo*', ('Foo', False)),
-			('Foo Bar', ('Foo|Bar', True)),
-			('Foo && Bar', ('Foo|Bar', True)),
-			('Foo || Bar', ('Foo|Bar', True)),
-			('Foo -Bar', ('Foo', False)),
-			('Links: Foo', (None, None)),
-			('Tag: Foo', ('@Foo', False)),
-			('@Foo', ('@Foo', False)),
-			('@Foo Bar', (re.escape('@Foo') + '|Bar', True)),
-				# re.escape() behavior changed in 3.7 older versions also escape the "@"
-			('Foo... Bar', ('Foo\\.\\.\\.|Bar', True)),
+		for word, regex in (
+			('foo', r'(^|.*:)foo(:|$)'),
+			('*foo', r'.*foo(:|$)'),
+			('foo*', r'(^|.*:)foo'),
+			('*foo*', r'.*foo'),
+			('foo$', r'(^|.*:)foo\$(:|$)'),
+			('foo bar', r'(^|.*:)foo\ bar(:|$)'),
+			('foo:bar', r'(^|.*:)foo:bar(:|$)'),
+			(':foo', r'(^|.*:)foo(:|$)'), # same as "foo"
+			('foo:', r'(^|.*:)foo(:|$)'),
+			(':foo:', r'(^|.*:)foo(:|$)'),
+			('foo:*', r'(^|.*:)foo:'), # match child pages only
+			(':foo:*', r'(^|.*:)foo:'),
 		):
-			query = Query(query_input)
-			self.assertEqual(query.find_input, wanted_find_input)
+			self.assertEqual(regex_func(word).pattern, re.compile(regex, re.I | re.U).pattern)
 
 
-class TestSearch(tests.TestCase):
+		for word, path, match in (
+			('foo', 'foo', True),
+			('foo', 'foo:bar', True),
+			('foo', 'bar:foo', True),
+			('foo', 'dus:foo:ja', True),
+			('foo', 'foobar', False),
+			('foo*', 'foobar', True),
+			('foo*', 'dus:foobar', True),
+			('foo*', 'dus:foobar:baz', True),
+			('foo*', 'dusfoo', False),
+			('*foo', 'dusfoo', True),
+			('*foo', 'bar:dusfoo', True),
+			('*foo', 'dusfoo:baz', True),
+			('*foo', 'bar:dusfoo:baz', True),
+			('*foo', 'dusfoobar', False),
+			('*foo*', 'dusfoobar', True),
+			('foo:bar', 'foo', False),
+			('foo:bar', 'foo:bar', True),
+			('foo:bar', 'foo:bar:baz', True),
+			('foo:bar', 'dus:foo:bar', True),
+			(':foo', 'foo', True),
+			('foo:', 'foo', True),
+			('foo:*', 'foo', False),
+			('foo:*', 'foo:bar', True),
+		):
+			#print('==', word, path, match, regex_func(word).pattern)
+			self.assertEqual(bool(regex_func(word).match(Path(path).name)), match)
 
-	def setUp(self):
-		self.notebook = self.setUpNotebook(content=tests.FULL_NOTEBOOK)
+	def testSectionMatches(self):
+		regex_func = SearchSelection(None)._namespace_regex
+
+		for word, regex in (
+			('foo', r'^foo(:|$)'),
+			('*foo', r'^\*foo(:|$)'), # not supported
+			('foo*', r'^foo'),
+			('*foo*', r'^\*foo'),
+			('foo$', r'^foo\$(:|$)'),
+			('foo bar', r'^foo\ bar(:|$)'),
+			(':foo', r'^foo(:|$)'), # same as "foo"
+			('foo:', r'^foo(:|$)'), # same as "foo"
+			('foo:*', r'^foo:'), # only match child pages
+			('foo:bar', r'^foo:bar(:|$)'),
+		):
+			self.assertEqual(regex_func(word).pattern, re.compile(regex, re.I | re.U).pattern)
+
+		for word, path, match in (
+			('foo', 'foo', True),
+			('foo', 'foo:bar', True),
+			('foo', 'bar:foo', False),
+			('foo:', 'foo', True),
+			('foo:', 'foo:bar', True),
+			('foo:', 'bar:foo', False),
+			('foo:*', 'foo', False),
+			('foo:*', 'foo:bar', True),
+			('foo:*', 'bar:foo', False),
+		):
+			#print('==', word, path, match, regex_func(word).pattern)
+			self.assertEqual(bool(regex_func(word).match(Path(path).name)), match)
+
+
+class TestPageSearch(tests.TestCase):
+
+	@classmethod
+	def setUpClass(cls):
+		# Using a class setup speeds up considerably when testing with real files
+		cls.notebook = cls.setUpClassNotebook(content=tests.FULL_NOTEBOOK)
 
 	def callback_check(self, selection, path):
 		self.assertIsInstance(selection, (SearchSelection, type(None)))
 		self.assertIsInstance(path, (Path, type(None)))
 		return True
 
-	def runTest(self):
-		'''Test search API'''
-		self.notebook.index.check_and_update()
+	def testDefaultKeyword(self):
 		results = SearchSelection(self.notebook)
 
-		query = Query('foo bar')
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertEqual(query.root, [
-				QueryTerm('contentorname', 'foo'),
-				QueryTerm('contentorname', 'bar')
-			])
+		query = parse_page_search_query('foo bar')
+		self.assertEqual(query, _and(
+				_t('contentorname', 'foo'),
+				_t('contentorname', 'bar')
+			))
 		results.search(query, callback=self.callback_check)
-		#~ print results
 		self.assertTrue(len(results) > 0)
 		self.assertFalse(Path('TaskList:foo') in results)
 		self.assertTrue(Path('Test:foo') in results)
@@ -105,14 +326,12 @@ class TestSearch(tests.TestCase):
 		self.assertTrue(set(results.scores.keys()) == results)
 		self.assertTrue(all(results.scores.values()))
 
-		query = Query('+TODO -bar')
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertEqual(query.root, [
-				QueryTerm('contentorname', 'TODO'),
-				QueryTerm('contentorname', 'bar', inverse=True)
-			])
+		query = parse_page_search_query('+TODO -bar')
+		self.assertEqual(query, _and(
+				_t('contentorname', 'TODO'),
+				_not(_t('contentorname', 'bar'))
+			))
 		results.search(query, callback=self.callback_check)
-		#~ print results
 		self.assertTrue(len(results) > 0)
 		self.assertTrue(Path('TaskList:foo') in results)
 		self.assertFalse(Path('Test:foo') in results)
@@ -120,14 +339,12 @@ class TestSearch(tests.TestCase):
 		self.assertTrue(set(results.scores.keys()) == results)
 		self.assertTrue(all(results.scores.values()))
 
-		query = Query('TODO not bar')
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertEqual(query.root, [
-				QueryTerm('contentorname', 'TODO'),
-				QueryTerm('contentorname', 'bar', inverse=True)
-			])
+		query = parse_page_search_query('TODO not bar')
+		self.assertEqual(query, _and(
+				_t('contentorname', 'TODO'),
+				_not(_t('contentorname', 'bar'))
+			))
 		results.search(query, callback=self.callback_check)
-		#~ print results
 		self.assertTrue(len(results) > 0)
 		self.assertTrue(Path('TaskList:foo') in results)
 		self.assertFalse(Path('Test:foo') in results)
@@ -135,15 +352,12 @@ class TestSearch(tests.TestCase):
 		self.assertTrue(set(results.scores.keys()) == results)
 		self.assertTrue(all(results.scores.values()))
 
-		query = Query('TODO or bar')
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertTrue(query.root[0].operator == OPERATOR_OR)
-		self.assertEqual(query.root, [[
-				QueryTerm('contentorname', 'TODO'),
-				QueryTerm('contentorname', 'bar')
-			]])
+		query = parse_page_search_query('TODO or bar')
+		self.assertEqual(query, _or(
+				_t('contentorname', 'TODO'),
+				_t('contentorname', 'bar')
+			))
 		results.search(query, callback=self.callback_check)
-		#~ print results
 		self.assertTrue(len(results) > 0)
 		self.assertTrue(Path('TaskList:foo') in results)
 		self.assertTrue(Path('Test:foo') in results)
@@ -151,53 +365,32 @@ class TestSearch(tests.TestCase):
 		self.assertTrue(set(results.scores.keys()) == results)
 		self.assertTrue(all(results.scores.values()))
 
-		query = Query('ThisWordDoesNotExistingInTheTestNotebook')
+		query = parse_page_search_query('ThisWordDoesNotExistingInTheTestNotebook')
 		results.search(query, callback=self.callback_check)
 		self.assertFalse(results)
 
-		query = Query('LinksTo: "Linking:Foo:Bar"')
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertEqual(query.root, [QueryTerm('linksto', 'Linking:Foo:Bar')])
-		results.search(query, callback=self.callback_check)
-		#~ print results
-		self.assertTrue(Path('Linking:Dus:Ja') in results)
-		self.assertTrue(set(results.scores.keys()) == results)
-		self.assertTrue(all(results.scores.values()))
+	def testContentKeyword(self):
+		results = SearchSelection(self.notebook)
 
-		query = Query('NOT LinksTo:"Linking:Foo:Bar"')
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertEqual(query.root, [QueryTerm('linksto', 'Linking:Foo:Bar', True)])
+		query = parse_page_search_query('Content: foo')
+		self.assertEqual(query, _q(_t('content', 'foo')))
 		results.search(query, callback=self.callback_check)
-		#~ print results
-		self.assertFalse(Path('Linking:Dus:Ja') in results)
-		self.assertTrue(set(results.scores.keys()) == results)
-		self.assertTrue(all(results.scores.values()))
+		self.assertTrue(len(results) > 0)
 
-		query = Query('LinksTo:"NonExistingNamespace:*"')
-		results.search(query, callback=self.callback_check)
-		self.assertFalse(results)
+	def testNameKeyword(self):
+		results = SearchSelection(self.notebook)
 
-		query = Query('LinksFrom: "Linking:Dus:Ja"')
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertEqual(query.root, [QueryTerm('linksfrom', 'Linking:Dus:Ja')])
-		query = Query('Links: "Linking:Dus:Ja"') # alias for LinksFrom
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertEqual(query.root, [QueryTerm('linksfrom', 'Linking:Dus:Ja')])
+		query = parse_page_search_query('Name: foo')
+		self.assertEqual(query, _q(_t('name', 'foo')))
 		results.search(query, callback=self.callback_check)
-		#~ print results
-		self.assertTrue(Path('Linking:Foo:Bar') in results)
-		self.assertTrue(set(results.scores.keys()) == results)
-		self.assertTrue(all(results.scores.values()))
+		self.assertTrue(len(results) > 0)
 
-		query = Query('LinksFrom:"NonExistingNamespace:*"')
-		results.search(query, callback=self.callback_check)
-		self.assertFalse(results)
+	def testSectionKeyword(self):
+		results = SearchSelection(self.notebook)
 
-		query = Query('Namespace: "TaskList" fix')
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertEqual(query.root, [QueryTerm('namespace', 'TaskList'), QueryTerm('contentorname', 'fix')])
+		query = parse_page_search_query('Namespace: "TaskList" fix')
+		self.assertEqual(query, _and(_t('namespace', 'TaskList'), _t('contentorname', 'fix')))
 		results.search(query, callback=self.callback_check)
-		#~ print results
 		self.assertTrue(Path('TaskList:foo') in results)
 
 		for text in (
@@ -207,61 +400,98 @@ class TestSearch(tests.TestCase):
 			'Section:"Test:Foo Bar"'
 		):
 			# check if space in page name works - found bug for 2nd form
-			query = Query(text)
+			query = parse_page_search_query(text)
 			results.search(query, callback=self.callback_check)
-			#~ print text, '>>' , results
 			self.assertTrue(Path('Test:Foo Bar:Dus Ja Hmm') in results)
 
-		query = Query('Namespace: "NonExistingNamespace"')
+		query = parse_page_search_query('Namespace: "NonExistingNamespace"')
 		results.search(query, callback=self.callback_check)
-		#~ print results
 		self.assertFalse(results)
 
-		query = Query('Tag: tags')
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertEqual(query.root, [QueryTerm('tag', 'tags')])
-		query = Query('@tags')
-		self.assertTrue(query.root.operator == OPERATOR_AND)
-		self.assertEqual(query.root, [QueryTerm('tag', 'tags')])
+	def testTagKeyword(self):
+		results = SearchSelection(self.notebook)
+
+		query = parse_page_search_query('Tag: tags')
+		self.assertEqual(query, _q(_t('tag', 'tags')))
+		query = parse_page_search_query('@tags') # implicit keyword
+		self.assertEqual(query, _q(_t('tag', '@tags')))
 		results.search(query, callback=self.callback_check)
 		#~ print results
 		self.assertTrue(Path('Test:tags') in results and len(results) == 2)
 			# Tasklist:all is the second match
 
-		query = Query('Tag: NonExistingTag')
+		query = parse_page_search_query('Tag: NonExistingTag')
 		results.search(query, callback=self.callback_check)
 		self.assertFalse(results)
 
-		# TODO test ContentOrName versus Content
-		# TODO test Name
+	def testLinksToKeyword(self):
+		results = SearchSelection(self.notebook)
+
+		query = parse_page_search_query('LinksTo: "Linking:Foo:Bar"')
+		self.assertEqual(query, _and(_t('linksto', 'Linking:Foo:Bar')))
+		results.search(query, callback=self.callback_check)
+		self.assertTrue(Path('Linking:Dus:Ja') in results)
+		self.assertTrue(set(results.scores.keys()) == results)
+		self.assertTrue(all(results.scores.values()))
+
+		query = parse_page_search_query('NOT LinksTo:"Linking:Foo:Bar"')
+		self.assertEqual(query, _q(_not(_t('linksto', 'Linking:Foo:Bar'))))
+		results.search(query, callback=self.callback_check)
+		self.assertFalse(Path('Linking:Dus:Ja') in results)
+		self.assertTrue(set(results.scores.keys()) == results)
+		self.assertTrue(all(results.scores.values()))
+
+		query = parse_page_search_query('LinksTo:"NonExistingNamespace:*"')
+		results.search(query, callback=self.callback_check)
+		self.assertFalse(results)
+
+	def testLinksFromKeyword(self):
+		results = SearchSelection(self.notebook)
+
+		query = parse_page_search_query('LinksFrom: "Linking:Dus:Ja"')
+		self.assertEqual(query, _q(_t('linksfrom', 'Linking:Dus:Ja')))
+		results.search(query, callback=self.callback_check)
+		self.assertTrue(Path('Linking:Foo:Bar') in results)
+		self.assertTrue(set(results.scores.keys()) == results)
+		self.assertTrue(all(results.scores.values()))
+
+		query = parse_page_search_query('Links: "Linking:Dus:Ja"') # alias for LinksFrom
+		self.assertEqual(query, _q(_t('links', 'Linking:Dus:Ja')))
+		results.search(query, callback=self.callback_check)
+		#~ print results
+		self.assertTrue(Path('Linking:Foo:Bar') in results)
+		self.assertTrue(set(results.scores.keys()) == results)
+		self.assertTrue(all(results.scores.values()))
+
+		query = parse_page_search_query('LinksFrom:"NonExistingNamespace:*"')
+		results.search(query, callback=self.callback_check)
+		self.assertFalse(results)
 
 
 @tests.slowTest
-class TestSearchFiles(TestSearch):
+class TestPageSearchFiles(TestPageSearch):
 
-	def setUp(self):
-		self.notebook = self.setUpNotebook(mock=tests.MOCK_ALWAYS_REAL, content=tests.FULL_NOTEBOOK)
+	@classmethod
+	def setUpClass(cls):
+		# Using a class setup speeds up considerably when testing with real files
+		cls.notebook = cls.setUpClassNotebook(mock=tests.MOCK_ALWAYS_REAL, content=tests.FULL_NOTEBOOK)
 
-	def runTest(self):
-		'''Test search API with file based notebook'''
-		TestSearch.runTest(self)
 
 @tests.skipIf(
 	indexed_fts.IndexedFTSPlugin.check_dependencies()[0] == False,
 	"Indexed FTS plugin not available"
 )
-class TestSearchIndexed(TestSearch):
+class TestPageSearchIndexed(TestPageSearch):
 	'''Test case for integration with the indexed_fts plugin'''
 
-	def setUp(self):
+	@classmethod
+	def setUpClass(cls):
+		tests.TestCase.setUpClass() # setup plugin manager
 		plugin = PluginManager.load_plugin('indexed_fts')
-		TestSearch.setUp(self)
-
-	def runTest(self):
-		TestSearch.runTest(self)
+		TestPageSearch.setUpClass()
 
 
-class TestUnicode(tests.TestCase):
+class TestUnicodeSearchTerms(tests.TestCase):
 
 	def runTest(self):
 		notebook = self.setUpNotebook(content={'Öffnungszeiten': 'Öffnungszeiten ... 123\n'})
@@ -281,6 +511,34 @@ class TestUnicode(tests.TestCase):
 			'name:Öff*',
 			'name:öff*',
 		):
-			query = Query(string)
+			query = parse_page_search_query(string)
 			results.search(query)
 			self.assertIn(path, results, 'query did not match: "%s"' % string)
+
+
+class TestQueryGrouping(tests.TestCase):
+
+	PAGES = {
+		'page1': 'term1',
+		'page2': 'term2',
+		'page3': 'term3',
+		'page4': 'term4',
+		'page12': 'term1 term2',
+		'page13': 'term1 term3',
+	}
+
+	def runTest(self):
+		notebook = self.setUpNotebook(content=self.PAGES)
+		results = SearchSelection(notebook)
+
+		for string, pages in (
+			('term1', ('page1', 'page12', 'page13')), # simpel case to test test construct
+			('term1 term2 OR term3', ('page12', 'page13')),
+			('term1 (term2 OR term3)', ('page12', 'page13')),
+			('(term1 term2) OR term3', ('page12', 'page3', 'page13')),
+			('term1 NOT (term2 OR term3)', ('page1',)),
+		):
+			query = parse_page_search_query(string)
+			results.search(query)
+			#print('==', string, set(results), set(pages))
+			self.assertEqual(set(results), set(Path(p) for p in pages))

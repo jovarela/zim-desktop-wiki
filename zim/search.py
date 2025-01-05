@@ -1,27 +1,22 @@
 
-# Copyright 2009 Jaap Karssenberg <jaap.karssenberg@gmail.com>
+# Copyright 2009-2025 Jaap Karssenberg <jaap.karssenberg@gmail.com>
 
 '''
 This module contains the logic for searching in a notebook.
 
-Supported operators:
-	- "NOT", "not" and "-"
-	- "AND", "and", "+" and "&&"
-	- "OR", "or" and "||"
-
-Order of precedence: AND, OR, NOT
-so "foo AND NOT bar OR baz" means AND(foo, OR(NOT(bar), baz))
+See L{zim.parse.searchquery} for generic parsing of the query language
 
 Supported keywords:
-	- C{Content}
-	- C{Name}
-	- C{Section}: alias for "Name XXX or Name: XXX:*"
-	- C{Namespace}: alias for "Name XXX or Name: XXX:*" -- backward compatible
-	- C{Links}: forward - alias for linksfrom
-	- C{LinksFrom}: forward
-	- C{LinksTo}: backward
-	- C{ContentOrName}: the default, like Name: *X* or Content: X
-	- C{Tag}: look for a single tag
+
+  - C{Content}
+  - C{Name}
+  - C{Section}: alias for "Name XXX or Name: XXX:*"
+  - C{Namespace}: alias for "Name XXX or Name: XXX:*" -- backward compatible
+  - C{Links}: forward - alias for linksfrom
+  - C{LinksFrom}: forward
+  - C{LinksTo}: backward
+  - C{ContentOrName}: the default, like Name: *X* or Content: X
+  - C{Tag}: look for a single tag
 
 For the Content field we need to request the actual page contents,
 all other fields we get from the index and are more efficient to
@@ -32,245 +27,71 @@ For the name keyword a '*' is allowed on both sides
 For content '*' can occur on both sides, but does not match whitespace
 '''
 
-# TODO keyword for recent changes "changed>=date" - see KQl for inspiration
-# TODO keyword for deadlinks, keyword for pages with no content
-#     "no:links" "no:content" ?
-
-# Queries are parsed into trees of groups of search terms
-# Terms have a keyword and a string to look for
-# When we start searching we walks through this tree and assemble the
-# results. In theory we fully support nested groups, but the current
-# query syntax doesn't allow them. So for now trees will only consist
-# of a toplevel AND group possibly with nested OR groups one level
-# below it.
-
 
 import re
 import logging
 
-from zim.parse.encode import unescape_string
+from typing import Optional
+
 from zim.notebook import Path, \
 	PageNotFoundError, IndexNotFoundError, \
 	LINK_DIR_BACKWARD, LINK_DIR_FORWARD
 
 from zim.plugins import PluginManager
 
+from zim.parse.searchquery import *
+
+
 logger = logging.getLogger('zim.search')
 
 
-OPERATOR_OR = 1
-OPERATOR_AND = 2
-OPERATOR_NOT = 3
 
-operators = {
-	'or': OPERATOR_OR,
-	'||': OPERATOR_OR,
-	'and': OPERATOR_AND,
-	'&&': OPERATOR_AND,
-	'+': OPERATOR_AND,
-	'-': OPERATOR_NOT,
-	'not': OPERATOR_NOT,
+KEYWORDS = {
+	'content': {},
+	'name': {},
+	'namespace': {},
+	'section': {},
+	'contentorname': {},
+	'links': {},
+	'linksfrom': {},
+	'linksto': {},
+	'tag': {'regex': search_tag_re}
 }
-
-KEYWORDS = (
-	'content', 'name', 'namespace', 'section', 'contentorname',
-	'links', 'linksfrom', 'linksto', 'tag'
-)
-
-keyword_re = re.compile('(' + '|'.join(KEYWORDS) + '):(.*)', re.I)
-operators_re = re.compile(r'^(\|\||\&\&|\+|\-)')
-tag_re = re.compile(r'^\@(\w+)$', re.U)
-
-class QueryTerm(object):
-	'''Wrapper for a single term in a query. Consists of a keyword,
-	a string and a flag for inverse (NOT operator).
-	'''
-
-	def __init__(self, keyword, string, inverse=False):
-		self.keyword = keyword
-		self.string = string
-		self.inverse = inverse
-
-	def __eq__(self, other):
-		if isinstance(other, QueryTerm):
-			return self.keyword == other.keyword \
-			and self.string == other.string \
-			and self.inverse == other.inverse
-		else:
-			return False
-
-	def __repr__(self):
-		if self.inverse:
-			return '<NOT %s: "%s">' % (self.keyword, self.string)
-		else:
-			return '<%s: "%s">' % (self.keyword, self.string)
+DEFAULT_KEYWORD = 'contentorname'
 
 
-class QueryGroup(list):
-	'''Wrapper for a sub group of a query. Just a list of QueryTerms
-	with an associated operator (either AND or OR).
-	'''
-
-	def __init__(self, operator, terms=None):
-		assert operator in (OPERATOR_AND, OPERATOR_OR)
-		self.operator = operator
-		if terms:
-			self[:] = terms
+def parse_page_search_query(string: str) -> SearchQuery:
+	return parse_search_query(string, KEYWORDS, default_keyword=DEFAULT_KEYWORD)
 
 
-_word_re = re.compile(r'''
-	(	'(\\'|[^'])*' |  # single quoted word
-		"(\\"|[^"])*" |  # double quoted word
-		[^\s'"]+         # word without spaces
-	)''', re.X)
+def find_query_from_search_query(query: SearchQuery) -> Optional['FindQuery']:
+	from zim.gui.pageview.find import FindQuery, FIND_CASE_SENSITIVE, FIND_WHOLE_WORD, FIND_REGEX
 
+	strings = list(_walk_search_query(query))
+	if len(strings) == 1:
+		return FindQuery(strings[0])
+	elif strings:
+		return FindQuery('|'.join(re.escape(s) for s in strings if s), FIND_REGEX)
+	else:
+		return None
 
-def split_quoted_strings(string):
-	'''Split a word list respecting quotes, does not remove the quotes
-
-	Allow both double and single quotes
-
-	This function always expect full words to be quoted, even if quotes
-	appear in the middle of a word, they are considered word
-	boundries.
-	'''
-	string = string.strip()
-	words = []
-	m = _word_re.match(string)
-	while m:
-		words.append(m.group(0))
-		i = m.end()
-		string = string[i:].lstrip()
-		m = _word_re.match(string)
-
-	if string:
-		words += string.split() # unmatched quote ?
-
-	return [w for w in words if w]
-
-
-def unescape_quoted_string(string):
-	'''Removes quotes from a string and unescapes embedded quotes
-	@returns: string
-	'''
-	if not string:
-		return string
-	elif string[0] in ('"', "'") and string[-1] == string[0]:
-		string = string[1:-1]
-	return unescape_string(string)
-
-
-class Query(object):
-	'''This class wraps a query as typed by the user. It parses the
-	query into a tree of QueryGroup and QueryTerm objects. The 'root'
-	attribute contains the top of the tree, while the 'string' attribute
-	contains the original query.
-	'''
-
-	def __init__(self, string):
-		self.string = string
-		self.root = self._parse_query(string)
-		self.find_input = self._generate_find_input()
-
-	def _parse_query(self, string):
-		# First do a raw tokenizer
-		words = split_quoted_strings(string)
-		tokens = []
-		while words:
-			m_op = operators_re.match(words[0])
-			if m_op:
-				w = m_op.group()
-				words[0] = words[0][len(w):]
+def _walk_search_query(query):
+	for term in query:
+		if isinstance(term, SearchQuery):
+			if term.negate:
+				continue # skip negated content
 			else:
-				w = words.pop(0)
-
-			m_key = keyword_re.match(w)
-			if w.lower() in operators:
-				tokens.append(operators[w.lower()])
-			elif m_key:
-				keyword = m_key.group(1).lower()
-				if not (m_key.group(2) or words):
-					# edge case - something ending in ":" but nothing following
-					tokens.append(QueryTerm('contentorname', m_key.group(1)+":")) # default keyword
-				else:
-					string = m_key.group(2) or words.pop(0)
-					string = unescape_quoted_string(string)
-					if keyword == 'links':
-						keyword = 'linksfrom'
-					tokens.append(QueryTerm(keyword, string))
-			else:
-				w = unescape_quoted_string(w)
-				if tag_re.match(w):
-					tokens.append(QueryTerm('tag', w[1:]))
-				else:
-					tokens.append(QueryTerm('contentorname', w)) # default keyword
-		#~ print tokens
-
-		# Then parse NOT operator out
-		tokens, mytokens = [], tokens
-		while mytokens:
-			token = mytokens.pop(0)
-			if token == OPERATOR_NOT:
-				if mytokens and isinstance(mytokens[0], QueryTerm):
-					token = mytokens.pop(0)
-					token.inverse = True
-					tokens.append(token)
-				else:
-					pass # ignore
-			else:
-				tokens.append(token)
-		#~ print tokens
-
-		# Finally group in AND and OR groups
-		root = QueryGroup(OPERATOR_AND)
-		while tokens:
-			token = tokens.pop(0)
-			if isinstance(token, QueryTerm):
-				if tokens and tokens[0] == OPERATOR_OR:
-					# collect terms joined by OR
-					assert isinstance(token, QueryTerm)
-					group = QueryGroup(OPERATOR_OR)
-					group.append(token)
-					while len(tokens) >= 2 and tokens[0] == OPERATOR_OR \
-					and isinstance(tokens[1], QueryTerm):
-						tokens.pop(0)
-						group.append(tokens.pop(0))
-					root.append(group)
-				else:
-					# simple term in AND group
-					root.append(token)
-			else:
-				assert token in (OPERATOR_AND, OPERATOR_OR)
-				pass # AND is the default, OR should not appear here, ignore silently
-
-		#~ print root
-		return root
-
-	def _generate_find_input(self):
-		# parse query and format as a string or regex for the pageview "find"
-		# function - used to highlight matches in the pageview
-		strings = list(self._walk_text_content(self.root))
-		if not strings:
-			return None, None
-		elif len(strings) == 1:
-			return strings[0], False
-		else:
-			return '|'.join(re.escape(s) for s in strings if s), True
-
-	def _walk_text_content(self, group):
-		for member in group:
-			if isinstance(member, QueryGroup):
-				for s in self._walk_text_content(member): # recurs
+				for s in self._walk_text_content(term): # recurs
 					yield s
-			else: # QueryTerm
-				if member.inverse: # OPERATOR_NOT
-					pass
-				elif member.keyword in ('content', 'contentorname'):
-					yield member.string.strip('*') # strip "*" for partial matches
-				elif member.keyword == 'tag':
-					yield '@' + member.string.lstrip('@').strip('*')
-				else:
-					pass # other terms select pages, but no (easy) match in the page
+		else: # SearchQueryTerm
+			if term.negate: # OPERATOR_NOT
+				continue
+			elif term.keyword in ('content', 'contentorname'):
+				yield term.value.strip('*') # strip "*" for partial matches
+			elif term.keyword == 'tag':
+				yield '@' + term.value.lstrip('@').strip('*')
+			else:
+				pass # other terms select pages, but no (easy) match in the page
 
 
 class PageSelection(set):
@@ -316,7 +137,7 @@ class SearchSelection(PageSelection):
 		self.scores = {}
 
 		# Actual search
-		self.update(self._process_group(query.root, selection, callback))
+		self.update(self._process_group(query, selection, callback))
 
 		# Clean up results
 		scored = set(self.scores.keys())
@@ -324,15 +145,15 @@ class SearchSelection(PageSelection):
 			self.scores.pop(path)
 
 	def _process_group(self, group, scope=None, callback=None):
-		# This method processes all search terms in a QueryGroup
-		# it is recursive for nested QueryGroup objects and calls
+		# This method processes all search terms in a SearchQuery
+		# it is recursive for nested SearchQuery objects and calls
 		# _process_from_index and _process_content to handle
-		# QueryTerms in the group. It takes care of combining the
+		# SearchQueryTerms in the group. It takes care of combining the
 		# results from various terms and calling the callback
 		# function when possible
 
 		# Special case to optimize for simple OR query to give callback results
-		if len(group) == 1 and isinstance(group[0], QueryGroup):
+		if len(group) == 1 and isinstance(group[0], SearchQuery):
 			group = group[0]
 
 		# For optimization we sort the terms in the group based  on how
@@ -341,10 +162,10 @@ class SearchSelection(PageSelection):
 		subgroups = []
 		contentterms = []
 		for term in group:
-			if isinstance(term, QueryGroup):
+			if isinstance(term, SearchQuery):
 				subgroups.append(term)
 			else:
-				assert isinstance(term, QueryTerm)
+				assert isinstance(term, SearchQueryTerm)
 				if term.keyword in ('content', 'contentorname'):
 					contentterms.append(term)
 				else:
@@ -381,8 +202,10 @@ class SearchSelection(PageSelection):
 				return True
 
 		for term in subgroups:
-			results, scope = op_func(results, scope,
-				self._process_group(term, scope, callbackwrapper))
+			newresults = self._process_group(term, scope, callbackwrapper)
+			if term.negate:
+				newresults = self._negate_op(scope, newresults)
+			results, scope = op_func(results, scope, newresults)
 
 			if callback:
 				if group.operator == OPERATOR_AND:
@@ -459,6 +282,14 @@ class SearchSelection(PageSelection):
 			results |= newresults
 		return results, scope
 
+	def _negate_op(self, scope, newresults):
+		if not scope:
+			# initialize scope with whole notebook :S
+			scope = set()
+			for p in self.notebook.pages.walk():
+				scope.add(p)
+		return scope - newresults
+
 	def _count_score(self, path, score):
 		self.scores[path] = self.scores.get(path, 0) + score
 
@@ -477,31 +308,31 @@ class SearchSelection(PageSelection):
 				generator = self.notebook.pages.walk()
 
 			if term.keyword in ('namespace', 'section'):
-				regex = self._namespace_regex(term.string)
+				regex = self._namespace_regex(term.value)
 			elif term.keyword == 'contentorname':
 				# More lax matching for default case
-				regex = self._name_regex('*' + term.string.strip('*') + '*')
+				regex = self._name_regex('*' + term.value.strip('*') + '*')
 				term.name_regex = regex # needed in _process_content
 			else:
-				regex = self._name_regex(term.string)
+				regex = self._name_regex(term.value)
 
 			#~ print('!! REGEX: ' + regex.pattern)
 			for path in generator:
 				if regex.match(path.name):
 					myresults.add(path)
 
-		elif term.keyword in ('linksfrom', 'linksto'):
-			if term.keyword == 'linksfrom':
+		elif term.keyword in ('links', 'linksfrom', 'linksto'):
+			if term.keyword in ('links', 'linksfrom'):
 				dir = LINK_DIR_FORWARD
 			else:
 				dir = LINK_DIR_BACKWARD
 
-			if term.string.endswith('*'):
+			if term.value.endswith('*'):
 				recurs = True
-				string = term.string.rstrip('*')
+				string = term.value.rstrip('*')
 			else:
 				recurs = False
-				string = term.string
+				string = term.value
 
 			try:
 				path = self.notebook.pages.lookup_from_user_input(string)
@@ -526,7 +357,7 @@ class SearchSelection(PageSelection):
 							myresults.add(link.source)
 
 		elif term.keyword == 'tag':
-			tag = term.string.strip('*') # XXX
+			tag = term.value
 			try:
 				for path in self.notebook.tags.list_pages(tag):
 					myresults.add(path)
@@ -539,16 +370,11 @@ class SearchSelection(PageSelection):
 		if scope and not scoped:
 			myresults &= scope # only keep results that in scope
 
-		# Inverse selection
-		if term.inverse:
-			if not scope:
-				# initialize scope with whole notebook :S
-				scope = set()
-				for p in self.notebook.pages.walk():
-					scope.add(p)
-			inverse = scope - myresults
+		# negate selection
+		if term.negate:
+			negate = self._negate_op(scope, myresults)
 			myresults.clear()
-			myresults.update(inverse)
+			myresults.update(negate)
 
 		for path in myresults:
 			self._count_score(path, scoring)
@@ -570,7 +396,7 @@ class SearchSelection(PageSelection):
 		# For OR 'results' is whatever was found so far while 'scope' can be larger
 		# we extend the results with any matches from scope
 		for term in terms:
-			term.content_regex = self._content_regex(term.string)
+			term.content_regex = self._content_regex(term.value)
 			# term.name_regex already defined in _process_from_index
 
 		def page_generator(paths):
@@ -610,7 +436,7 @@ class SearchSelection(PageSelection):
 					and term.name_regex.match(path.name):
 						myscore += 1 # effective score going to 11
 
-					if bool(myscore) != term.inverse: # implicit XOR
+					if bool(myscore) != term.negate: # implicit XOR
 						score += myscore or 1
 					else:
 						score = 0
@@ -627,7 +453,7 @@ class SearchSelection(PageSelection):
 					and term.name_regex.match(path.name):
 						score += 1 # effective score going to 11
 
-					if bool(score) != term.inverse: # implicit XOR
+					if bool(score) != term.negate: # implicit XOR
 						results.add(path)
 						self._count_score(path, score or 1)
 
@@ -643,24 +469,23 @@ class SearchSelection(PageSelection):
 
 	def _name_regex(self, string, case=False):
 		# Build a regex for matching a glob against a page name
-		# Don't use word delimiters here, since page names could be in
-		# camelcase. User should include ":" if they want to match
-		# whole namespace.
+		# consider the ":" separator as the word boundary, even if name contains spaces
 		if string.startswith('*'):
 			prefix = r'.*'
 			string = string.lstrip('*')
 		else:
-			prefix = r'^'
+			prefix = r'(^|.*:)'
 			string = string.lstrip(':')
 
 		if string.endswith('*'):
+			# ":*" ending implicit here
 			postfix = r''
 			string = string.rstrip('*')
 		else:
-			postfix = r'$'
+			postfix = r'(:|$)'
+			string = string.rstrip(':')
 
 		regex = prefix + re.escape(string) + postfix
-
 		if case:
 			return re.compile(regex, re.U)
 		else:
@@ -668,8 +493,16 @@ class SearchSelection(PageSelection):
 
 	def _namespace_regex(self, string, case=False):
 		# like _name_regex but adds recursive descent below the page
-		namespace = re.escape(string.strip('*:'))
-		regex = r'^(' + namespace + '$|' + namespace + ':)'
+		string = string.lstrip(':')
+		if string.endswith('*'):
+			# ":*" ending implicit here
+			postfix = r''
+			string = string.rstrip('*')
+		else:
+			postfix = r'(:|$)'
+			string = string.rstrip(':')
+
+		regex = '^' + re.escape(string) + postfix
 		if case:
 			return re.compile(regex)
 		else:

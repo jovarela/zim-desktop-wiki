@@ -26,6 +26,7 @@ from zim.gui.widgets import \
 	uistate_property
 from zim.gui.actionextension import ActionExtensionBase, populate_toolbar_with_actions
 from zim.gui.clipboard import Clipboard
+from zim.gui.pageview.find import FindQuery
 
 
 logger = logging.getLogger('zim.plugins.tasklist')
@@ -1204,7 +1205,7 @@ class TaskListTreeView(BrowserTreeView):
 		text = self._get_raw_text(model[path])
 
 		pageview = self.opener.open_page(page)
-		pageview.show_find(text)
+		pageview.show_find(FindQuery(text))
 
 	def _get_raw_text(self, task):
 		id = task[TASKID_COL]

@@ -1,5 +1,5 @@
 Content-Type: text/x-zim-wiki
-Wiki-Format: zim 0.4
+Wiki-Format: zim 0.6
 
 ====== Searching ======
 
@@ -49,24 +49,27 @@ which will print a list of all pages that contain both the [[tags]] "''@home''" 
 ===== Search Query Syntax =====
 This section describes the query syntax that can be used in the search dialog.
 
-=== Summary ===
+==== Summary ====
+Queries can exist of just a word or a quoted string. Multiple words are interpreted as an "AND" query where results must match all terms. Operators can be used to create "OR" queries and negate terms. There is a keyword-value syntax to match specific properties of a page. Keyword matches can use the page index and typically are faster than content searches.
 
 **Operators:**
-+ AND and &&	all the words  must be on the page
-OR or ||			any one of the words must be on the page
-- NOT			the page may not contain this word
+''AND'', ''and, +''	all the search terms  must be on the page
+''OR'', ''or''		any one of the search must be on the page
+''-'', ''NOT''		the page must not contain this term
+''( .. )''		group terms into a sub-query
 
-**Keywords:**	//details on keyword searches below//
-Content:
-Name:
-Section:
-Links:
-LinksFrom:
-LinksTo:
-Tag:
+**Keywords:**
+''Content:''	match page content
+''Name:''		match the page name, matches anywhere in the full page name, including ":" separators
+''Section:''	match the given page and any sub-pages, value should be a fully specified page name
+''Namespace:''	alias for "''Section''"
+''Tag:''		match tags on the page
+''LinksFrom:''	match pages linked, value should be a fully specified page name
+''LinksTo:''	match pages linking to the give page, value should be a fully specified page name
+''Links:''		alias for "''LinksFrom''"
 
 
-=== Details ===
+==== Operators ====
 The Boolean operators AND NOT OR give you great flexibility in searching. If you have large, long-term notebooks, it is worth the learning curve.
 
 AND is the default: it serves to narrow your search by stipulating that 2 or more terms appear on the same page
@@ -77,7 +80,6 @@ As in most search programs (e.g. Google and Yahoo) logical AND is **implied** by
 foo bar
 foo AND bar
 foo and bar
-foo && bar
 +foo +bar
 '''
 
@@ -104,14 +106,23 @@ In our example the OR operator serves for finding pages containing either "foo" 
 '''
 foo OR bar
 foo or bar
-foo || bar
 '''
 
 When combining the operators AND has precedence over OR. So a query like:
 
 	''foo OR bar AND dus''
 
-gives all pages that contain "dus" plus either "foo" or "bar" or both.
+is equivalent with:
+
+	''(foo OR bar) AND dus''
+
+Brackets can be used to group terms into sub-queries. This allows to defnine the alternative for the above example:
+
+	''foo OR (bar AND dus)''
+
+Groups can also be negated, as in this example:
+
+	''foo AND NOT (bar or dus)''
 
 To match phrases, i.e. strings containing whitespace (blanks), or to match things that look like operators, you need to put the string between double quotes. So when looking for a literal string "foo bar" and a literal "+1" use:
 
@@ -126,18 +137,10 @@ Some*
 will match all words starting with "Some", like "Someday", "Someplace" etc.
 
 
-**Keyword searches: **
-So far we just searched for words in the page contents and page names. If you want more control you can use keywords to specify a specific page property. Such searches limit the scope of the search, they are not only more specific, but in some cases also much faster than normal searches.  The keywords for defined fields of pages are:
+==== Keyword searches ====
+So far we just searched for words in the page contents and page names. In all of the above examples a keyword-value pair can be used as a search term as well.
 
-	**Content:**
-	**Name:**
-	**Section:**
-	**Links:**
-	**LinksFrom:**
-	**LinksTo:**
-	**Tag:**
-
- For example to only search the page names you can use:
+Keywords are case-insensitive and end in a ":". The keyword can be followed by an optional whitespace. For example to only search the page names you can use:
 
 '''
 Name: *foo*
@@ -145,18 +148,72 @@ Name: *foo*
 
 This query only returns pages that contain "foo" in the page name without looking at their content.
 
+The same query can be written as:
+
+'''
+Name: *foo*
+name: *foo*
+name:*foo*
+name:"*foo*"
+Name:'*foo*'
+name: "*foo*"
+'''
+
+All of these result in the same query
+
 The "Content:" keyword only matches page contents and excludes e.g. page names.
 
  Content: foo AND NOT Name: *foo*
 
-will find pages that have foo written somewhere in their page content but that do not contain "foo" in the page name.
+will find pages that have "foo" written somewhere in their page content but that do not contain "foo" in the page name.
 
-The "Section:" keyword limits the search to sub-pages of a specific page name. This allows searching a sub-set of the full notebook.
+Most keywords support "*" to match partial words. The "*" matches any non-whitespace characters. Globs are expanded even in quoted strings.
+
+Words that end in a ":" but are not a recognized keyword are understood as plain text and result in a content search.
+
+
+==== Implicit keywords ====
+A search for a single word that starts with an "''@''" will automatically be converted in a search for a tag. For example "''@home''" will automatically be converted to "''Tag: home''"
+
+
+==== Supported Keywords ====
+
+=== ContentOrName ===
+This is the keyword that is being used for search terms without a specific keyword, it behaves like the "Content" keyword, but also matches anywhere in the page name
+
+=== Content ===
+The "''Content:''" keyword matches text content anywhere in the page. A "''*''" can appear anywhere in the string (start, middle, end) and is expanded to match non-whitespace characters.
+
+This keyword does not match e.g. object attributes or the link target for links that have different value for the text and for the link target.
+
+=== Name ===
+The "''Name:''" keyword matches anywhere in the full page name. This is the full page path, including "'':''" separators.
+A "''*''" will be expanded at the start or end of the string. It matches any character.
+
+The "'':''" separators in the full page name are considered word boundaries. If the page name starts with a "'':''" it is matched from the start of the (sub-)page name. If the page name ends with ":" the name is matched till the end of the (sub-)page name. If the string ends in "'':*''" it will match only sub-pages of a matching page name,
+
+=== Section ===
+The "''Section:''" matches the given page and any sub-pages. This allows searching a sub-set of the full notebook. The value should be a fully specified name. The start is always the top level of the notebook.
 
 Suppose under Home you have the page "photo" as top-level page with multiple pages below it and you want to search only the photo part of your large notebook. You want to find all entries about the depth of field or its abbreviation DoF, so you type the following search:
 
 	''Section: Home:photo "depth of field" or dof''
 
+A "'':''" at the start will be ignored and a "''*''" at the start is not supported and taken as a literal character. At the end "''*''" is supported to expand the name and "'':*''" is supported to only match sub-pages, while excluding the top-level page of the section. Effectively this keyword behaves the same as the "''Name:''" keyword except expansion at the start is ignored and matches always start from the notebook top-level. If you want to also expand the start of the name, use the "''Name:''" keyword instead.
+
+The "''Namespace:''" keyword is an alias for "''Section:''".
+
+=== Tag ===
+The keyword "''Tag:''" can be used to search for specifics tags like:
+'''
+
+Tag: home
+Tag: @home
+'''
+
+Will return any page that has the tag "home". The "''*''" expansion is currently not supported for tags.
+
+=== Links, LinksFrom, LinksTo ===
 The "Links" and "LinksFrom" keywords return all pages linked by a certain page while "LinksTo" returns all pages that link to a certain page, this is used to find back links.
 
 To exclude all pages linking to ":Done" try:
@@ -171,10 +228,6 @@ A complex example would be to find any pages in the section ":Date" that link to
 section: Date and linksto: Planning
 '''
 
-The keyword "Tag" can be used to search for specifics tags like:
-'''
+For the keywords "''Links:''", "''LinksFrom:''" and "''LinksTo:''" currently no "''*''" expansion is supported. However a "''*''" can appear at the end but gets a special meaning. The value is supposed to be a fully specified name, if it ends in a "''*''", all sub-pages are also included.
 
-Tag: home
-'''
-
-Note that a simple search for a single word like "''@home''" will automatically be converted to "''Tag: home''"
+So a query "''linksfrom: Projects''" only matches pages linked directly from the page "'':Projects''", while a query "''linksfrom: Projects*''" matches all pages linked from either the page "'':Projects''" or from any sub-page of "'':Projects''".

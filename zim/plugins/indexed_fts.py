@@ -117,18 +117,18 @@ sqlite.
 
 		# Protect against a possibly long-running query if accidentally
 		# searching for "*"
-		if term.string == "*":
+		if term.value == "*":
 			return SearchSelection(None)
 
 		# Beware: FTS5 only supports "*" expansion at the end of a word
 		# while we want to support it in the beginning and the middle as well
 		# We can emulate the globbing behavior by constructing an equivalent
 		# query containing all tokens that match the expansion
-		if "*" in term.string:
+		if "*" in term.value:
 			# We need to find all tokens that match the search
 			query_token_result = db.execute(
 				"SELECT DISTINCT term FROM pages_ftsv WHERE term GLOB ?;",
-				(escape_for_glob(term.string.lower()),)
+				(escape_for_glob(term.value.lower()),)
 			).fetchall()
 			query_token_list = [
 				escape_for_fts(row["term"])
@@ -137,7 +137,7 @@ sqlite.
 			query_string = ' OR '.join(query_token_list)
 
 		else:
-			query_string = escape_for_fts(term.string.lower())
+			query_string = escape_for_fts(term.value.lower())
 
 
 		logger.debug("Full-Text Search for query %s", query_string)
@@ -153,7 +153,7 @@ sqlite.
 			"JOIN pages_ftsv AS v ON f.rowid = v.doc "
 			"WHERE v.term GLOB ? "
 			"GROUP BY p.name;",
-			(query_string, escape_for_glob(term.string.lower()))
+			(query_string, escape_for_glob(term.value.lower()))
 		).fetchall()
 
 		myscores = {}
@@ -172,7 +172,7 @@ sqlite.
 			myresults &= scope
 
 		# Inverse selection
-		if term.inverse:
+		if term.negate:
 			if not scope:
 				# initialize scope with whole notebook :S
 				scope = set()

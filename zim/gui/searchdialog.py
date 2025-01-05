@@ -13,12 +13,15 @@ from zim.gui.pageview.find import FIND_REGEX
 
 from zim.search import *
 
+
 logger = logging.getLogger('zim.gui.searchdialog')
+
 
 HELP_TEXT = _(
 	'For advanced search you can use operators like\n'
 	'AND, OR and NOT. See the help page for more details.'
 ) # T: help text for the search dialog
+
 
 class SearchDialog(Dialog):
 
@@ -193,7 +196,7 @@ class SearchResultsTreeView(BrowserTreeView):
 		self.get_model().clear()
 		self.cancelled = False
 		self.hasresults = False
-		self.query = Query(query)
+		self.query = parse_page_search_query(query)
 		self.selection.search(self.query, callback=self._search_callback)
 		self._update_results(self.selection)
 
@@ -248,7 +251,6 @@ class SearchResultsTreeView(BrowserTreeView):
 
 		# Popup find dialog with same query
 		if pageview and self.query:
-			find_string, find_needs_regex = self.query.find_input
-			if find_string:
-				flag = FIND_REGEX if find_needs_regex else 0
-				pageview.show_find(find_string, flags=flag, highlight=True)
+			fquery = find_query_from_search_query(self.query)
+			if fquery:
+				pageview.show_find(fquery, highlight=True)
