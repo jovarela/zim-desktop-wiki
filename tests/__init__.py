@@ -418,11 +418,13 @@ class LoggingFilter(logging.Filter):
 		'''
 		self.logger = logger
 		self.message = message
+		self.captured = []
 
 	def __enter__(self):
 		logging.getLogger(self.logger).addFilter(self)
 		for handler in logging.getLogger().handlers:
 			handler.addFilter(self)
+		return self
 
 	def __exit__(self, *a):
 		logging.getLogger(self.logger).removeFilter(self)
@@ -431,16 +433,20 @@ class LoggingFilter(logging.Filter):
 
 	def filter(self, record):
 		if record.name.startswith(self.logger):
+			capture = False
 			msg = record.getMessage()
 			if self.message is None:
-				return False
+				capture = True
 			elif isinstance(self.message, tuple):
-				return not any(msg.startswith(m) for m in self.message)
+				capture = any(msg.startswith(m) for m in self.message)
 			else:
-				return not msg.startswith(self.message)
+				capture = msg.startswith(self.message)
+
+			if capture:
+				self.captured.append(msg)
+			return not capture
 		else:
 			return True
-
 
 	def wrap_test(self, test):
 		self.__enter__()

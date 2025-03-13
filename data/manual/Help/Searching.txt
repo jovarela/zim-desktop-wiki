@@ -163,13 +163,18 @@ All of these result in the same query
 
 The "Content:" keyword only matches page contents and excludes e.g. page names.
 
- Content: foo AND NOT Name: *foo*
-
-will find pages that have "foo" written somewhere in their page content but that do not contain "foo" in the page name.
+''Content: foo AND NOT Name: *foo*'' will find pages that have "foo" written somewhere in their page content but that do not contain "foo" in the page name.
 
 Most keywords support "*" to match partial words. The "*" matches any non-whitespace characters. Globs are expanded even in quoted strings.
 
 Words that end in a ":" but are not a recognized keyword are understood as plain text and result in a content search.
+
+
+As a special case, a keyword can also contain a group.
+
+''name:(foo bar)'' is equivalent with ''(name:foo name:bar)''
+
+Such keyword groups cannot contain sub-groups or nested keyword terms and do not support ''AND'' and ''OR'' operators
 
 
 ==== Implicit keywords ====

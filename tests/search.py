@@ -122,7 +122,7 @@ class TestParseSearchQuery(tests.TestCase):
 			('foo OR (bar baz) OR some', # group in middle
 				_or(_any('foo'), _and(_any('bar'), _any('baz')), _any('some'))),
 			('(bar baz)', # only group
-				_and(_and(_any('bar'), _any('baz')))),
+				_and(_any('bar'), _any('baz'))),
 			('foo OR (bar (test OR TEST))', # Nested group
 				_or(_any('foo'), _and(_any('bar'), _or(_any('test'), _any('TEST'))))),
 			('foo OR ((test OR TEST) bar)', # Nested group
@@ -135,31 +135,49 @@ class TestParseSearchQuery(tests.TestCase):
 				_and(_any('foo'), _not(_or(_any('bar'), _any('baz'))))),
 			('foo AND NOT ( bar OR baz )', # with spaces
 				_and(_any('foo'), _not(_or(_any('bar'), _any('baz'))))),
+			('links: (bar and baz -dus)', # keyword group - no operator support except "+", "-"
+				_and(_t('links', 'bar'), _t('links', 'and'), _t('links', 'baz'), _not(_t('links', 'dus')))
+			)
 		):
 			query = parse_search_query(string, keywords)
-			#print('====', string, '\n', query, '\n', wanted)
 			self.assertEqual(query, wanted)
 
-	def testStrayOperatorsRaiseError(self):
+	def testFixingInvalidQueries(self):
 		keywords = {'links'}
-		for string in (
+		for string, equivalent in (
 			# groups cannot start with OR or multiple AND
-			'AND +foo bar', 'OR foo bar', 'foo (OR bar)',
+			('AND +foo bar', 'foo bar'),
+			('OR foo bar', 'foo bar'),
+			('foo (OR bar)', 'foo (bar)'),
 			# groups cannot end with AND, OR or NOT
-			'foo OR', 'foo AND', 'foo NOT', 'foo (bar NOT) baz',
+			('foo OR', 'foo'),
+			('foo AND', 'foo'),
+			('foo NOT', 'foo'),
+			('foo (bar NOT) baz', 'foo (bar) baz'),
 			# AND and OR cannot follow another AND, OR or NOT operator
-			'foo AND OR bar', 'foo OR AND bar', 'foo NOT AND bar',
+			('foo AND OR bar', 'foo OR bar'),
+			('foo OR AND bar', 'foo AND bar'),
+			('foo NOT AND bar', 'foo AND bar'),
 			# groups cannot be empty - including toplevel - and "( )"
-			'', '    ', '( )', 'AND', 'NOT',
-			# raises unmatched ( or )
-			'(foo', 'bar)', 'foo (bar OR baz))', 'foo (bar OR (baz)',
+			('', ''),
+			('    ', ''),
+			('( )', ''),
+			('AND', ''),
+			('NOT', ''),
+			# unmatched ( or )
+			('(foo', 'foo'),
+			('bar)', 'bar'),
+			('foo (bar OR baz))', 'foo (bar OR baz)'),
+			('foo (bar OR (baz)', 'foo (bar OR (baz))'),
 			# more weird edge cases
-			'(foo +)',
+			('(foo +)', 'foo'),
 		):
 			#print('====', string)
-			with self.assertRaises(SearchQueryValidationError):
+			with tests.LoggingFilter('zim.parsing') as warning:
 				query = parse_search_query(string, keywords)
-				print("GOT:", query)
+				wanted = parse_search_query(equivalent, keywords)
+				self.assertEqual(query, wanted)
+				self.assertTrue(warning.captured)
 
 
 class TestSearchQueryToFindQuery(tests.TestCase):
@@ -542,3 +560,98 @@ class TestQueryGrouping(tests.TestCase):
 			results.search(query)
 			#print('==', string, set(results), set(pages))
 			self.assertEqual(set(results), set(Path(p) for p in pages))
+
+
+class TestSearchQueryTermToRegex(tests.TestCase):
+
+	def runTest(self):
+		for value, regex in (
+			('foo', '\\bfoo'),
+			(' foo', '\\bfoo'),
+			('*foo', 'foo'),
+			('foo bar', '\\bfoo\\s+bar'),
+			('foo*bar', '\\bfoo\\S*bar'),
+			('foo*', '\\bfoo'),
+			('foo ', '\\bfoo\\b'),
+			(' foo ', '\\bfoo\\b'),
+			('*foo*', 'foo'),
+			(' foo bar ', '\\bfoo\\s+bar\\b'),
+			('\u4e00foo', '\u4e00foo'), # chineses char changes behavior
+			('*\u4e00foo', '\u4e00foo'),
+			(' \u4e00foo', '\\b\u4e00foo'),
+			('+foo', '\\+foo'), # no word boundery at non-word character
+		):
+			#print(value, regex, search_query_term_to_regex(value))
+			self.assertEqual(search_query_term_to_regex(value), re.compile(regex, re.I))
+
+
+class TestSearchQueryPageNameTermToRegex(tests.TestCase):
+
+	def runTest(self):
+		for value, regex in (
+			('foo', 'foo'),
+			(' foo', '\\s+foo'),
+			('*foo', 'foo'),
+			('foo bar', 'foo\\s+bar'),
+			('foo*', 'foo'),
+			('foo ', 'foo\\s+'),
+			(' foo ', '\\s+foo\\s+'),
+			('*foo*', 'foo'),
+			(' foo bar ', '\\s+foo\\s+bar\\s+'),
+			(':foo:', '(^:?|:)foo(:|:?$)'),
+			('::foo::', '^:?foo:?$'),
+		):
+			#print(value, regex, search_query_pagename_term_to_regex(value))
+			self.assertEqual(search_query_pagename_term_to_regex(value), re.compile(regex, re.I))
+
+
+class TestCompileSearchQueryCheckFunction(tests.TestCase):
+
+	tuple_keywords = {
+		'name': {'check_func_constructor': check_func_constructor_any_keyword, 'include': ('firstname', 'lastname')},
+		'firstname': {'key': 0},
+		'lastname': {'key': 1}
+	}
+	dict_keywords = {
+		'name': {'check_func_constructor': check_func_constructor_any_keyword, 'include': ('firstname', 'lastname')},
+		'firstname': {'key': 'f_name'},
+		'lastname': {'key': 'lastname'}
+	}
+	tuple_records = [
+		('John', 'Doe'),
+		('Johnny', 'Doe'),
+		('John', 'Johnson'),
+		('Janna', 'Doe'),
+	]
+	dict_records = [
+		{'f_name': 'John', 'lastname': 'Doe'},
+		{'f_name': 'Johnny', 'lastname': 'Doe'},
+		{'f_name': 'John', 'lastname': 'Johnson'},
+		{'f_name': 'Janna', 'lastname': 'Doe'},
+	]
+	queries = [
+		('John', [True, True, True, False]),
+		('name:John', [True, True, True, False]),
+		('name: John', [True, True, True, False]),
+		('name: "John"', [True, True, True, False]),
+		('name: "John "', [True, False, True, False]),
+		('firstname:John', [True, True, True, False]),
+		('lastname:John', [False, False, True, False]),
+		('firstname:John and lastname:Doe', [True, True, False, False]),
+		('firstname:John or lastname:Doe', [True, True, True, True]),
+		('not John', [False, False, False, True]),
+	]
+
+	def testWithTupleRecords(self):
+		self._runTest(self.tuple_keywords, self.tuple_records)
+
+	def testWithDictRecords(self):
+		self._runTest(self.dict_keywords, self.dict_records)
+
+	def _runTest(self, keywords, records):
+		for query, wanted in self.queries:
+			p_query = parse_search_query(query, keywords, default_keyword='name')
+			#print('>>>', query, '\n', '===', p_query)
+			check_func = compile_search_query_check_function(p_query, keywords)
+			result = list(map(check_func, records))
+			self.assertEqual(result, wanted, msg='Query: %s' % query)
