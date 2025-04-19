@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2025-03-24 21:50+0000\n"
+"PO-Revision-Date: 2025-04-19 12:52+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/zim/develop/ta/>\n"
 "Language: ta\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 
 #. Error message when external application could not be found, %s is the command
 #: zim/applications.py:133
@@ -288,9 +288,9 @@ msgid ""
 "</tt>\n"
 msgstr ""
 "பின்வரும் அளவுருக்கள் மாற்றாக இருக்கும்\n"
-" கட்டளை செயல்படுத்தப்படும் போது:\n"
-" <Tt>\n"
-" <b>%f </b> பக்க மூலத்தை தற்காலிக கோப்பாக\n"
+" கட்டளை செயல்படுத்தப்படும்போது:\n"
+" <tt>\n"
+" <b>%f </b> பக்க மூலத்தைத் தற்காலிக கோப்பாக\n"
 " <b>%d </b> தற்போதைய பக்கத்தின் இணைப்பு அடைவு\n"
 " <b>%s </b> உண்மையான பக்க மூல கோப்பு (ஏதேனும் இருந்தால்)\n"
 " <b>%p </b> பக்கத்தின் பெயர்\n"
@@ -599,7 +599,7 @@ msgstr "முழுத்திரனை விட்டு விடுங்�
 #. Menu item
 #: zim/gui/mainwindow.py:295
 msgid "_Fullscreen"
-msgstr "_Fullscreen"
+msgstr "முழுத்திரை"
 
 #. menu item
 #: zim/gui/mainwindow.py:303
@@ -731,7 +731,7 @@ msgstr "குதிக்கவும்"
 #. Button label
 #: zim/gui/mainwindow.py:1169
 msgid "_Jump"
-msgstr "_Jump"
+msgstr "தாண்டு"
 
 #. Label for page input
 #: zim/gui/mainwindow.py:1174
@@ -1142,15 +1142,15 @@ msgid ""
 "Unindent on <BackSpace>\n"
 "(If disabled you can still use <Shift><Tab>)"
 msgstr ""
-"<ackspace> இல் ஆர்வமற்றது\n"
-" ."
+"<BackSpace>இல் வெளிதள்ளல்\n"
+"(முடக்கப்பட்டிருந்தாலும் நீங்கள் இன்னும் பயன்படுத்தலாம் <Shift><Tab>)"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:114
 msgid "Repeated clicking a checkbox cycles through the checkbox states"
 msgstr ""
-"தேர்வுப்பெட்டி மாநிலங்கள் வழியாக தேர்வுப்பெட்டி சுழற்சிகளைக் சொடுக்கு செய்வதை மீண்டும் மீண்டும்"
-" சொடுக்கு செய்க"
+"தேர்வுப்பெட்டி நிலைகள் வழியாகத் தேர்வுப்பெட்டி சுழற்சிகளைக் சொடுக்கு செய்வதை மீண்டும் "
+"சொடுக்கு"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:117
@@ -1241,7 +1241,7 @@ msgstr "_ச்ட்ராங்"
 #. menu item for formatting
 #: zim/gui/pageview/__init__.py:509 zim/gui/pageview/__init__.py:524
 msgid "_Emphasis"
-msgstr "_Emphasis"
+msgstr "முக்கியத்துவம்"
 
 #. Menu item | 
 #. menu item for formatting
@@ -1274,7 +1274,7 @@ msgstr "_Vervall"
 #. menu item for formatting
 #: zim/gui/pageview/__init__.py:528
 msgid "Su_perscript"
-msgstr "Su_perscript"
+msgstr "அருமைஉரை"
 
 #. menu item for formatting
 #: zim/gui/pageview/__init__.py:529
@@ -1415,7 +1415,7 @@ msgstr "மறுஏற்றம் (_R)"
 #. Menu item
 #: zim/gui/pageview/__init__.py:1609
 msgid "_Undo"
-msgstr "_Undo"
+msgstr "செயல்தவிர்"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:1616
@@ -1556,7 +1556,7 @@ msgstr "_ ரோமோவ் தலைப்பு"
 #. Menu item
 #: zim/gui/pageview/__init__.py:2067
 msgid "_Find..."
-msgstr "தேடு... (_F)"
+msgstr "தேடு..."
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:2085
@@ -1571,7 +1571,7 @@ msgstr "Pre_ived ஐக் கண்டறியவும்"
 #. Menu item
 #: zim/gui/pageview/__init__.py:2099
 msgid "_Replace..."
-msgstr "மறுசீரமைப்பு ... (_R)"
+msgstr "மாற்று..."
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:2106
@@ -1778,8 +1778,8 @@ msgid ""
 msgstr ""
 "முக்கிய கலவையுடன் ஒரு புலத்தைக் சொடுக்கு செய்வதன் மூலம் முக்கிய பிணைப்புகளை மாற்றலாம்\n"
 " பட்டியலில், பின்னர் புதிய விசை பிணைப்பை அழுத்தவும்.\n"
-" ஒரு விசைப்பிண்டுகளை முடக்க, அதை பட்டியலில் தேர்ந்தெடுத்து <tt> & lt; பேக்ச்பேச் & gt; "
-"</tt> ஐப் பயன்படுத்தவும்."
+" ஒரு விசைப்பிண்டுகளை முடக்க, அதைப் பட்டியலில் தேர்ந்தெடுத்து <tt> &lt; பின்வெளி &gt; </"
+"tt> ஐப் பயன்படுத்தவும்."
 
 #. Column header for keybinding list
 #: zim/gui/preferencesdialog.py:578
@@ -2010,7 +2010,7 @@ msgstr "முறையான_டிகள்"
 #. menu item in tray icon menu
 #: zim/gui/uiactions.py:228 zim/plugins/trayicon.py:151
 msgid "_Quit"
-msgstr "_Quit"
+msgstr "வெளியேறு"
 
 #. Menu item
 #: zim/gui/uiactions.py:234
@@ -2120,7 +2120,7 @@ msgstr "_ பக்ச்"
 #. Menu item
 #: zim/gui/uiactions.py:434
 msgid "_About"
-msgstr "_About"
+msgstr "பற்றி"
 
 #. Dialog title
 #: zim/gui/uiactions.py:450
@@ -2183,8 +2183,8 @@ msgstr "\"%s\" என்ற பக்கத்தை மறுபெயரிட
 #, python-format
 msgid "Update %i page linking to this page"
 msgid_plural "Update %i pages linking to this page"
-msgstr[0] "புதுப்பிப்பு %நான் இந்த பக்கத்துடன் இணைக்கும் பக்கம்"
-msgstr[1] "இந்த பக்கத்துடன் இணைக்கும் %i பக்கங்களை புதுப்பிக்கவும்"
+msgstr[0] "இந்தப் பக்கத்துடன் இணைக்கும் %i பக்கத்தைப் புதுப்பி"
+msgstr[1] "இந்தப் பக்கத்துடன் இணைக்கும் %i பக்கங்களைப் புதுப்பி"
 
 #. option in 'move page' dialog
 #: zim/gui/uiactions.py:595
@@ -2232,7 +2232,7 @@ msgstr ""
 #, python-format
 msgid "%i file will be trashed"
 msgid_plural "%i files will be trashed"
-msgstr[0] "%நான் கோப்பு குப்பைத் தொட்டியில் இருக்கும்"
+msgstr[0] "%i கோப்பு குப்பைக்கு ஏற்படும்"
 msgstr[1] "%i கோப்புகள் குப்பைக்கு ஏற்படும்"
 
 #. Title of progressbar dialog
@@ -2270,7 +2270,7 @@ msgstr ""
 #, python-format
 msgid "%i file will be deleted"
 msgid_plural "%i files will be deleted"
-msgstr[0] "%நான் கோப்பு நீக்கப்படும்"
+msgstr[0] "%i கோப்பு நீக்கப்படும்"
 msgstr[1] "%i கோப்புகள் நீக்கப்படும்"
 
 #. General description of zim itself
@@ -2394,7 +2394,7 @@ msgstr "படங்கள்"
 #: zim/gui/widgets.py:3894
 #, python-brace-format
 msgid "{count} of {total}"
-msgstr "{மொத்தம் {count}"
+msgstr "{count} ஆவது {total} இல்"
 
 #. dialog title for log view dialog - e.g. for Equation Editor
 #: zim/gui/widgets.py:3916
@@ -2672,7 +2672,7 @@ msgstr "எச்.வி.சி.க்கு சிறுபடங்களை �
 #. label for attachment browser pane
 #: zim/plugins/attachmentbrowser/__init__.py:130
 msgid "Atta_chments"
-msgstr "Atta_chments"
+msgstr "இணைப்புகள்"
 
 #. placeholder label for sidepane
 #: zim/plugins/attachmentbrowser/__init__.py:147
@@ -2747,7 +2747,7 @@ msgstr "திருத்து %s"
 #. button in e.g. equation editor dialog
 #: zim/plugins/base/imagegenerator.py:436
 msgid "_Preview"
-msgstr "_Preview"
+msgstr "முன்னோட்டம்"
 
 #. Question prompt when e.g. equation editor encountered an error generating the image to insert
 #: zim/plugins/base/imagegenerator.py:499
@@ -3349,7 +3349,7 @@ msgstr "பக்க குறியீட்டில் தற்போதை�
 #. tab label for side pane
 #: zim/plugins/pageindex/__init__.py:147
 msgid "Inde_x"
-msgstr "Inde_x"
+msgstr "குறியீட்டு"
 
 #. plugin name
 #: zim/plugins/pathbar.py:38
@@ -3370,7 +3370,7 @@ msgstr ""
 #. Menu title
 #: zim/plugins/pathbar.py:80
 msgid "P_athbar"
-msgstr "P_athbar"
+msgstr "பாதைபட்டி"
 
 #. Menu option for View->Pathbar
 #: zim/plugins/pathbar.py:81
@@ -3429,7 +3429,7 @@ msgstr "_ உலாவிக்கு முன்மாதிரி"
 #. menu item
 #: zim/plugins/printtobrowser.py:75
 msgid "_Print"
-msgstr "_Print"
+msgstr "அச்சிடு"
 
 #. menu item
 #: zim/plugins/printtobrowser.py:75
@@ -3504,7 +3504,7 @@ msgstr ""
 #. plugin preference
 #: zim/plugins/scoreeditor.py:55
 msgid "Common include header"
-msgstr "பொதுவான தலைப்பு தலைப்பு"
+msgstr "பொதுவாகச் சேர்க்கும் தலைப்பு"
 
 #. plugin preference
 #: zim/plugins/scoreeditor.py:56
@@ -3989,7 +3989,7 @@ msgstr ""
 #. title for sidepane tab
 #: zim/plugins/tags.py:98
 msgid "T_ags"
-msgstr "T_ags"
+msgstr "குறிசொற்கள்"
 
 #. menu option
 #: zim/plugins/tags.py:148
@@ -4054,7 +4054,7 @@ msgstr "பணிகளை வடிகட்டவும்"
 #. tab label for side pane
 #: zim/plugins/tasklist/gui.py:275
 msgid "Tas_ks"
-msgstr "Tas_ks"
+msgstr "பணிகள்"
 
 #. Window title for tasklist
 #: zim/plugins/tasklist/gui.py:375 zim/plugins/tasklist/gui.py:380
