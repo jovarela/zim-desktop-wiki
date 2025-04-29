@@ -8,23 +8,22 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2022-12-07 21:47+0000\n"
+"PO-Revision-Date: 2025-04-30 12:18+0000\n"
 "Last-Translator: Stanislav Horáček <stanislav.horacek@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/zim/develop/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:41+0000\n"
 
 #. Error message when external application could not be found, %s is the command
 #: zim/applications.py:133
-#, fuzzy, python-format
-#| msgid "Could not find template \"%s\""
+#, python-format
 msgid "Cound not find application: %s"
-msgstr "Nelze načíst šablonu \"%s\""
+msgstr "Nepodařilo se najít aplikaci: %s"
 
 #. Error message when external application failed, %s is the command
 #: zim/applications.py:150
@@ -100,6 +99,8 @@ msgid ""
 "Create missing directories automatically\n"
 "(If disabled you will be prompted)"
 msgstr ""
+"Vytvářet automaticky chybějící adresáře.\n"
+"(Pokud je zakázáno, budete dotázáni.)"
 
 #. Heading in a question dialog for creating a folder
 #: zim/gui/applications.py:594
@@ -139,10 +140,9 @@ msgstr ""
 
 #. Error message when external application could not be run in terminal, %s is the command
 #: zim/gui/applications.py:826
-#, fuzzy, python-format
-#| msgid "Failed to run application: %s"
+#, python-format
 msgid "Cound not find terminal emulator to run application: %s"
-msgstr "Nepodařilo se spustit aplikaci %s"
+msgstr "Nepodařilo se najít emulátor terminálu pro spuštění aplikace: %s"
 
 #. label to customize 'open with' menu
 #: zim/gui/applications.py:1080
@@ -560,23 +560,23 @@ msgstr "Přepí_nač"
 #. option for preferences dialog
 #: zim/gui/mainwindow.py:68
 msgid "Prefer dark theme"
-msgstr ""
+msgstr "Upřednostnit tmavý motiv vzhledu"
 
 #. info text for preferences dialog
 #: zim/gui/mainwindow.py:69
 msgid "This option requires a Gtk theme supporting a dark variant"
-msgstr ""
+msgstr "Tato možnost vyžaduje motiv Gtk s podporou tmavé varianty"
 
 #. info text for preferences dialog | 
 #. option for preferences dialog
 #: zim/gui/mainwindow.py:70 zim/gui/mainwindow.py:71
 msgid "This option requires restart of the application"
-msgstr ""
+msgstr "Tato možnost vyžaduje restart aplikace"
 
 #. option for preferences dialog
 #: zim/gui/mainwindow.py:71
 msgid "Show controls in the window decoration"
-msgstr ""
+msgstr "Zobrazit ovládací prvky v dekoracích oken"
 
 #. Option in the preferences dialog - %s will map to either <Control><Space> or <Command><Space> key binding
 #: zim/gui/mainwindow.py:73
@@ -591,10 +591,8 @@ msgstr "Při otevření stránky umístit kurzor na poslední známou pozici"
 
 #. button label for fullscreen window header
 #: zim/gui/mainwindow.py:152 zim/gui/mainwindow.py:273
-#, fuzzy
-#| msgid "_Fullscreen"
 msgid "Leave Fullscreen"
-msgstr "_Celoobrazovkový režim"
+msgstr "Opustit celoobrazovkový režim"
 
 #. Menu item
 #: zim/gui/mainwindow.py:295
@@ -603,22 +601,18 @@ msgstr "_Celoobrazovkový režim"
 
 #. menu item
 #: zim/gui/mainwindow.py:303
-#, fuzzy
-#| msgid "Notebook _Editable"
 msgid "Toggle _Editable"
-msgstr "Sešit lze _upravovat"
+msgstr "Přepnout _lištu úprav"
 
 #. menu item
 #: zim/gui/mainwindow.py:303
-#, fuzzy
-#| msgid "Notebook _Editable"
 msgid "Toggle editable"
-msgstr "Sešit lze _upravovat"
+msgstr "Přepnout lištu úprav"
 
 #. message in toggle editable tooltip
 #: zim/gui/mainwindow.py:332
 msgid "Page is read-only and cannot be edited"
-msgstr ""
+msgstr "Stránka je pouze pro čtení a nelze ji upravovat"
 
 #. Menu item
 #: zim/gui/mainwindow.py:366
@@ -628,7 +622,7 @@ msgstr "_Postranní panely"
 #. menu item
 #: zim/gui/mainwindow.py:391
 msgid "Focus Sidepane"
-msgstr ""
+msgstr "Zaměřit boční panel"
 
 #. Menu item | 
 #. Button label
@@ -685,7 +679,7 @@ msgstr "_Zpět"
 #. tooltip for navigation button
 #: zim/gui/mainwindow.py:913
 msgid "Go back"
-msgstr ""
+msgstr "Přejít zpět"
 
 #. Menu item | 
 #. Button label
@@ -695,10 +689,8 @@ msgstr "_Vpřed"
 
 #. tooltip for navigation button
 #: zim/gui/mainwindow.py:926
-#, fuzzy
-#| msgid "_Forward"
 msgid "Go forward"
-msgstr "_Vpřed"
+msgstr "Přejít vpřed"
 
 #. Menu item
 #: zim/gui/mainwindow.py:936
@@ -712,15 +704,11 @@ msgstr "O úroveň _níž"
 
 #. Menu item
 #: zim/gui/mainwindow.py:961
-#, fuzzy
-#| msgid "_Previous in index"
 msgid "_Previous in Index"
 msgstr "Pře_dchozí v indexu"
 
 #. Menu item
 #: zim/gui/mainwindow.py:970
-#, fuzzy
-#| msgid "_Next in index"
 msgid "_Next in Index"
 msgstr "_Následující v indexu"
 
@@ -732,18 +720,16 @@ msgstr "_Domů"
 #. Menu item
 #: zim/gui/mainwindow.py:979
 msgid "Go to home page"
-msgstr ""
+msgstr "Přejít na domovskou stránku"
 
 #. Label for button with backlinks in statusbar
 #: zim/gui/mainwindow.py:1001
-#, fuzzy, python-format
-#| msgid "%i _Backlink..."
-#| msgid_plural "%i _Backlinks..."
+#, python-format
 msgid "%i _Backlink"
 msgid_plural "%i _Backlinks"
-msgstr[0] "%i zpětný odkaz"
-msgstr[1] "%i zpětné odkazy"
-msgstr[2] "%i zpětných odkazů"
+msgstr[0] "%i _zpětný odkaz"
+msgstr[1] "%i _zpětné odkazy"
+msgstr[2] "%i _zpětných odkazů"
 
 #. Dialog title
 #: zim/gui/mainwindow.py:1168
@@ -966,7 +952,7 @@ msgstr "Text"
 #. Input in 'move text' dialog
 #: zim/gui/pageview/dialogs.py:556 zim/gui/pageview/dialogs.py:783
 msgid "Prefer short link names for pages"
-msgstr ""
+msgstr "Upřednostnit pro stránky krátké názvy odkazů"
 
 #. Dialog title
 #: zim/gui/pageview/dialogs.py:669
@@ -1031,7 +1017,7 @@ msgstr "Otevřít novou stránku"
 #. error message in "move selected text" action
 #: zim/gui/pageview/dialogs.py:807
 msgid "No text selected"
-msgstr ""
+msgstr "Není vybrán žádný text"
 
 #. Dialog title
 #: zim/gui/pageview/dialogs.py:847
@@ -1106,7 +1092,7 @@ msgstr "Nová _příloha"
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:81
 msgid "Show edit bar along bottom of editor"
-msgstr ""
+msgstr "Zobrazit lištu úprav v dolní části editoru"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:84
@@ -1115,7 +1101,7 @@ msgid ""
 "(If disabled you can still use <Alt><Enter>)"
 msgstr ""
 "Pomocí klávesy Enter můžete přejít na cíl odkazu\n"
-"(pokud to nefunguje, použijte Alt-Enter)."
+"(pokud to nefunguje, použijte Alt-Enter)"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:87
@@ -1125,7 +1111,7 @@ msgstr ""
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:90
 msgid "Show the cursor also for pages that can not be edited"
-msgstr "Zobrazit kurzor také na stránkách, které nelze upravovat."
+msgstr "Zobrazit kurzor také na stránkách, které nelze upravovat"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:93
@@ -1134,24 +1120,18 @@ msgstr "Automaticky vytvářet odkazy ze SloženýchSlov"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:96
-#, fuzzy
-#| msgid "Automatically turn file paths into links"
 msgid "Automatically turn wiki page names into links"
-msgstr "Automaticky vytvářet odkazy z adresářových cest"
+msgstr "Automaticky vytvářet odkazy z wiki stránek"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:99
-#, fuzzy
-#| msgid "Automatically turn file paths into links"
 msgid "Automatically turn identifiers starting with \"#\" into links"
-msgstr "Automaticky vytvářet odkazy z adresářových cest"
+msgstr "Automaticky vytvářet odkazy z identifikátorů začínajících „#“"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:102
-#, fuzzy
-#| msgid "Automatically turn file paths into links"
 msgid "Automatically turn interwiki names into links"
-msgstr "Automaticky vytvářet odkazy z adresářových cest"
+msgstr "Automaticky vytvářet odkazy z názvů interwiki"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:105
@@ -1179,15 +1159,11 @@ msgstr "Opakované klikání na přepínač postupně aktivuje jeho stavy"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:117
-#, fuzzy
-#| msgid "(Un-)Indenting a list item also change any sub-items"
 msgid "(Un-)indenting a list item also changes any sub-items"
-msgstr "Odsazení položky seznamu ovlivní i podpoložky"
+msgstr "Změna odsazení položky seznamu změní také jeho podpoložky"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:120
-#, fuzzy
-#| msgid "Checking a checkbox also change any sub-items"
 msgid "Checking a checkbox also changes any sub-items"
 msgstr "Zatržení přepínače změní také jeho podpoložky"
 
@@ -1300,15 +1276,11 @@ msgstr "Stro_jopis"
 
 #. menu item for formatting
 #: zim/gui/pageview/__init__.py:528
-#, fuzzy
-#| msgid "_Superscript"
 msgid "Su_perscript"
 msgstr "_Horní index"
 
 #. menu item for formatting
 #: zim/gui/pageview/__init__.py:529
-#, fuzzy
-#| msgid "_Subscript"
 msgid "Su_bscript"
 msgstr "_Dolní index"
 
@@ -1331,10 +1303,8 @@ msgstr "Kopírovat _jako..."
 
 #. menu item for context menu of editor
 #: zim/gui/pageview/__init__.py:1386
-#, fuzzy
-#| msgid "_Verbatim"
 msgid "Paste As _Verbatim"
-msgstr "Stro_jopis"
+msgstr "Vložit jako stro_jopis"
 
 #. Context menu item for pageview to move selected text to new/other page | 
 #. Menu item
@@ -1372,10 +1342,8 @@ msgstr "Kopírovat _odkaz"
 
 #. context menu item
 #: zim/gui/pageview/__init__.py:1493
-#, fuzzy
-#| msgid "Edit Link"
 msgid "Cut Lin_k"
-msgstr "Upravit odkaz"
+msgstr "Vy_jmout odkaz"
 
 #. context menu item
 #: zim/gui/pageview/__init__.py:1506
@@ -1514,10 +1482,8 @@ msgstr "Kopírovat řá_dek"
 
 #. menu item to cut current line to clipboard
 #: zim/gui/pageview/__init__.py:1757
-#, fuzzy
-#| msgid "Edit Link"
 msgid "Cut Line"
-msgstr "Upravit odkaz"
+msgstr "Vyjmout řádek"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:1770
@@ -1635,14 +1601,12 @@ msgstr "_Normální velikost"
 #. tooltip for button in anchor popover
 #: zim/gui/pageview/textview.py:826
 msgid "Copy link to clipboard"
-msgstr ""
+msgstr "Zkopírovat odkaz do schránky"
 
 #. tooltip label for image with href
 #: zim/gui/pageview/textview.py:1087
-#, fuzzy
-#| msgid "_Link"
 msgid "Link"
-msgstr "_Odkaz"
+msgstr "Odkaz"
 
 #. Tab in preferences dialog
 #: zim/gui/preferencesdialog.py:31
@@ -1701,10 +1665,8 @@ msgstr "_Nastavit"
 
 #. Button in plugin tab
 #: zim/gui/preferencesdialog.py:259
-#, fuzzy
-#| msgid "Properties"
 msgid "_Properties"
-msgstr "Vlastnosti"
+msgstr "_Vlastnosti"
 
 #. button label
 #: zim/gui/preferencesdialog.py:274
@@ -1818,10 +1780,8 @@ msgstr ""
 
 #. Column header for keybinding list
 #: zim/gui/preferencesdialog.py:578
-#, fuzzy
-#| msgid "Section"
 msgid "Action"
-msgstr "Sekce"
+msgstr "Akce"
 
 #. Column header for keybinding list
 #: zim/gui/preferencesdialog.py:589
@@ -1848,14 +1808,12 @@ msgstr "Kořen dokumentu"
 #. label for properties dialog
 #: zim/gui/propertiesdialog.py:21
 msgid "Prefer short names for page links"
-msgstr ""
+msgstr "Upřednostnit pro odkazy na stránky krátké názvy"
 
 #. label for properties dialog
 #: zim/gui/propertiesdialog.py:22
-#, fuzzy
-#| msgid "Could not find the file or folder for this notebook"
 msgid "Do not use system trash for this notebook"
-msgstr "Nelze najít soubor nebo složku pro tento sešit"
+msgstr "Nepoužívat pro tento sešit koš ze systému"
 
 #: zim/gui/propertiesdialog.py:23
 #, fuzzy
@@ -1909,10 +1867,8 @@ msgstr "_Najít"
 
 #. checkbox option in search dialog
 #: zim/gui/searchdialog.py:54
-#, fuzzy
-#| msgid "Limit search to the current page and sub-pages"
 msgid "_Limit search to the current page and sub-pages"
-msgstr "Hledat jen v aktuální stránce a podstránkách"
+msgstr "Hledat jen v _aktuální stránce a podstránkách"
 
 #. placeholder label when search has started
 #: zim/gui/searchdialog.py:67
@@ -1924,7 +1880,7 @@ msgstr "_Hledat..."
 #. placeholder label when search has no results
 #: zim/gui/searchdialog.py:68
 msgid "No results"
-msgstr ""
+msgstr "Žádné výsledky"
 
 #. Column header search dialog
 #: zim/gui/searchdialog.py:170
@@ -2048,6 +2004,7 @@ msgstr "_Smazat stránku"
 #: zim/gui/uiactions.py:212
 msgid "Trash failed, do you want to permanently delete instead ?"
 msgstr ""
+"Stránku se nepodařilo přesunout do koše, chcete ji místo toho trvale smazat?"
 
 #. Menu item
 #: zim/gui/uiactions.py:218
@@ -2256,40 +2213,36 @@ msgstr ""
 #. Dialog title
 #: zim/gui/uiactions.py:712
 msgid "Trash Page"
-msgstr ""
+msgstr "Přesunout stránku do koše"
 
 #. Heading in 'trash page' dialog - %s is the page name
 #: zim/gui/uiactions.py:713
-#, fuzzy, python-format
-#| msgid "Move page \"%s\""
+#, python-format
 msgid "Move page \"%s\" to trash?"
-msgstr "Přesunout stránku %s"
+msgstr "Přesunout stránku „%s“ do koše?"
 
 #. Text in 'trash page' dialog - %s is the page name
 #: zim/gui/uiactions.py:715
-#, fuzzy, python-format
-#| msgid ""
-#| "Page \"%s\" and all of it's\n"
-#| "sub-pages and attachments will be deleted"
+#, python-format
 msgid ""
 "Page \"%s\" and all of it's sub-pages and\n"
 "attachments will be moved to your system's trash.\n"
 "\n"
 "To undo later, go to your system's trashcan."
 msgstr ""
-"Stránka \"%s\"a všechny\n"
-"její podstránky a přílohy budou smazány"
+"Stránka „%s“a všechny její podstránky\n"
+"a přílohy budou přesunuty do koše ze systému.\n"
+"\n"
+"Budete-li chtít později smazání vrátit, použijte tento koš."
 
 #. label in the TrashPage dialog to warn user of attachments being deleted
 #: zim/gui/uiactions.py:719
-#, fuzzy, python-format
-#| msgid "%i file will be deleted"
-#| msgid_plural "%i files will be deleted"
+#, python-format
 msgid "%i file will be trashed"
 msgid_plural "%i files will be trashed"
-msgstr[0] "%i soubor bude smazán"
-msgstr[1] "%i soubory budou smazány"
-msgstr[2] "%i souborů bude smazáno"
+msgstr[0] "%i soubor bude přesunut do koše"
+msgstr[1] "%i soubory budou přesunuty do koše"
+msgstr[2] "%i souborů bude přesunuto do koše"
 
 #. Title of progressbar dialog
 #: zim/gui/uiactions.py:729 zim/gui/uiactions.py:769
