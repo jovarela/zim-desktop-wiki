@@ -8,22 +8,22 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2025-03-07 05:49+0000\n"
-"Last-Translator: Andreas Klostermaier <andreas.klostermaier@appendx.de>\n"
+"PO-Revision-Date: 2025-05-06 19:01+0000\n"
+"Last-Translator: Amr Ibrahim <amribrahim1987@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/zim/develop/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:41+0000\n"
 
 #. Error message when external application could not be found, %s is the command
 #: zim/applications.py:133
 #, python-format
 msgid "Cound not find application: %s"
-msgstr "Konnte die Anwendung \"%s\" nicht finden"
+msgstr "Konnte die Anwendung »%s« nicht finden"
 
 #. Error message when external application failed, %s is the command
 #: zim/applications.py:150
@@ -105,7 +105,7 @@ msgstr ""
 #. Heading in a question dialog for creating a folder
 #: zim/gui/applications.py:594
 msgid "Create folder?"
-msgstr "Verzeichnis erstellen?"
+msgstr "Ordner erstellen?"
 
 #. Text in a question dialog for creating a folder, %s will be the folder base name
 #: zim/gui/applications.py:596
