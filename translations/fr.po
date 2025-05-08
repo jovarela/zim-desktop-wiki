@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2025-03-09 08:11+0000\n"
+"PO-Revision-Date: 2025-05-09 09:01+0000\n"
 "Last-Translator: joel MKO <joelmko90@outlook.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/zim/develop/fr/>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:41+0000\n"
 
 #. Error message when external application could not be found, %s is the command
@@ -29,7 +29,7 @@ msgstr "Impossible de trouver l'application : %s"
 #: zim/applications.py:150
 #, python-format
 msgid "Failed to run application: %s"
-msgstr "Échec du lancement de l'application : %s"
+msgstr "Échec du lancement de l'application : %s"
 
 #. Error message when external application failed, %(cmd)s is the command, %(code)i the exit code
 #: zim/applications.py:153
@@ -67,7 +67,7 @@ msgstr "Il semble que vous ayez trouvé un bogue"
 #: zim/fs.py:275 zim/newfs/base.py:66
 #, python-format
 msgid "Could not read: %s"
-msgstr "Impossible de lire : %s"
+msgstr "Impossible de lire : %s"
 
 #. message for FileUnicodeError
 #: zim/fs.py:277 zim/newfs/base.py:68
@@ -86,13 +86,13 @@ msgstr "Détails"
 #: zim/fs.py:1171
 #, python-format
 msgid "File is not writable: %s"
-msgstr "Le fichier est protégé en écriture : %s"
+msgstr "Le fichier est protégé en écriture : %s"
 
 #. error message
 #: zim/fs.py:1243
 #, python-format
 msgid "File changed on disk: %s"
-msgstr "Le fichier a été modifié sur le disque : %s"
+msgstr "Le fichier a été modifié sur le disque : %s"
 
 #. option in preferences dialog
 #: zim/gui/applications.py:45
@@ -106,7 +106,7 @@ msgstr ""
 #. Heading in a question dialog for creating a folder
 #: zim/gui/applications.py:594
 msgid "Create folder?"
-msgstr "Créer le répertoire ?"
+msgstr "Créer le répertoire ?"
 
 #. Text in a question dialog for creating a folder, %s will be the folder base name
 #: zim/gui/applications.py:596
@@ -116,7 +116,7 @@ msgid ""
 "Do you want to create it now?"
 msgstr ""
 "Le dossier \"%s\" n'existe pas.\n"
-"Voulez-vous le créer ?"
+"Voulez-vous le créer ?"
 
 #. error when external application fails
 #: zim/gui/applications.py:663 zim/gui/applications.py:737
@@ -292,7 +292,7 @@ msgid ""
 "</tt>\n"
 msgstr ""
 "Les paramètres suivant vont être remplacés\n"
-"dans la commande quand elle sera exécutée :\n"
+"dans la commande quand elle sera exécutée :\n"
 "<tt>\n"
 "<b>%f</b> le fichier temporaire de la page source\n"
 "<b>%d</b> le dossier de fichiers liés de la page actuelle\n"
@@ -318,7 +318,7 @@ msgstr "Export du bloc-notes"
 #: zim/gui/exportdialog.py:143
 #, python-format
 msgid "Folder exists: %s"
-msgstr "Le dossier existe : %s"
+msgstr "Le dossier existe : %s"
 
 #. detailed message, answers are Yes and No
 #: zim/gui/exportdialog.py:144
@@ -326,8 +326,8 @@ msgid ""
 "Folder already exists and has content, exporting to this folder may "
 "overwrite existing files. Do you want to continue?"
 msgstr ""
-"Le dossier existe déjà et possède des fichiers ; exporter dans ce dossier "
-"pourrait remplacer des fichiers existants. Voulez-vous continuer ?"
+"Le dossier existe déjà et possède des fichiers ; exporter dans ce dossier "
+"pourrait remplacer des fichiers existants. Voulez-vous continuer ?"
 
 #. message heading
 #: zim/gui/exportdialog.py:157
@@ -341,7 +341,7 @@ msgid ""
 "Do you want to overwrite it?"
 msgstr ""
 "Le fichier existe déjà.\n"
-"Voulez-vous l'écraser ?"
+"Voulez-vous l'écraser ?"
 
 #. title of step in export dialog
 #: zim/gui/exportdialog.py:169
@@ -481,7 +481,7 @@ msgstr "Consulter le _journal"
 #: zim/gui/insertedobjects.py:276
 #, python-format
 msgid "No plugin available to display objects of type: %s"
-msgstr "Aucun greffon disponible pour afficher des objets du type : %s"
+msgstr "Aucun greffon disponible pour afficher des objets du type : %s"
 
 #. Label for object manager - "%s" is the plugin name
 #: zim/gui/insertedobjects.py:284
@@ -646,7 +646,7 @@ msgstr "Barre de menus"
 #. short question on open-page if file exists
 #: zim/gui/mainwindow.py:822 zim/gui/uiactions.py:493
 msgid "File exists, do you want to import?"
-msgstr "Ce fichier existe déjà, voulez-vous le ré-importer ?"
+msgstr "Ce fichier existe déjà, voulez-vous le ré-importer ?"
 
 #. longer question on open-page if file exists
 #: zim/gui/mainwindow.py:823 zim/gui/uiactions.py:494
@@ -656,7 +656,7 @@ msgid ""
 "Do you want to import it?"
 msgstr ""
 "Le fichier \"%s\" existe mais n'est pas une page de wiki.\n"
-"Vous-vous l'importer ?"
+"Vous-vous l'importer ?"
 
 #. page status for title bar
 #: zim/gui/mainwindow.py:878 zim/gui/mainwindow.py:1053
@@ -1691,8 +1691,8 @@ msgid ""
 "\n"
 msgstr ""
 "Cet greffon n'a pas être activé à cause des dépendances manquantes.\n"
-"Veuillez voir la section des dépendances ci-dessous pour plus "
-"d'informations.\n"
+"Veuillez voir la section des dépendances ci-dessous pour plus d'informations."
+"\n"
 "\n"
 
 #. help text when plugin cannot be loaded due to bug / issue
@@ -2008,7 +2008,7 @@ msgstr "_Supprimer la page"
 msgid "Trash failed, do you want to permanently delete instead ?"
 msgstr ""
 "Une erreur est survenue avec la corbeille, souhaitez-vous supprimer "
-"définitivement ?"
+"définitivement ?"
 
 #. Menu item
 #: zim/gui/uiactions.py:218
@@ -2220,7 +2220,7 @@ msgstr "Mettre à la Corbeille"
 #: zim/gui/uiactions.py:713
 #, python-format
 msgid "Move page \"%s\" to trash?"
-msgstr "Déplacer la page \"%s\" dans la corbeille ?"
+msgstr "Déplacer la page \"%s\" dans la corbeille ?"
 
 #. Text in 'trash page' dialog - %s is the page name
 #: zim/gui/uiactions.py:715
@@ -2258,7 +2258,7 @@ msgstr "Supprimer la page"
 #: zim/gui/uiactions.py:755
 #, python-format
 msgid "Delete page \"%s\"?"
-msgstr "Supprimer la page « %s » ?"
+msgstr "Supprimer la page « %s » ?"
 
 #. Text in 'delete page' dialog - %s is the page name
 #: zim/gui/uiactions.py:757
@@ -2292,7 +2292,7 @@ msgstr "Un wiki pour le bureau"
 msgid "translator-credits"
 msgstr ""
 "Jean Demartini\n"
-"Contributions à la plate-forme de lancement :\n"
+"Contributions à la plateforme de lancement :\n"
 "BobMauchin https://launchpad.net/~zebob.m\n"
 "Calinou https://launchpad.net/~calinou\n"
 "Daniel Stoyanov https://launchpad.net/~dankh\n"
@@ -2616,7 +2616,7 @@ msgstr "_Arithmétique"
 #: zim/plugins/attachmentbrowser/filebrowser.py:61
 #, python-format
 msgid "Are you sure you want to delete the file '%s'?"
-msgstr "Voulez-vous vraiment supprimer le fichier '%s' ?"
+msgstr "Voulez-vous vraiment supprimer le fichier '%s' ?"
 
 #. menu item to delete file
 #: zim/plugins/attachmentbrowser/filebrowser.py:392
@@ -2770,7 +2770,7 @@ msgstr "Rétroliens"
 #. placeholder label in sidepane
 #: zim/plugins/backlinkpane.py:84
 msgid "No backlinks"
-msgstr "Aucun rétrolien"
+msgstr "Absence de Rétroliens"
 
 #. Label for the statusbar, %i is the number of BackLinks to the current page
 #: zim/plugins/backlinkpane.py:125
@@ -2803,7 +2803,7 @@ msgid ""
 "Do you want to save the source text anyway?"
 msgstr ""
 "Une erreur est survenue lors de la génération de l'image.\n"
-"Voulez-vous tout de même sauvegarder le texte source ?"
+"Voulez-vous tout de même sauvegarder le texte source ?"
 
 #. plugin name
 #: zim/plugins/bookmarksbar.py:36
@@ -2852,7 +2852,7 @@ msgstr "Ajouter un signet/Montrer les paramètres"
 #. message for bookmark plugin
 #: zim/plugins/bookmarksbar.py:294
 msgid "Do you want to delete all bookmarks?"
-msgstr "Voulez-vous supprimer tous les marque-pages ?"
+msgstr "Voulez-vous supprimer tous les marque-pages ?"
 
 #. menu item for context menu
 #: zim/plugins/bookmarksbar.py:375
@@ -3242,7 +3242,7 @@ msgid ""
 msgstr ""
 "Ce greffon trie les lignes sélectionnées par ordre alphabétique.\n"
 "Si la liste est déjà triée, elle le sera de nouveau en sens inverse\n"
-"(A-Z vers Z-A). Fonctionnalités supplémentaires : déplacement\n"
+"(A-Z vers Z-A). Fonctionnalités supplémentaires : déplacement\n"
 "des lignes vers haut et bas, copie et suppression des lignes de texte.\n"
 
 #. Error message for linesorter plugin
@@ -3390,7 +3390,7 @@ msgstr "Réduire l'index des pages"
 #. menu item
 #: zim/plugins/pageindex/__init__.py:133
 msgid "Reveal Current Page in Page Index"
-msgstr "Afficher la page actuelle dans l'index des pages"
+msgstr "Montrer la page courant dans l'index des pages"
 
 #. tab label for side pane
 #: zim/plugins/pageindex/__init__.py:147
@@ -3528,7 +3528,7 @@ msgstr "Ouvrir la _Page"
 #. confirm closing quick note dialog
 #: zim/plugins/quicknote.py:325
 msgid "Discard note?"
-msgstr "Abandonner la note ?"
+msgstr "Abandonner la note ?"
 
 #. plugin name
 #: zim/plugins/scoreeditor.py:43
@@ -3798,8 +3798,8 @@ msgid ""
 msgstr ""
 "Avec ce greffon, vous pouvez insérer un tableau dans une page wiki. Les "
 "tableaux seront représentés par \n"
-"un composant GTK TreeView. Ils pourront être exportés en différents formats "
-"(HTML/LaTex par exemple).\n"
+"un composant GTK TreeView. Ils pourront être exportés en différents formats ("
+"HTML/LaTex par exemple).\n"
 
 #. option value
 #: zim/plugins/tableeditor.py:131
@@ -4083,12 +4083,12 @@ msgstr "Projets"
 #. list with tasks (GTD style category)
 #: zim/plugins/tasklist/gui.py:95
 msgid "Waiting"
-msgstr "En attente"
+msgstr "Patience"
 
 #. placeholder label for sidepane
 #: zim/plugins/tasklist/gui.py:141
 msgid "No tasks"
-msgstr "Aucune tâche"
+msgstr "Aucune Tâche"
 
 #. tooltip
 #: zim/plugins/tasklist/gui.py:167
@@ -4134,7 +4134,7 @@ msgstr "Montrer les tâches annulées"
 #. selection menu option
 #: zim/plugins/tasklist/gui.py:509
 msgid "Show migrated tasks"
-msgstr "Afficher les tâches migrées"
+msgstr "Montrer les tâches reportées"
 
 #. selection menu option
 #: zim/plugins/tasklist/gui.py:510
@@ -4154,7 +4154,7 @@ msgstr "Non étiquetté"
 #. header in selection drop down
 #: zim/plugins/tasklist/gui.py:751
 msgid "Labels"
-msgstr "Étiquettes"
+msgstr "Etiquettes"
 
 #. Column header Task List dialog
 #: zim/plugins/tasklist/gui.py:895
@@ -4225,7 +4225,7 @@ msgstr "Afficher la date de début dans le panneau latéral"
 #. preferences option
 #: zim/plugins/tasklist/__init__.py:57
 msgid "Show page column in the sidepane"
-msgstr "Afficher la colonne de la page dans le volet latéral"
+msgstr "Montrer la colonne \"Page\" dans le panneau latéral des tâches"
 
 #. label for plugin preferences dialog
 #: zim/plugins/tasklist/__init__.py:63
@@ -4481,7 +4481,7 @@ msgstr "Fossil"
 #. Question dialog
 #: zim/plugins/versioncontrol/__init__.py:720
 msgid "Enable Version Control?"
-msgstr "Activer la gestion de version ?"
+msgstr "Activer la gestion de version ?"
 
 #. Detailed question
 #: zim/plugins/versioncontrol/__init__.py:722
@@ -4490,7 +4490,7 @@ msgid ""
 "Do you want to enable it?"
 msgstr ""
 "La gestion de versions n'est pas activée pour ce bloc-notes.\n"
-"Souhaitez-vous l'activer ?"
+"Souhaitez-vous l'activer ?"
 
 #. option to chose versioncontrol backend
 #: zim/plugins/versioncontrol/__init__.py:733
@@ -4566,7 +4566,7 @@ msgstr "Source de la page annotée"
 #. Confirmation question
 #: zim/plugins/versioncontrol/__init__.py:990
 msgid "Restore page to saved version?"
-msgstr "Revenir à la version enregistrée ?"
+msgstr "Revenir à la version enregistrée ?"
 
 #. Detailed question, "%(page)s" is replaced by the page, "%(version)s" by the version id
 #: zim/plugins/versioncontrol/__init__.py:991
@@ -4578,8 +4578,8 @@ msgid ""
 "All changes since the last saved version will be lost !"
 msgstr ""
 "Voulez-vous revenir à la version %(version)s\n"
-"de la page %(page)s ?\n"
-"Toutes les modifications effectuées depuis seront perdues !"
+"de la page %(page)s ?\n"
+"Toutes les modifications effectuées depuis seront perdues !"
 
 #. dialog title
 #: zim/plugins/versioncontrol/__init__.py:1006
@@ -4664,7 +4664,7 @@ msgstr "Passer les évènements au démon Zeitgeist."
 #: zim/plugins/zeitgeist-logger.py:64
 #, python-format
 msgid "Wiki page: %s"
-msgstr "Page Wiki : %s"
+msgstr "Page Wiki : %s"
 
 #: data/templates/wiki/Default.txt:2 data/templates/wiki/Journal.txt:22
 msgid "Created"
