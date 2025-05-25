@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2025-03-27 18:56+0000\n"
+"PO-Revision-Date: 2025-05-26 21:01+0000\n"
 "Last-Translator: Theodoros Asimakopoulos <theoasima@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/zim/develop/el/>\n"
 "Language: el\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:41+0000\n"
 
 #. Error message when external application could not be found, %s is the command
@@ -108,13 +108,13 @@ msgstr "Δημιουργία φακέλου;"
 
 #. Text in a question dialog for creating a folder, %s will be the folder base name
 #: zim/gui/applications.py:596
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "The folder \"%s\" does not yet exist.\n"
 "Do you want to create it now?"
 msgstr ""
-"Ο φάκελος \"%s\" δεν υπάρχει.\n"
-"Επιθυμείτε να το δημιουργήσετε τώρα;"
+"Ο φάκελος \"%s\" δεν υπάρχει ακόμη.\n"
+"Θέλετε να τον δημιουργήσετε τώρα;"
 
 #. error when external application fails
 #: zim/gui/applications.py:663 zim/gui/applications.py:737
@@ -179,7 +179,7 @@ msgstr ""
 #. Dialog title
 #: zim/gui/applications.py:1160
 msgid "Configure Applications"
-msgstr "Ρύθμιση Εφαρμογών"
+msgstr "Ρύθμιση παραμέτρων εφαρμογών"
 
 #. Button for adding a new application to the 'open with' menu | 
 #. Dialog title
@@ -270,7 +270,7 @@ msgstr "Η έξοδος πρέπει να αντικαταστήσει την τ
 #. Input in "Edit Custom Tool" dialog
 #: zim/gui/customtools.py:701
 msgid "Show in the toolbar"
-msgstr "Εμφάνιση στην γραμμή εργαλείων"
+msgstr "Εμφάνιση στη γραμμή εργαλείων"
 
 #. Short help text in "Edit Custom Tool" dialog. The "%" is literal - please include the html formatting
 #: zim/gui/customtools.py:709
