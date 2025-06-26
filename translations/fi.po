@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2025-01-18 17:00+0000\n"
+"PO-Revision-Date: 2025-06-27 07:01+0000\n"
 "Last-Translator: Juhana Uuttu <j.uuttu@netti.fi>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/zim/develop/fi/"
-">\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/zim/develop/fi/>"
+"\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:41+0000\n"
 
 #. Error message when external application could not be found, %s is the command
@@ -461,9 +461,8 @@ msgstr "%i varoitusta, katso lokia"
 
 #. label in export dialog
 #: zim/gui/exportdialog.py:428
-#, fuzzy
 msgid "Export completed"
-msgstr "Vienti valmistui"
+msgstr "Vienti suoritettu"
 
 #. button in export dialog | 
 #. button in e.g. equation editor dialog
