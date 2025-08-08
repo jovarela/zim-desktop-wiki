@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zim 0.48\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2024-03-22 13:01+0000\n"
+"PO-Revision-Date: 2025-08-09 15:01+0000\n"
 "Last-Translator: Mukli Krisztián <krisztianmukli@mukli.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/zim/develop/hu/"
 ">\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:41+0000\n"
 "X-Poedit-Bookmarks: 566,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
@@ -566,17 +566,15 @@ msgstr "_Jelölőnégyzet"
 
 #. option for preferences dialog
 #: zim/gui/mainwindow.py:68
-#, fuzzy
-#| msgid "Use font color for dark theme"
 msgid "Prefer dark theme"
-msgstr "Betűszín használata sötét téma esetén"
+msgstr "Sötét téma használata"
 
 #. info text for preferences dialog
 #: zim/gui/mainwindow.py:69
-#, fuzzy
-#| msgid "This option requires restart of the application"
 msgid "This option requires a Gtk theme supporting a dark variant"
-msgstr "Ez az opció az alkalmazás újraindítását igényli"
+msgstr ""
+"Ez a beállítás csak olyan Gtk témával működik, amely támogatja a sötét "
+"megjelenést"
 
 #. info text for preferences dialog | 
 #. option for preferences dialog
@@ -1107,7 +1105,7 @@ msgstr ""
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:87
 msgid "Preview link destination in overlay"
-msgstr ""
+msgstr "Hivatkozás céljának megjelenítése lebegő szövegként"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:90
@@ -1822,10 +1820,8 @@ msgid "Do not use system trash for this notebook"
 msgstr "Ne használja a rendszer lomtárát ehhez a jegyzetfüzethez"
 
 #: zim/gui/propertiesdialog.py:23
-#, fuzzy
-#| msgid "Folder with templates for attachment files"
 msgid "Filename template for pasted images"
-msgstr "Csatolt sablonfájlokat tartalmazó könyvtár"
+msgstr "Fájlnév sablon a beillesztett képekhez"
 
 #. Dialog title
 #: zim/gui/propertiesdialog.py:31
@@ -2369,10 +2365,8 @@ msgstr "Jobbra zárt"
 
 #. label for menu item which opens preferences dialog
 #: zim/gui/widgets.py:2406
-#, fuzzy
-#| msgid "Preferences"
 msgid "Preferences..."
-msgstr "Tulajdonságok"
+msgstr "Beállítások..."
 
 #. Menu item
 #: zim/gui/widgets.py:2842
@@ -2566,7 +2560,7 @@ msgstr ""
 #. plugin preference
 #: zim/plugins/arithmetic.py:28
 msgid "Output precision"
-msgstr ""
+msgstr "Eredmény pontossága"
 
 #. menu item
 #: zim/plugins/arithmetic.py:38
@@ -2900,10 +2894,8 @@ msgstr "SVG formátumú diagramok generálása"
 
 #. Plugin preference for diagram editor
 #: zim/plugins/diagrameditor.py:44
-#, fuzzy
-#| msgid "Default"
 msgid "Default text"
-msgstr "Alapértelmezett"
+msgstr "Alapértelmezett szöveg"
 
 #. menu item
 #: zim/plugins/diagrameditor.py:58
@@ -3040,7 +3032,7 @@ msgstr "GNU R Plot"
 #. plugin name
 #: zim/plugins/indexed_fts.py:44
 msgid "Indexed Full-Text Search"
-msgstr ""
+msgstr "Indexelt teljes szöveg keresés"
 
 #. plugin description
 #: zim/plugins/indexed_fts.py:45
@@ -3050,14 +3042,18 @@ msgid ""
 "based on the FTS5 virtual table module of\n"
 "sqlite.\n"
 msgstr ""
+"Ez a bővítmény az oldal tartalmának\n"
+"teljes szöveges indexelését biztosítja\n"
+"a gyors teljes szövegű kereséshez, \n"
+"az sqlite FTS5 virtuális táblamoduljával.\n"
 
 #: zim/plugins/indexed_fts.py:57
 msgid "Remove diacritics before indexing"
-msgstr ""
+msgstr "Ékezetek eltávolítása indexelés előtt"
 
 #: zim/plugins/indexed_fts.py:58
 msgid "Additional token characters"
-msgstr ""
+msgstr "További token karakterek"
 
 #. error description
 #: zim/plugins/inlinecalculator.py:192
@@ -3279,31 +3275,22 @@ msgstr "Mindig új ablakban nyissa meg a hivatkozásokat"
 
 #. plugin name
 #: zim/plugins/mermaiddiagrameditor.py:23
-#, fuzzy
-#| msgid "Insert Diagram"
 msgid "Insert Mermaid Diagram"
-msgstr "Diagram beillesztése"
+msgstr "Mermaid diagram beillesztése"
 
 #. plugin description
 #: zim/plugins/mermaiddiagrameditor.py:24
-#, fuzzy
-#| msgid ""
-#| "This plugin provides a sequence diagram editor for zim based on seqdiag.\n"
-#| "It allows easy editing of sequence diagrams.\n"
 msgid ""
 "This plugin provides a Mermaid diagram editor for zim.\n"
 "It allows easy editing of Mermaid diagrams.\n"
 msgstr ""
-"Ez a kiegészítő egy, a seqdiagon-on alapuló szekvenciadiagram-szerkesztőt ad "
-"hozzá a zim-hez.\n"
-"Szekvenciadiagramok egyszerű szerkesztését teszi lehetővé.\n"
+"Ez a bővítmény egy Mermaid diagramszerkesztőt biztosít a zim számára.\n"
+"Lehetővé teszi a Mermaid diagramok egyszerű szerkesztését.\n"
 
 #. menu item
 #: zim/plugins/mermaiddiagrameditor.py:56
-#, fuzzy
-#| msgid "Insert Diagram"
 msgid "Mermaid Diagram"
-msgstr "Diagram beillesztése"
+msgstr "Mermaid diagram"
 
 #. plugin name
 #: zim/plugins/osx_menubar.py:74
@@ -3712,21 +3699,16 @@ msgstr "Helyesírás-ellenőrző"
 
 #. plugin description
 #: zim/plugins/spell.py:104
-#, fuzzy
-#| msgid ""
-#| "Adds spell checking support using gtkspell.\n"
-#| "\n"
-#| "This is a core plugin shipping with zim.\n"
 msgid ""
 "Adds spell checking support using \n"
 "gtkspellchecker, Gspell, or gtkspell libraries.\n"
 "\n"
 "This is a core plugin shipping with zim.\n"
 msgstr ""
-"Ez a kiegészítő helyesírás ellenőrzést tesz lehetővé a gtkspell "
-"segítségével.\n"
+"Helyesírás-ellenőrzési támogatást ad hozzá a \n"
+"gtkspellchecker, Gspell vagy gtkspell könyvtárak használatával.\n"
 "\n"
-"Ez a kiegészítő szerves része a Zim-nek.\n"
+"Ez az alapbővítmény a zimmel együtt kerül telepítésre.\n"
 
 #. menu item
 #: zim/plugins/spell.py:166
@@ -3819,7 +3801,7 @@ msgstr "Sor hozzáadása"
 #. tooltip on mouse hover
 #: zim/plugins/tableeditor.py:535
 msgid "Remove row"
-msgstr "Sor törlése"
+msgstr "Sor eltávolítása"
 
 #. tooltip on mouse hover | 
 #. menu item
@@ -4095,7 +4077,7 @@ msgstr "Nyitott feladatok megjelenítése"
 #. selection menu option
 #: zim/plugins/tasklist/gui.py:507
 msgid "Show closed tasks"
-msgstr "Lezárt feladatok megjelenítése"
+msgstr "Befejezett feladatok megjelenítése"
 
 #. selection menu option
 #: zim/plugins/tasklist/gui.py:508
@@ -4560,36 +4542,32 @@ msgstr "Vissza"
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:19
 msgid "Page Path - Notebook Name"
-msgstr ""
+msgstr "Oldal elérési útvonala - Jegyzetfüzet neve"
 
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:20
 msgid "Notebook Name - Zim"
-msgstr ""
+msgstr "Jegyzetfüzet neve - Zim"
 
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:21
 msgid "Page Name — Page Title — Zim"
-msgstr ""
+msgstr "Oldal neve — Oldal címe — Zim"
 
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:22
 msgid "Notebook Name: Page Title (Page Source Path)"
-msgstr ""
+msgstr "Notebook név: Oldal címe (oldal forrásának elérési útja)"
 
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:23
-#, fuzzy
-#| msgid "Customize..."
 msgid "Custom"
-msgstr "Testreszabás..."
+msgstr "Saját"
 
 #. plugin name
 #: zim/plugins/windowtitleeditor.py:28
-#, fuzzy
-#| msgid "Table Editor"
 msgid "Window Title Editor"
-msgstr "Táblázatszerkesztő"
+msgstr "Ablakcím szerkesztő"
 
 #. plugin description
 #: zim/plugins/windowtitleeditor.py:29
@@ -4599,23 +4577,26 @@ msgid ""
 "Press \"Configure\" below to choose a preset\n"
 "or to create a custom one.\n"
 msgstr ""
+"Ez a bővítmény lehetővé teszi az ablak címének szerkesztését.\n"
+"\n"
+"Kattintson a\"Beállítás\" gombra, hogy kiválasszon egy előre beállított "
+"értéket, \n"
+"vagy hozzon létre egy sajátot.\n"
 
 #. window title editor preference option
 #: zim/plugins/windowtitleeditor.py:41
-#, fuzzy
-#| msgid "Template"
 msgid "Title template"
-msgstr "Sablon"
+msgstr "Cím sablon"
 
 #. window title editor preference option
 #: zim/plugins/windowtitleeditor.py:45
 msgid "Template string for custom format"
-msgstr ""
+msgstr "Sablon karakterlánc egyéni formátumhoz"
 
 #. window title in case of critical error
 #: zim/plugins/windowtitleeditor.py:98
 msgid "Plugin error - check debug log! - Zim"
-msgstr ""
+msgstr "Bővítmény hiba - ellenőrizze a hibakeresési naplót! - Zim"
 
 #. plugin name
 #: zim/plugins/zeitgeist-logger.py:33
