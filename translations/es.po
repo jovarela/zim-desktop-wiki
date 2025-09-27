@@ -7,9 +7,8 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2025-05-11 20:01+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz "
-"<jaime.marquinez.ferrandiz@fastmail.net>\n"
+"PO-Revision-Date: 2025-09-28 18:01+0000\n"
+"Last-Translator: Alfredo Natale <alfredo.n@yandex.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/zim/develop/es/>"
 "\n"
 "Language: es\n"
@@ -17,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:41+0000\n"
 
 #. Error message when external application could not be found, %s is the command
@@ -3545,7 +3544,7 @@ msgstr "¿Desea borrar la nota?"
 #. plugin name
 #: zim/plugins/scoreeditor.py:43
 msgid "Insert Score"
-msgstr "Agregar puntaje"
+msgstr "Agregar Partitura"
 
 #. plugin description
 #: zim/plugins/scoreeditor.py:44
@@ -3554,9 +3553,10 @@ msgid ""
 "\n"
 "This is a core plugin shipping with zim.\n"
 msgstr ""
-"Este plugin provee a zim un editor de puntaje basado en GNU Lilypond.\n"
+"Este complemento provee a zim un editor de partituras basado en GNU Lilypond."
 "\n"
-"Este plugin viene con zim.\n"
+"\n"
+"Este complemento viene con zim.\n"
 
 #. plugin preference
 #: zim/plugins/scoreeditor.py:55
