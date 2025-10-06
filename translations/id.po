@@ -8,23 +8,22 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2021-02-15 22:50+0000\n"
-"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/zim/master/id/"
-">\n"
+"PO-Revision-Date: 2025-10-07 10:02+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/zim/develop/"
+"id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #. Error message when external application could not be found, %s is the command
 #: zim/applications.py:133
-#, fuzzy, python-format
-#| msgid "Could not find template \"%s\""
+#, python-format
 msgid "Cound not find application: %s"
-msgstr "Tak dapat menemukan templat \"%s\""
+msgstr "Tidak dapat menemukan aplikasi: %s"
 
 #. Error message when external application failed, %s is the command
 #: zim/applications.py:150
@@ -100,6 +99,8 @@ msgid ""
 "Create missing directories automatically\n"
 "(If disabled you will be prompted)"
 msgstr ""
+"Buat direktori yang hilang secara otomatis\n"
+"(Jika dinonaktifkan, Anda akan diminta untuk melakukannya)"
 
 #. Heading in a question dialog for creating a folder
 #: zim/gui/applications.py:594
@@ -139,10 +140,9 @@ msgstr ""
 
 #. Error message when external application could not be run in terminal, %s is the command
 #: zim/gui/applications.py:826
-#, fuzzy, python-format
-#| msgid "Failed to run application: %s"
+#, python-format
 msgid "Cound not find terminal emulator to run application: %s"
-msgstr "Gagal menjalankan aplikasi: %s"
+msgstr "Tidak dapat menemukan emulator terminal untuk menjalankan aplikasi: %s"
 
 #. label to customize 'open with' menu
 #: zim/gui/applications.py:1080
@@ -288,6 +288,18 @@ msgid ""
 "<b>%T</b> the selected text including wiki formatting\n"
 "</tt>\n"
 msgstr ""
+"Parameter-parameter berikut akan diganti\n"
+"dalam perintah saat dieksekusi:\n"
+"<tt>\n"
+"<b>%f</b> sumber halaman sebagai berkas sementara\n"
+"<b>%d</b> direktori lampiran halaman saat ini\n"
+"<b>%s</b> berkas sumber halaman asli (jika ada)\n"
+"<b>%p</b> nama halaman\n"
+"<b>%n</b> lokasi notebook (berkas atau folder)\n"
+"<b>%D</b> akar dokumen (jika ada)\n"
+"<b>%t</b> teks atau kata yang dipilih di bawah kursor\n"
+"<b>%T</b> teks yang dipilih termasuk format wiki\n"
+"</tt>\n"
 
 #. dialog title
 #: zim/gui/exportdialog.py:32
@@ -548,23 +560,23 @@ msgstr "Kotak _Cek"
 #. option for preferences dialog
 #: zim/gui/mainwindow.py:68
 msgid "Prefer dark theme"
-msgstr ""
+msgstr "Utamakan tema gelap"
 
 #. info text for preferences dialog
 #: zim/gui/mainwindow.py:69
 msgid "This option requires a Gtk theme supporting a dark variant"
-msgstr ""
+msgstr "Opsi ini memerlukan tema Gtk yang mendukung varian gelap"
 
 #. info text for preferences dialog | 
 #. option for preferences dialog
 #: zim/gui/mainwindow.py:70 zim/gui/mainwindow.py:71
 msgid "This option requires restart of the application"
-msgstr ""
+msgstr "Opsi ini memerlukan peluncuran ulang aplikasi"
 
 #. option for preferences dialog
 #: zim/gui/mainwindow.py:71
 msgid "Show controls in the window decoration"
-msgstr ""
+msgstr "Tampilkan pengaturan di dekorasi jendela"
 
 #. Option in the preferences dialog - %s will map to either <Control><Space> or <Command><Space> key binding
 #: zim/gui/mainwindow.py:73
@@ -579,10 +591,8 @@ msgstr "Selalu gunakan posisi kursor terakhir saat membuka sebuah halaman"
 
 #. button label for fullscreen window header
 #: zim/gui/mainwindow.py:152 zim/gui/mainwindow.py:273
-#, fuzzy
-#| msgid "_Fullscreen"
 msgid "Leave Fullscreen"
-msgstr "_Layar penuh"
+msgstr "Keluar dari Mode Layar Penuh"
 
 #. Menu item
 #: zim/gui/mainwindow.py:295
@@ -591,22 +601,18 @@ msgstr "_Layar penuh"
 
 #. menu item
 #: zim/gui/mainwindow.py:303
-#, fuzzy
-#| msgid "Notebook _Editable"
 msgid "Toggle _Editable"
-msgstr "Buku Catatan _Dapat Disunting"
+msgstr "Aktifkan/Nonaktifkan Mode Edit"
 
 #. menu item
 #: zim/gui/mainwindow.py:303
-#, fuzzy
-#| msgid "Notebook _Editable"
 msgid "Toggle editable"
-msgstr "Buku Catatan _Dapat Disunting"
+msgstr "Aktifkan/nonaktifkan mode edit"
 
 #. message in toggle editable tooltip
 #: zim/gui/mainwindow.py:332
 msgid "Page is read-only and cannot be edited"
-msgstr ""
+msgstr "Halaman ini bersifat read-only dan tidak dapat diedit"
 
 #. Menu item
 #: zim/gui/mainwindow.py:366
@@ -616,7 +622,7 @@ msgstr "Panel _Sisi"
 #. menu item
 #: zim/gui/mainwindow.py:391
 msgid "Focus Sidepane"
-msgstr ""
+msgstr "Panel Samping Fokus"
 
 #. Menu item | 
 #. Button label
@@ -631,27 +637,18 @@ msgstr "Bilah menu"
 
 #. short question on open-page if file exists
 #: zim/gui/mainwindow.py:822 zim/gui/uiactions.py:493
-#, fuzzy
-#| msgid ""
-#| "This file already exists.\n"
-#| "Do you want to overwrite it?"
 msgid "File exists, do you want to import?"
-msgstr ""
-"Berkas sudah ada.\n"
-"Anda ingin menimpanya?"
+msgstr "Berkas sudah ada, apakah Anda ingin mengimpor?"
 
 #. longer question on open-page if file exists
 #: zim/gui/mainwindow.py:823 zim/gui/uiactions.py:494
-#, fuzzy, python-format
-#| msgid ""
-#| "The folder \"%s\" does not yet exist.\n"
-#| "Do you want to create it now?"
+#, python-format
 msgid ""
 "The file \"%s\" exists but is not a wiki page.\n"
 "Do you want to import it?"
 msgstr ""
-"Folder \"%s\" tidak ada.\n"
-"Anda ingin membuatnya?"
+"Berkas “%s” sudah ada tetapi bukan halaman wiki.\n"
+"Apakah Anda ingin mengimpornya?"
 
 #. page status for title bar
 #: zim/gui/mainwindow.py:878 zim/gui/mainwindow.py:1053
@@ -673,7 +670,7 @@ msgstr "_Mundur"
 #. tooltip for navigation button
 #: zim/gui/mainwindow.py:913
 msgid "Go back"
-msgstr ""
+msgstr "Kembali"
 
 #. Menu item | 
 #. Button label
@@ -683,10 +680,8 @@ msgstr "_Maju"
 
 #. tooltip for navigation button
 #: zim/gui/mainwindow.py:926
-#, fuzzy
-#| msgid "_Forward"
 msgid "Go forward"
-msgstr "_Maju"
+msgstr "Majulah"
 
 #. Menu item
 #: zim/gui/mainwindow.py:936
@@ -700,17 +695,13 @@ msgstr "_Anak"
 
 #. Menu item
 #: zim/gui/mainwindow.py:961
-#, fuzzy
-#| msgid "_Previous in index"
 msgid "_Previous in Index"
-msgstr "_Sebelumnya di indeks"
+msgstr "Sebelumnya di Indeks"
 
 #. Menu item
 #: zim/gui/mainwindow.py:970
-#, fuzzy
-#| msgid "_Next in index"
 msgid "_Next in Index"
-msgstr "_Berikutnya di indeks"
+msgstr "Selanjutnya di Indeks"
 
 #. Menu item
 #: zim/gui/mainwindow.py:979
@@ -720,7 +711,7 @@ msgstr "_Awal"
 #. Menu item
 #: zim/gui/mainwindow.py:979
 msgid "Go to home page"
-msgstr ""
+msgstr "Kunjungi halaman utama"
 
 #. Label for button with backlinks in statusbar
 #: zim/gui/mainwindow.py:1001
@@ -913,7 +904,7 @@ msgstr "Tinggi"
 #: zim/gui/pageview/dialogs.py:388 zim/gui/pageview/textview.py:1089
 #: zim/plugins/sourceview.py:402
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #. Button in 'edit image' dialog
 #: zim/gui/pageview/dialogs.py:398
@@ -950,7 +941,7 @@ msgstr "Teks"
 #. Input in 'move text' dialog
 #: zim/gui/pageview/dialogs.py:556 zim/gui/pageview/dialogs.py:783
 msgid "Prefer short link names for pages"
-msgstr ""
+msgstr "Gunakan nama tautan pendek untuk halaman"
 
 #. Dialog title
 #: zim/gui/pageview/dialogs.py:669
@@ -1015,7 +1006,7 @@ msgstr "Buka halaman baru"
 #. error message in "move selected text" action
 #: zim/gui/pageview/dialogs.py:807
 msgid "No text selected"
-msgstr ""
+msgstr "Tidak ada teks yang dipilih"
 
 #. Dialog title
 #: zim/gui/pageview/dialogs.py:847
@@ -1090,7 +1081,7 @@ msgstr "L_ampiran Baru"
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:81
 msgid "Show edit bar along bottom of editor"
-msgstr ""
+msgstr "Tampilkan bilah pengeditan di bagian bawah editor"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:84
@@ -1104,7 +1095,7 @@ msgstr ""
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:87
 msgid "Preview link destination in overlay"
-msgstr ""
+msgstr "Tampilkan pratinjau tautan tujuan dalam overlay"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:90
@@ -1118,24 +1109,19 @@ msgstr "Ubah kata \"CamelCase\" menjadi tautan secara otomatis"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:96
-#, fuzzy
-#| msgid "Automatically turn file paths into links"
 msgid "Automatically turn wiki page names into links"
-msgstr "Ubah alamat berkas menjadi tautan secara otomatis"
+msgstr "Secara otomatis mengubah nama halaman wiki menjadi tautan"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:99
-#, fuzzy
-#| msgid "Automatically turn file paths into links"
 msgid "Automatically turn identifiers starting with \"#\" into links"
-msgstr "Ubah alamat berkas menjadi tautan secara otomatis"
+msgstr ""
+"Secara otomatis ubah identifikasi yang dimulai dengan “#” menjadi tautan"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:102
-#, fuzzy
-#| msgid "Automatically turn file paths into links"
 msgid "Automatically turn interwiki names into links"
-msgstr "Ubah alamat berkas menjadi tautan secara otomatis"
+msgstr "Secara otomatis mengubah nama interwiki menjadi tautan"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:105
@@ -1163,19 +1149,15 @@ msgstr "Mengulang klik pada kotak cek akan mendaur status kotak cek"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:117
-#, fuzzy
-#| msgid "(Un-)Indenting a list item also change any sub-items"
 msgid "(Un-)indenting a list item also changes any sub-items"
 msgstr ""
-"Naikkan (atau turunkan) indentasi pada sebuah item daftar juga akan mengubah "
-"sub-item"
+"Mengubah indentasi (atau menghilangkan indentasi) pada item daftar juga akan "
+"mengubah indentasi pada sub-itemnya"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:120
-#, fuzzy
-#| msgid "Checking a checkbox also change any sub-items"
 msgid "Checking a checkbox also changes any sub-items"
-msgstr "Mencentang sebuah kotak cek juga mengubah sub-item"
+msgstr "Mencentang kotak centang juga mengubah semua sub-item"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:123
@@ -1287,17 +1269,13 @@ msgstr "_Verbatim"
 
 #. menu item for formatting
 #: zim/gui/pageview/__init__.py:528
-#, fuzzy
-#| msgid "_Superscript"
 msgid "Su_perscript"
-msgstr "_Superskrip"
+msgstr "Su_superscript"
 
 #. menu item for formatting
 #: zim/gui/pageview/__init__.py:529
-#, fuzzy
-#| msgid "_Subscript"
 msgid "Su_bscript"
-msgstr "_Subskrip"
+msgstr "Subskrip"
 
 #. error when unknown interwiki link is clicked
 #: zim/gui/pageview/__init__.py:1268
@@ -1309,7 +1287,7 @@ msgstr "Tak ada wiki yang ditentukan: %s"
 #: zim/gui/pageview/__init__.py:1321
 #, python-format
 msgid "Id \"%s\" not found on the current page"
-msgstr ""
+msgstr "ID “%s” tidak ditemukan di halaman saat ini"
 
 #. menu item for context menu of editor
 #: zim/gui/pageview/__init__.py:1380
@@ -1318,10 +1296,8 @@ msgstr "S_alin Sebagai..."
 
 #. menu item for context menu of editor
 #: zim/gui/pageview/__init__.py:1386
-#, fuzzy
-#| msgid "_Verbatim"
 msgid "Paste As _Verbatim"
-msgstr "_Verbatim"
+msgstr "Salin sebagai _Verbatim"
 
 #. Context menu item for pageview to move selected text to new/other page | 
 #. Menu item
@@ -1332,10 +1308,8 @@ msgstr "Pindahkan Teks Terpilih..."
 #. menu item to copy link to achor location in page | 
 #. menu item
 #: zim/gui/pageview/__init__.py:1417 zim/plugins/tableofcontents.py:443
-#, fuzzy
-#| msgid "Copy _Location"
 msgid "Copy _link to this location"
-msgstr "Salin _Lokasi"
+msgstr "Salin tautan ke lokasi ini"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:1458 zim/gui/pageview/__init__.py:1723
@@ -1359,10 +1333,8 @@ msgstr "Sa_lin Tautan"
 
 #. context menu item
 #: zim/gui/pageview/__init__.py:1493
-#, fuzzy
-#| msgid "Edit Link"
 msgid "Cut Lin_k"
-msgstr "Sunting Tautan"
+msgstr "Potong Lin_k"
 
 #. context menu item
 #: zim/gui/pageview/__init__.py:1506
@@ -1399,10 +1371,8 @@ msgstr "_Buka"
 
 #. popup menu menuitem
 #: zim/gui/pageview/__init__.py:1576
-#, fuzzy
-#| msgid "Check Checkbox '>'"
 msgid "Check Checkbox '<'"
-msgstr "Centang Kotak Cek '>'"
+msgstr "Centang kotak centang ‘<’"
 
 #. popup menu menuitem
 #: zim/gui/pageview/__init__.py:1577
@@ -1488,10 +1458,8 @@ msgstr "Jungkit Kotak Cek '>'"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:1676
-#, fuzzy
-#| msgid "Toggle Checkbox 'V'"
 msgid "Toggle Checkbox '<'"
-msgstr "Jungkit Kotak Cek 'V'"
+msgstr "Aktifkan/Nonaktifkan Kotak Centang ‘<’"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:1685
@@ -1500,24 +1468,18 @@ msgstr "Sunting Tautan atau Oby_ek..."
 
 #. menu item to copy current line to clipboard
 #: zim/gui/pageview/__init__.py:1741
-#, fuzzy
-#| msgid "Copy _Link"
 msgid "Copy Line"
-msgstr "Sa_lin Tautan"
+msgstr "Salin Baris"
 
 #. menu item to cut current line to clipboard
 #: zim/gui/pageview/__init__.py:1757
-#, fuzzy
-#| msgid "Edit Link"
 msgid "Cut Line"
-msgstr "Sunting Tautan"
+msgstr "Garis Potong"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:1770
-#, fuzzy
-#| msgid "_Date and Time..."
 msgid "Date and Time..."
-msgstr "Tanggal _dan Waktu..."
+msgstr "Tanggal dan Waktu..."
 
 #. Menu item for Insert menu
 #: zim/gui/pageview/__init__.py:1785
@@ -1554,10 +1516,8 @@ msgstr "Daftar _Kotak Cek"
 
 #. Menu item,
 #: zim/gui/pageview/__init__.py:1858
-#, fuzzy
-#| msgid "_Remove Link"
 msgid "_Remove List"
-msgstr "_Hapus Tautan"
+msgstr "Hapus Daftar"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:1886
@@ -1586,10 +1546,8 @@ msgstr "_Bersihkan Format"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:2023
-#, fuzzy
-#| msgid "_Remove Link"
 msgid "_Remove Heading"
-msgstr "_Hapus Tautan"
+msgstr "Hapus Judul"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:2067
@@ -1634,14 +1592,12 @@ msgstr "Ukuran _Normal"
 #. tooltip for button in anchor popover
 #: zim/gui/pageview/textview.py:826
 msgid "Copy link to clipboard"
-msgstr ""
+msgstr "Salin tautan ke papan klip"
 
 #. tooltip label for image with href
 #: zim/gui/pageview/textview.py:1087
-#, fuzzy
-#| msgid "_Link"
 msgid "Link"
-msgstr "_Tautan"
+msgstr "Tautan"
 
 #. Tab in preferences dialog
 #: zim/gui/preferencesdialog.py:31
@@ -1662,6 +1618,10 @@ msgid ""
 "or see errors due to encoding, please ensure to configure your system to use "
 "\"UTF-8\""
 msgstr ""
+"Pengaturan enkoding sistem Anda saat ini adalah %s. Jika Anda ingin "
+"mendukung karakter khusus\n"
+"atau mengalami kesalahan akibat masalah enkoding, pastikan untuk "
+"mengonfigurasi sistem Anda agar menggunakan “UTF-8”."
 
 #. Dialog title
 #: zim/gui/preferencesdialog.py:55
@@ -1671,7 +1631,7 @@ msgstr "Pengaturan"
 #. Heading in preferences dialog
 #: zim/gui/preferencesdialog.py:118
 msgid "Key bindings"
-msgstr ""
+msgstr "Pengaturan tombol"
 
 #. Heading in preferences dialog
 #: zim/gui/preferencesdialog.py:123
@@ -1700,8 +1660,6 @@ msgstr "K_onfigurasi"
 
 #. Button in plugin tab
 #: zim/gui/preferencesdialog.py:259
-#, fuzzy
-#| msgid "Properties"
 msgid "_Properties"
 msgstr "Properti"
 
@@ -1722,6 +1680,9 @@ msgid ""
 "Please see the dependencies section below for details.\n"
 "\n"
 msgstr ""
+"Plugin ini tidak dapat diaktifkan karena dependensi yang hilang.\n"
+"Silakan lihat bagian dependensi di bawah ini untuk detailnya.\n"
+"\n"
 
 #. help text when plugin cannot be loaded due to bug / issue
 #: zim/gui/preferencesdialog.py:338
@@ -1729,6 +1690,8 @@ msgid ""
 "There was a problem loading this plugin\n"
 "\n"
 msgstr ""
+"Ada masalah saat memuat plugin ini.\n"
+"\n"
 
 #. Heading in plugins tab of preferences dialog
 #: zim/gui/preferencesdialog.py:350
@@ -1798,10 +1761,8 @@ msgstr "Atur penyunting teks standar"
 
 #. button in preferences dialog to change default browser
 #: zim/gui/preferencesdialog.py:523
-#, fuzzy
-#| msgid "Set default text editor"
 msgid "Set default browser"
-msgstr "Atur penyunting teks standar"
+msgstr "Atur browser default"
 
 #. help text in preferences dialog for modifying keybindings
 #: zim/gui/preferencesdialog.py:557
@@ -1811,16 +1772,21 @@ msgid ""
 "To disable a keybinding, select it in the list and use <tt>&lt;Backspace&gt;"
 "</tt>."
 msgstr ""
+"Pengaturan tombol dapat diubah dengan mengklik bidang yang memiliki "
+"kombinasi tombol\n"
+"dalam daftar, lalu tekan kombinasi tombol baru.\n"
+"Untuk menonaktifkan pengaturan tombol, pilih pengaturan tersebut dalam "
+"daftar dan gunakan <tt>&lt;Backspace&gt;</tt>."
 
 #. Column header for keybinding list
 #: zim/gui/preferencesdialog.py:578
 msgid "Action"
-msgstr ""
+msgstr "Tindakan"
 
 #. Column header for keybinding list
 #: zim/gui/preferencesdialog.py:589
 msgid "Key Binding"
-msgstr ""
+msgstr "Pengaturan Tombol"
 
 #. label for properties dialog
 #: zim/gui/propertiesdialog.py:17
@@ -1840,20 +1806,16 @@ msgstr "Alamat Dokumen"
 #. label for properties dialog
 #: zim/gui/propertiesdialog.py:21
 msgid "Prefer short names for page links"
-msgstr ""
+msgstr "Gunakan nama pendek untuk tautan halaman"
 
 #. label for properties dialog
 #: zim/gui/propertiesdialog.py:22
-#, fuzzy
-#| msgid "Could not find the file or folder for this notebook"
 msgid "Do not use system trash for this notebook"
-msgstr "Tak dapat menemukan berkas atau folder untuk buku catatan ini"
+msgstr "Jangan gunakan tempat sampah sistem untuk notebook ini"
 
 #: zim/gui/propertiesdialog.py:23
-#, fuzzy
-#| msgid "Folder with templates for attachment files"
 msgid "Filename template for pasted images"
-msgstr "Folder dengan templat untuk berkas lampiran"
+msgstr "Template nama berkas untuk gambar yang disalin"
 
 #. Dialog title
 #: zim/gui/propertiesdialog.py:31
@@ -1901,22 +1863,18 @@ msgstr "_Cari"
 
 #. checkbox option in search dialog
 #: zim/gui/searchdialog.py:54
-#, fuzzy
-#| msgid "Limit search to the current page and sub-pages"
 msgid "_Limit search to the current page and sub-pages"
-msgstr "Batasi pencarian pada halaman dan sub-halaman saat ini."
+msgstr "_Batasi pencarian pada halaman saat ini dan sub-halaman"
 
 #. placeholder label when search has started
 #: zim/gui/searchdialog.py:67
-#, fuzzy
-#| msgid "_Search..."
 msgid "Searching ..."
-msgstr "_Cari..."
+msgstr "Mencari ..."
 
 #. placeholder label when search has no results
 #: zim/gui/searchdialog.py:68
 msgid "No results"
-msgstr ""
+msgstr "Tidak ada hasil"
 
 #. Column header search dialog
 #: zim/gui/searchdialog.py:170
@@ -1941,7 +1899,7 @@ msgstr "Izinkan akses publik"
 #. checkbox in dialog for starting webserver
 #: zim/gui/server.py:85
 msgid "Require authentication"
-msgstr ""
+msgstr "Membutuhkan otentikasi"
 
 #. Field in web server gui for HTTP port (e.g. port 80)
 #: zim/gui/server.py:104
@@ -1951,12 +1909,12 @@ msgstr "Pangkalan"
 #. Field in web server gui
 #: zim/gui/server.py:110
 msgid "Username"
-msgstr ""
+msgstr "Nama Pengguna"
 
 #. Field in web server gui
 #: zim/gui/server.py:112
 msgid "Password"
-msgstr ""
+msgstr "Kata sandi"
 
 #. Status in web server gui
 #: zim/gui/server.py:187
@@ -2026,10 +1984,8 @@ msgstr "_Kirim Ke..."
 
 #. Menu item
 #: zim/gui/uiactions.py:174
-#, fuzzy
-#| msgid "_Import Page..."
 msgid "_Rename or Move Page..."
-msgstr "_Impor Halaman.."
+msgstr "Ubah Nama atau Pindahkan Halaman..."
 
 #. Menu item
 #: zim/gui/uiactions.py:183
@@ -2039,7 +1995,7 @@ msgstr "Hapus Halaman"
 #. question in "delete page" action
 #: zim/gui/uiactions.py:212
 msgid "Trash failed, do you want to permanently delete instead ?"
-msgstr ""
+msgstr "Penghapusan gagal, apakah Anda ingin menghapus secara permanen?"
 
 #. Menu item
 #: zim/gui/uiactions.py:218
@@ -2124,17 +2080,13 @@ msgstr "Jalankan Server _Web"
 
 #. menu item
 #: zim/gui/uiactions.py:352
-#, fuzzy
-#| msgid "View _Log"
 msgid "View Debug Log"
-msgstr "Lihat _Log"
+msgstr "Lihat Log Debug"
 
 #. Menu item
 #: zim/gui/uiactions.py:366
-#, fuzzy
-#| msgid "Update Index"
 msgid "Check and Update Index"
-msgstr "Mutakhirkan Indeks"
+msgstr "Periksa dan Perbarui Indeks"
 
 #. Menu item
 #: zim/gui/uiactions.py:405
@@ -2149,12 +2101,12 @@ msgstr "Daftar _Isi"
 #. Menu item
 #: zim/gui/uiactions.py:419
 msgid "_FAQ"
-msgstr ""
+msgstr "Pertanyaan yang Sering Diajukan"
 
 #. Menu item
 #: zim/gui/uiactions.py:424
 msgid "_Keybindings"
-msgstr ""
+msgstr "Pengaturan Tombol"
 
 #. Menu item
 #: zim/gui/uiactions.py:429
@@ -2214,7 +2166,7 @@ msgstr "Simpan Salinan"
 #. Dialog title
 #: zim/gui/uiactions.py:570
 msgid "Rename or Move Page"
-msgstr ""
+msgstr "Ubah Nama atau Pindahkan Halaman"
 
 #. Heading in 'move page' dialog - %s is the page name
 #: zim/gui/uiactions.py:575
@@ -2243,39 +2195,36 @@ msgstr "Mutakhirkan Tautan"
 #: zim/gui/uiactions.py:668
 #, python-format
 msgid "Remove links to %s"
-msgstr ""
+msgstr "Hapus tautan ke %s"
 
 #. Dialog title
 #: zim/gui/uiactions.py:712
 msgid "Trash Page"
-msgstr ""
+msgstr "Halaman Sampah"
 
 #. Heading in 'trash page' dialog - %s is the page name
 #: zim/gui/uiactions.py:713
 #, python-format
 msgid "Move page \"%s\" to trash?"
-msgstr ""
+msgstr "Pindahkan halaman “%s” ke tempat sampah?"
 
 #. Text in 'trash page' dialog - %s is the page name
 #: zim/gui/uiactions.py:715
-#, fuzzy, python-format
-#| msgid ""
-#| "Page \"%s\" and all of it's\n"
-#| "sub-pages and attachments will be deleted"
+#, python-format
 msgid ""
 "Page \"%s\" and all of it's sub-pages and\n"
 "attachments will be moved to your system's trash.\n"
 "\n"
 "To undo later, go to your system's trashcan."
 msgstr ""
-"Hapus \"%s\" beserta seluruh sub-halaman\n"
-"dan lampirannya akan dihapus"
+"Halaman “%s” dan semua sub-halaman serta\n"
+"lampirannya akan dipindahkan ke tempat sampah sistem Anda.\n"
+"\n"
+"Untuk membatalkan tindakan ini nanti, pergi ke tempat sampah sistem Anda."
 
 #. label in the TrashPage dialog to warn user of attachments being deleted
 #: zim/gui/uiactions.py:719
-#, fuzzy, python-format
-#| msgid "%i file will be deleted"
-#| msgid_plural "%i files will be deleted"
+#, python-format
 msgid "%i file will be trashed"
 msgid_plural "%i files will be trashed"
 msgstr[0] "Berkas %i akan dihapus"
@@ -2298,18 +2247,17 @@ msgstr "Hapus halaman \"%s\"?"
 
 #. Text in 'delete page' dialog - %s is the page name
 #: zim/gui/uiactions.py:757
-#, fuzzy, python-format
-#| msgid ""
-#| "Page \"%s\" and all of it's\n"
-#| "sub-pages and attachments will be deleted"
+#, python-format
 msgid ""
 "Page \"%s\" and all of it's sub-pages and\n"
 "attachments will be deleted.\n"
 "\n"
 "This deletion is permanent and cannot be un-done."
 msgstr ""
-"Hapus \"%s\" beserta seluruh sub-halaman\n"
-"dan lampirannya akan dihapus"
+"Halaman “%s” dan semua sub-halaman serta\n"
+"lampirannya akan dihapus.\n"
+"\n"
+"Penghapusan ini bersifat permanen dan tidak dapat dibatalkan."
 
 #. label in the DeletePage dialog to warn user of attachments being deleted
 #: zim/gui/uiactions.py:761
@@ -2365,7 +2313,7 @@ msgstr "Pilih Gambar"
 #. default text for empty page section selection
 #: zim/gui/widgets.py:1727
 msgid "<Top>"
-msgstr ""
+msgstr "<Atas>"
 
 #. Option for placement of plugin widgets
 #: zim/gui/widgets.py:2081
@@ -2389,17 +2337,13 @@ msgstr "Panel Atas"
 
 #. position of widget in window
 #: zim/gui/widgets.py:2093
-#, fuzzy
-#| msgid "ToC"
 msgid "Top"
-msgstr "Daftar Isi"
+msgstr "Teratas"
 
 #. position of widget in window
 #: zim/gui/widgets.py:2094
-#, fuzzy
-#| msgid "Bottom Pane"
 msgid "Bottom"
-msgstr "Panel Bawah"
+msgstr "Bawah"
 
 #. position of widget in window | 
 #. alignment option
@@ -2416,10 +2360,8 @@ msgstr "Kanan"
 
 #. label for menu item which opens preferences dialog
 #: zim/gui/widgets.py:2406
-#, fuzzy
-#| msgid "Preferences"
 msgid "Preferences..."
-msgstr "Pengaturan"
+msgstr "Preferensi..."
 
 #. Menu item
 #: zim/gui/widgets.py:2842
@@ -2508,12 +2450,15 @@ msgid ""
 "of the file name, please try using a name with less\n"
 "than 255 characters"
 msgstr ""
+"Tidak dapat menulis berkas ini. Kemungkinan hal ini disebabkan oleh panjang\n"
+"nama berkas, silakan coba menggunakan nama dengan panjang\n"
+"kurang dari 255 karakter"
 
 #. error message for filesystem limitations
 #: zim/newfs/local.py:47
 #, python-format
 msgid "File name too long: %s"
-msgstr ""
+msgstr "Nama berkas terlalu panjang: %s"
 
 #. Error explanation
 #: zim/newfs/local.py:52
@@ -2522,12 +2467,15 @@ msgid ""
 "of the file path, please try using a folder structure resulting in less\n"
 "than 4096 characters"
 msgstr ""
+"Tidak dapat menulis berkas ini. Kemungkinan hal ini disebabkan oleh panjang\n"
+"jalur berkas, silakan coba menggunakan struktur folder yang menghasilkan\n"
+"kurang dari 4096 karakter"
 
 #. error message for filesystem limitations
 #: zim/newfs/local.py:58
 #, python-format
 msgid "File path too long: %s"
-msgstr ""
+msgstr "Jalur berkas terlalu panjang: %s"
 
 #. Title of progressbar dialog
 #: zim/notebook/index/__init__.py:436
@@ -2556,19 +2504,15 @@ msgstr ""
 
 #. message for PageNotAvailableError
 #: zim/notebook/notebook.py:124
-#, fuzzy, python-format
-#| msgid "Page not allowed: %s"
+#, python-format
 msgid "Page not available: %s"
-msgstr "Halaman tak diizinkan: %s"
+msgstr "Halaman tidak tersedia: %s"
 
 #. description for PageNotAvailableError
 #: zim/notebook/notebook.py:125
-#, fuzzy
-#| msgid ""
-#| "This page name cannot be used due to technical limitations of the storage"
 msgid "This page name cannot be used due to a conflicting file in the storage"
 msgstr ""
-"Nama halaman ini tak bisa digunakan karena batasan teknis dari ruang "
+"Nama halaman ini tidak dapat digunakan karena ada berkas yang bertabrakan di "
 "penyimpanan"
 
 #. message for PageExistsError
@@ -2613,7 +2557,7 @@ msgstr ""
 #. plugin preference
 #: zim/plugins/arithmetic.py:28
 msgid "Output precision"
-msgstr ""
+msgstr "Ketepatan keluaran"
 
 #. menu item
 #: zim/plugins/arithmetic.py:38
@@ -2624,21 +2568,17 @@ msgstr "_Aritmatika"
 #: zim/plugins/attachmentbrowser/filebrowser.py:61
 #, python-format
 msgid "Are you sure you want to delete the file '%s'?"
-msgstr ""
+msgstr "Apakah Anda yakin ingin menghapus berkas ‘%s’?"
 
 #. menu item to delete file
 #: zim/plugins/attachmentbrowser/filebrowser.py:392
-#, fuzzy
-#| msgid "_Delete"
 msgid "_Delete..."
-msgstr "_Hapus"
+msgstr "Hapus..."
 
 #. menu item to rename file
 #: zim/plugins/attachmentbrowser/filebrowser.py:396
-#, fuzzy
-#| msgid "_Replace..."
 msgid "_Rename..."
-msgstr "_Ganti..."
+msgstr "Ubah nama..."
 
 #. unspecified value for file modification time
 #: zim/plugins/attachmentbrowser/filebrowser.py:429
@@ -2678,22 +2618,22 @@ msgstr "Batal"
 #. dialog title
 #: zim/plugins/attachmentbrowser/filerenamedialog.py:18
 msgid "Rename file"
-msgstr ""
+msgstr "Ubah nama berkas"
 
 #. Error message
 #: zim/plugins/attachmentbrowser/filerenamedialog.py:69
 msgid "File name should not be blank."
-msgstr ""
+msgstr "Nama berkas tidak boleh kosong."
 
 #. Error message
 #: zim/plugins/attachmentbrowser/filerenamedialog.py:72
 msgid "A file with that name already exists."
-msgstr ""
+msgstr "Berkas dengan nama tersebut sudah ada."
 
 #. Error message
 #: zim/plugins/attachmentbrowser/filerenamedialog.py:75
 msgid "File name should not contain path declaration."
-msgstr ""
+msgstr "Nama berkas tidak boleh mengandung deklarasi jalur."
 
 #. plugin name
 #: zim/plugins/attachmentbrowser/__init__.py:69
@@ -2721,32 +2661,26 @@ msgstr "Posisi pada jendela"
 #. option for plugin preferences
 #: zim/plugins/attachmentbrowser/__init__.py:84
 msgid "Use thumbnails"
-msgstr ""
+msgstr "Gunakan thumbnail"
 
 #. option for plugin preferences
 #: zim/plugins/attachmentbrowser/__init__.py:86
 msgid "Support thumbnails for SVG"
-msgstr ""
+msgstr "Dukungan thumbnail untuk SVG"
 
 #. label for attachment browser pane
 #: zim/plugins/attachmentbrowser/__init__.py:130
-#, fuzzy
-#| msgid "Attachments"
 msgid "Atta_chments"
 msgstr "Lampiran"
 
 #. placeholder label for sidepane
 #: zim/plugins/attachmentbrowser/__init__.py:147
-#, fuzzy
-#| msgid "Attachments:"
 msgid "No attachments"
-msgstr "Lampiran:"
+msgstr "Tidak ada lampiran"
 
 #. Label for the statusbar, %i is the number of attachments for the current page
 #: zim/plugins/attachmentbrowser/__init__.py:198
-#, fuzzy, python-format
-#| msgid "%i Attachment"
-#| msgid_plural "%i Attachments"
+#, python-format
 msgid "%i Atta_chment"
 msgid_plural "%i Atta_chments"
 msgstr[0] "%i Lampiran"
@@ -2772,14 +2706,12 @@ msgstr ""
 #. option for plugin preferences
 #: zim/plugins/backlinkpane.py:37
 msgid "Show BackLink count in title"
-msgstr ""
+msgstr "Tampilkan jumlah BackLink di judul"
 
 #. option for plugin preferences
 #: zim/plugins/backlinkpane.py:39
-#, fuzzy
-#| msgid "Show full Page Name"
 msgid "Show full Page Names"
-msgstr "Tampilkan Nama Halaman lengkap"
+msgstr "Tampilkan Nama Halaman Lengkap"
 
 #. widget label
 #: zim/plugins/backlinkpane.py:71
@@ -2788,19 +2720,15 @@ msgstr "Tautbalik"
 
 #. placeholder label in sidepane
 #: zim/plugins/backlinkpane.py:84
-#, fuzzy
-#| msgid "Backlinks:"
 msgid "No backlinks"
-msgstr "Tautbalik:"
+msgstr "Tidak ada tautan balik"
 
 #. Label for the statusbar, %i is the number of BackLinks to the current page
 #: zim/plugins/backlinkpane.py:125
-#, fuzzy, python-format
-#| msgid "%i _Backlink"
-#| msgid_plural "%i _Backlinks"
+#, python-format
 msgid "%i _BackLink"
 msgid_plural "%i _BackLinks"
-msgstr[0] "%i _Backlink"
+msgstr[0] "%i Tautan Balik"
 
 #. context menu for inserted objects
 #: zim/plugins/base/imagegenerator.py:382
@@ -2923,10 +2851,8 @@ msgstr "Atur ke Halaman Saat Ini"
 
 #. plugin name
 #: zim/plugins/commandpalette.py:43 zim/plugins/commandpalette.py:115
-#, fuzzy
-#| msgid "Command"
 msgid "Command Palette"
-msgstr "Perintah"
+msgstr "Palet Perintah"
 
 #. plugin description
 #: zim/plugins/commandpalette.py:44
@@ -2935,6 +2861,10 @@ msgid ""
 "The search dialog can be opened by pressing the keyboard shortcut "
 "Ctrl+Shift+P which can be customized via Zim's key bindings preferences."
 msgstr ""
+"Plugin ini membuka kotak dialog pencarian untuk memungkinkan eksekusi cepat "
+"entri menu. Kotak dialog pencarian dapat dibuka dengan menekan pintasan "
+"keyboard Ctrl+Shift+P, yang dapat disesuaikan melalui pengaturan pintasan "
+"keyboard Zim."
 
 #. plugin name
 #: zim/plugins/diagrameditor.py:23
@@ -2956,14 +2886,12 @@ msgstr ""
 #. plugin preference
 #: zim/plugins/diagrameditor.py:38 zim/plugins/sequencediagrameditor.py:38
 msgid "Generate diagrams in SVG format"
-msgstr ""
+msgstr "Buat diagram dalam format SVG"
 
 #. Plugin preference for diagram editor
 #: zim/plugins/diagrameditor.py:44
-#, fuzzy
-#| msgid "Default"
 msgid "Default text"
-msgstr "Standar"
+msgstr "Teks default"
 
 #. menu item
 #: zim/plugins/diagrameditor.py:58
@@ -3051,19 +2979,17 @@ msgstr ""
 #. plugin preference
 #: zim/plugins/equationeditor.py:33
 msgid "Use font color for dark theme"
-msgstr ""
+msgstr "Gunakan warna font untuk tema gelap"
 
 #. plugin preference
 #: zim/plugins/equationeditor.py:34
 msgid "Font size"
-msgstr ""
+msgstr "Ukuran font"
 
 #. plugin preference
 #: zim/plugins/equationeditor.py:35
-#, fuzzy
-#| msgid "Equation"
 msgid "Equation image DPI"
-msgstr "Persamaan"
+msgstr "Gambar persamaan DPI"
 
 #. menu item
 #: zim/plugins/equationeditor.py:49
@@ -3105,7 +3031,7 @@ msgstr "GNU R Plot"
 #. plugin name
 #: zim/plugins/indexed_fts.py:44
 msgid "Indexed Full-Text Search"
-msgstr ""
+msgstr "Pencarian Teks Lengkap yang Diindeks"
 
 #. plugin description
 #: zim/plugins/indexed_fts.py:45
@@ -3115,14 +3041,18 @@ msgid ""
 "based on the FTS5 virtual table module of\n"
 "sqlite.\n"
 msgstr ""
+"Plugin ini menyediakan pengindeksan teks lengkap\n"
+"dari isi halaman untuk pencarian teks lengkap yang cepat,\n"
+"berdasarkan modul tabel virtual FTS5 dari\n"
+"SQLite.\n"
 
 #: zim/plugins/indexed_fts.py:57
 msgid "Remove diacritics before indexing"
-msgstr ""
+msgstr "Hapus tanda diakritik sebelum pengindeksan"
 
 #: zim/plugins/indexed_fts.py:58
 msgid "Additional token characters"
-msgstr ""
+msgstr "Karakter token tambahan"
 
 #. error description
 #: zim/plugins/inlinecalculator.py:192
@@ -3243,10 +3173,8 @@ msgstr "Hari _Ini"
 
 #. side pane title
 #: zim/plugins/journal.py:336
-#, fuzzy
-#| msgid "Journal"
 msgid "_Journal"
-msgstr "Jurnal"
+msgstr "_Jurnal"
 
 #. strftime format for current date label
 #: zim/plugins/journal.py:397
@@ -3260,20 +3188,17 @@ msgstr "Urutkan Baris"
 
 #. plugin description
 #: zim/plugins/linesorter.py:22
-#, fuzzy
-#| msgid ""
-#| "This plugin sorts selected lines in alphabetical order.\n"
-#| "If the list is already sorted the order will be reversed\n"
-#| "(A-Z to Z-A).\n"
 msgid ""
 "This plugin sorts selected lines in alphabetical order.\n"
 "If the list is already sorted the order will be reversed\n"
 "(A-Z to Z-A). Additional features: move text lines up or down,\n"
 "duplicate or remove lines of text.\n"
 msgstr ""
-"Plugin ini mengurutkan baris terpilih berdasarkan alfabet.\n"
-"Jika daftar telah diurutkan, maka urutannya akan dibalik\n"
-"(A-Z ke Z-A).\n"
+"Plugin ini mengurutkan baris yang dipilih secara alfabetis.\n"
+"Jika daftar sudah diurutkan, urutannya akan dibalik\n"
+"(dari A-Z menjadi Z-A). Fitur tambahan: memindahkan baris teks ke atas atau "
+"ke bawah,\n"
+"menggandakan atau menghapus baris teks.\n"
 
 #. Error message for linesorter plugin
 #: zim/plugins/linesorter.py:36
@@ -3331,64 +3256,51 @@ msgstr ""
 #. preferences option
 #: zim/plugins/linkmap.py:55
 msgid "Show linkmap button in headerbar"
-msgstr ""
+msgstr "Tampilkan tombol peta tautan di bilah header"
 
 #. preferences option
 #: zim/plugins/linkmap.py:57
 msgid "Autozoom to fit map"
-msgstr ""
+msgstr "Autozoom untuk menyesuaikan peta"
 
 #. preferences option
 #: zim/plugins/linkmap.py:59
-#, fuzzy
-#| msgid "Position in the window"
 msgid "Follow main window"
-msgstr "Posisi pada jendela"
+msgstr "Ikuti jendela utama"
 
 #. preferences option
 #: zim/plugins/linkmap.py:61
-#, fuzzy
-#| msgid "Open in New Window"
 msgid "Always open links in new windows"
-msgstr "Buka di Jendela Baru"
+msgstr "Selalu buka tautan di jendela baru"
 
 #. plugin name
 #: zim/plugins/mermaiddiagrameditor.py:23
-#, fuzzy
-#| msgid "Insert Diagram"
 msgid "Insert Mermaid Diagram"
-msgstr "Masukkan Diagram"
+msgstr "Sisipkan Diagram Putri Duyung"
 
 #. plugin description
 #: zim/plugins/mermaiddiagrameditor.py:24
-#, fuzzy
-#| msgid ""
-#| "This plugin provides a sequence diagram editor for zim based on seqdiag.\n"
-#| "It allows easy editing of sequence diagrams.\n"
 msgid ""
 "This plugin provides a Mermaid diagram editor for zim.\n"
 "It allows easy editing of Mermaid diagrams.\n"
 msgstr ""
-"Plugin ini menyedian sebuah penyunting diagram urutan berbasis seqdiag untuk "
-"zim.\n"
-"Plugin ini mengizinkan penyuntingan diagram urutan dengan mudah.\n"
+"Plugin ini menyediakan editor diagram Mermaid untuk Zim.\n"
+"Plugin ini memungkinkan pengeditan diagram Mermaid dengan mudah.\n"
 
 #. menu item
 #: zim/plugins/mermaiddiagrameditor.py:56
-#, fuzzy
-#| msgid "Insert Diagram"
 msgid "Mermaid Diagram"
-msgstr "Masukkan Diagram"
+msgstr "Diagram Putri Duyung"
 
 #. plugin name
 #: zim/plugins/osx_menubar.py:74
 msgid "macOS Menubar"
-msgstr ""
+msgstr "Baris Menu macOS"
 
 #. plugin description
 #: zim/plugins/osx_menubar.py:75
 msgid "This plugin provides a macOS menubar for zim."
-msgstr ""
+msgstr "Plugin ini menyediakan bilah menu macOS untuk zim."
 
 #. plugin name
 #: zim/plugins/pageindex/__init__.py:51
@@ -3403,44 +3315,40 @@ msgstr "Plugin ini menambahkan panel indeks halaman pada jendela utama.\n"
 #. preferences option
 #: zim/plugins/pageindex/__init__.py:63
 msgid "Use drag&drop to move pages in the notebook"
-msgstr ""
+msgstr "Gunakan drag&drop untuk memindahkan halaman di buku catatan"
 
 #. preferences option
 #: zim/plugins/pageindex/__init__.py:65 zim/plugins/tags.py:49
 msgid "Automatically expand sections on open page"
-msgstr ""
+msgstr "Secara otomatis memperluas bagian pada halaman yang terbuka"
 
 #. preferences option
 #: zim/plugins/pageindex/__init__.py:67 zim/plugins/tags.py:51
 msgid "Automatically collapse sections on close page"
-msgstr ""
+msgstr "Secara otomatis menyembunyikan bagian-bagian saat menutup halaman"
 
 #. preferences option
 #: zim/plugins/pageindex/__init__.py:69 zim/plugins/tags.py:53
 msgid "Use horizontal scrollbar (may need restart)"
-msgstr ""
+msgstr "Gunakan bilah gulir horizontal (mungkin perlu me-restart)"
 
 #. preferences option
 #: zim/plugins/pageindex/__init__.py:71 zim/plugins/tags.py:55
 msgid "Use tooltips"
-msgstr ""
+msgstr "Gunakan tooltips"
 
 #. menu item
 #: zim/plugins/pageindex/__init__.py:129
-#, fuzzy
-#| msgid "Page Index"
 msgid "Collapse Page Index"
-msgstr "Indeks Halaman"
+msgstr "Indeks Halaman yang Dihapus"
 
 #. menu item
 #: zim/plugins/pageindex/__init__.py:133
 msgid "Reveal Current Page in Page Index"
-msgstr ""
+msgstr "Tampilkan Halaman Saat Ini di Indeks Halaman"
 
 #. tab label for side pane
 #: zim/plugins/pageindex/__init__.py:147
-#, fuzzy
-#| msgid "Index"
 msgid "Inde_x"
 msgstr "Indeks"
 
@@ -3526,10 +3434,8 @@ msgstr "_Cetak"
 
 #. menu item
 #: zim/plugins/printtobrowser.py:75
-#, fuzzy
-#| msgid "Print to Browser"
 msgid "Print tasklist to browser"
-msgstr "Cetak ke Peramban"
+msgstr "Cetak daftar tugas ke browser"
 
 #. plugin name
 #: zim/plugins/quicknote.py:143 zim/plugins/quicknote.py:178
@@ -3600,17 +3506,17 @@ msgstr ""
 #. plugin preference
 #: zim/plugins/scoreeditor.py:55
 msgid "Common include header"
-msgstr ""
+msgstr "Umumnya termasuk header"
 
 #. plugin preference
 #: zim/plugins/scoreeditor.py:56
 msgid "Common include footer"
-msgstr ""
+msgstr "Umumnya termasuk footer"
 
 #. menu item
 #: zim/plugins/scoreeditor.py:72
 msgid "Musical Score"
-msgstr ""
+msgstr "Partitur Musik"
 
 #. plugin name | 
 #. dialog title
@@ -3706,27 +3612,27 @@ msgstr ""
 #. option value
 #: zim/plugins/sourceview.py:80
 msgid "Never wrap lines"
-msgstr ""
+msgstr "Jangan membungkus baris"
 
 #. option value
 #: zim/plugins/sourceview.py:81
 msgid "Try wrap at word boundaries or character"
-msgstr ""
+msgstr "Coba membungkus di batas kata atau karakter"
 
 #. option value
 #: zim/plugins/sourceview.py:82
 msgid "Always wrap at character"
-msgstr ""
+msgstr "Selalu bungkus pada karakter"
 
 #. option value
 #: zim/plugins/sourceview.py:83
 msgid "Always wrap at word boundaries"
-msgstr ""
+msgstr "Selalu membungkus di batas kata"
 
 #. preference option for sourceview plugin
 #: zim/plugins/sourceview.py:87
 msgid "Auto indenting"
-msgstr ""
+msgstr "Indentasi otomatis"
 
 #. preference option for sourceview plugin
 #: zim/plugins/sourceview.py:89
@@ -3756,12 +3662,12 @@ msgstr "Lebar tab"
 #. preference option for sourceview plugin
 #: zim/plugins/sourceview.py:101
 msgid "Text wrap mode"
-msgstr ""
+msgstr "Mode pembungkus teks"
 
 #. preference option for sourceview plugin
 #: zim/plugins/sourceview.py:103
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #. menu item
 #: zim/plugins/sourceview.py:118
@@ -3786,7 +3692,7 @@ msgstr "Masukkan Blok Kode"
 #. input checkbox
 #: zim/plugins/sourceview.py:407
 msgid "Display line numbers"
-msgstr ""
+msgstr "Tampilkan nomor baris"
 
 #. plugin name
 #: zim/plugins/spell.py:103
@@ -3795,20 +3701,16 @@ msgstr "Periksa Ejaan"
 
 #. plugin description
 #: zim/plugins/spell.py:104
-#, fuzzy
-#| msgid ""
-#| "Adds spell checking support using gtkspell.\n"
-#| "\n"
-#| "This is a core plugin shipping with zim.\n"
 msgid ""
 "Adds spell checking support using \n"
 "gtkspellchecker, Gspell, or gtkspell libraries.\n"
 "\n"
 "This is a core plugin shipping with zim.\n"
 msgstr ""
-"Tambah dukungan periksa ejaan menggunakan gtkspell.\n"
+"Menambahkan dukungan pengecekan ejaan menggunakan \n"
+"gtkspellchecker, Gspell, atau perpustakaan gtkspell.\n"
 "\n"
-"Ini adalah plugin inti zim.\n"
+"Ini adalah plugin inti yang disertakan dalam Zim.\n"
 
 #. menu item
 #: zim/plugins/spell.py:166
@@ -4045,12 +3947,12 @@ msgstr "Tampilkan kepala judul halaman di Daftar Isi"
 #. option for plugin preferences
 #: zim/plugins/tableofcontents.py:113
 msgid "Include horizontal lines in the ToC"
-msgstr ""
+msgstr "Sertakan garis horizontal dalam Daftar Isi"
 
 #. option for plugin preferences
 #: zim/plugins/tableofcontents.py:115
 msgid "Set ToC fontsize"
-msgstr ""
+msgstr "Atur ukuran font daftar isi"
 
 #. action to lower level of heading in the text
 #: zim/plugins/tableofcontents.py:429
@@ -4065,7 +3967,7 @@ msgstr "Naikkan"
 #. widget label
 #: zim/plugins/tableofcontents.py:545
 msgid "T_oC"
-msgstr ""
+msgstr "Daftar Isi"
 
 #. small label above Table Of Contents
 #: zim/plugins/tableofcontents.py:575
@@ -4090,7 +3992,7 @@ msgstr ""
 #. title for sidepane tab
 #: zim/plugins/tags.py:98
 msgid "T_ags"
-msgstr ""
+msgstr "T_ag"
 
 #. menu option
 #: zim/plugins/tags.py:148
@@ -4110,62 +4012,52 @@ msgstr "Urutkan berdasar alfabet"
 #. list with tasks
 #: zim/plugins/tasklist/gui.py:90
 msgid "All Tasks"
-msgstr ""
+msgstr "Semua Tugas"
 
 #. list with tasks
 #: zim/plugins/tasklist/gui.py:91
 msgid "Active"
-msgstr ""
+msgstr "Aktif"
 
 #. list with tasks (GTD style category)
 #: zim/plugins/tasklist/gui.py:92
 msgid "Inbox"
-msgstr ""
+msgstr "Kotak Masuk"
 
 #. list with tasks (GTD style category)
 #: zim/plugins/tasklist/gui.py:93
-#, fuzzy
-#| msgid "Section"
 msgid "Next Actions"
-msgstr "Bagian"
+msgstr "Langkah Selanjutnya"
 
 #. list with tasks (GTD style category)
 #: zim/plugins/tasklist/gui.py:94
 msgid "Projects"
-msgstr ""
+msgstr "Proyek"
 
 #. list with tasks (GTD style category)
 #: zim/plugins/tasklist/gui.py:95
-#, fuzzy
-#| msgid "Editing"
 msgid "Waiting"
-msgstr "Sunting"
+msgstr "Menunggu"
 
 #. placeholder label for sidepane
 #: zim/plugins/tasklist/gui.py:141
-#, fuzzy
-#| msgid "Tasks"
 msgid "No tasks"
-msgstr "Tugas"
+msgstr "Tidak ada tugas"
 
 #. tooltip
 #: zim/plugins/tasklist/gui.py:167
-#, fuzzy
-#| msgid "Show tasklist in sidepane"
 msgid "Show tasklist window"
-msgstr "Tampilkan daftar tugas di panel sisi"
+msgstr "Tampilkan jendela daftar tugas"
 
 #. label for filtering/searching tasks
 #: zim/plugins/tasklist/gui.py:212
-#, fuzzy
-#| msgid "Filter"
 msgid "Filter tasks"
-msgstr "Saring"
+msgstr "Saring tugas"
 
 #. tab label for side pane
 #: zim/plugins/tasklist/gui.py:275
 msgid "Tas_ks"
-msgstr ""
+msgstr "Tugas"
 
 #. Window title for tasklist
 #: zim/plugins/tasklist/gui.py:375 zim/plugins/tasklist/gui.py:380
@@ -4176,39 +4068,37 @@ msgstr "Tugas"
 #: zim/plugins/tasklist/gui.py:454
 #, python-format
 msgid "%s shown"
-msgstr ""
+msgstr "%s ditampilkan"
 
 #. selection menu option
 #: zim/plugins/tasklist/gui.py:506
 msgid "Show open tasks"
-msgstr ""
+msgstr "Tampilkan tugas yang belum selesai"
 
 #. selection menu option
 #: zim/plugins/tasklist/gui.py:507
-#, fuzzy
-#| msgid "Only Show Active Tasks"
 msgid "Show closed tasks"
-msgstr "Hanya Tampilkan Tugas Aktif"
+msgstr "Tampilkan tugas yang telah diselesaikan"
 
 #. selection menu option
 #: zim/plugins/tasklist/gui.py:508
 msgid "Show cancelled tasks"
-msgstr ""
+msgstr "Tampilkan tugas yang dibatalkan"
 
 #. selection menu option
 #: zim/plugins/tasklist/gui.py:509
 msgid "Show migrated tasks"
-msgstr ""
+msgstr "Tampilkan tugas yang telah dipindahkan"
 
 #. selection menu option
 #: zim/plugins/tasklist/gui.py:510
 msgid "Show trans-migrated tasks"
-msgstr ""
+msgstr "Tampilkan tugas yang telah dipindahkan"
 
 #. Header for list selection in tasklist window
 #: zim/plugins/tasklist/gui.py:603
 msgid "Lists"
-msgstr ""
+msgstr "Daftar"
 
 #. selection of tasks without tags
 #: zim/plugins/tasklist/gui.py:696
@@ -4218,7 +4108,7 @@ msgstr "Tanpa tag"
 #. header in selection drop down
 #: zim/plugins/tasklist/gui.py:751
 msgid "Labels"
-msgstr ""
+msgstr "Label"
 
 #. Column header Task List dialog
 #: zim/plugins/tasklist/gui.py:895
@@ -4260,15 +4150,13 @@ msgstr ""
 
 #. preferences option
 #: zim/plugins/tasklist/__init__.py:45
-#, fuzzy
-#| msgid "Show tasklist in sidepane"
 msgid "Show tasklist button in headerbar"
-msgstr "Tampilkan daftar tugas di panel sisi"
+msgstr "Tampilkan tombol daftar tugas di bilah header"
 
 #. preferences option - "GTD" means "Getting Things Done" methodology
 #: zim/plugins/tasklist/__init__.py:47
 msgid "Show \"GTD-style\" inbox & next actions lists"
-msgstr ""
+msgstr "Tampilkan kotak masuk dan daftar tindakan berikutnya dalam gaya GTD"
 
 #. preferences option
 #: zim/plugins/tasklist/__init__.py:49
@@ -4278,21 +4166,17 @@ msgstr "Tampilkan daftar tugas di panel sisi"
 #. preferences option
 #: zim/plugins/tasklist/__init__.py:53
 msgid "Show due date in sidepane"
-msgstr ""
+msgstr "Tampilkan tanggal jatuh tempo di panel samping"
 
 #. preferences option
 #: zim/plugins/tasklist/__init__.py:55
-#, fuzzy
-#| msgid "Show tasklist in sidepane"
 msgid "Show start date in sidepane"
-msgstr "Tampilkan daftar tugas di panel sisi"
+msgstr "Tampilkan tanggal mulai di panel samping"
 
 #. preferences option
 #: zim/plugins/tasklist/__init__.py:57
-#, fuzzy
-#| msgid "Show tasklist in sidepane"
 msgid "Show page column in the sidepane"
-msgstr "Tampilkan daftar tugas di panel sisi"
+msgstr "Tampilkan kolom halaman di panel samping"
 
 #. label for plugin preferences dialog
 #: zim/plugins/tasklist/__init__.py:63
@@ -4302,21 +4186,17 @@ msgstr "Perlakukan semua kotak cek sebagai tugas"
 #. label for plugin preferences dialog - labels are e.g. "FIXME", "TODO"
 #: zim/plugins/tasklist/__init__.py:65
 msgid "Labels marking tasks"
-msgstr ""
+msgstr "Label yang menandai tugas"
 
 #. label for plugin preferences dialog - labels are e.g. "Waiting", "Planned"
 #: zim/plugins/tasklist/__init__.py:67
-#, fuzzy
-#| msgid "Tags for non-actionable tasks"
 msgid "Labels for \"waiting\" tasks"
-msgstr "Tag untuk tugas yang tak dapat dilakukan"
+msgstr "Label untuk tugas “menunggu”"
 
 #. label for plugin preferences dialog - tags are e.g. "@waiting", "@planned"
 #: zim/plugins/tasklist/__init__.py:69
-#, fuzzy
-#| msgid "Tags for non-actionable tasks"
 msgid "Tags for \"waiting\" tasks"
-msgstr "Tag untuk tugas yang tak dapat dilakukan"
+msgstr "Tag untuk tugas “menunggu”"
 
 #. label for preference with multiple options
 #: zim/plugins/tasklist/__init__.py:71
@@ -4351,81 +4231,68 @@ msgstr "Bagian untuk diabaikan"
 #. label for plugin preferences dialog
 #: zim/plugins/tasklist/__init__.py:83
 msgid "Show page names in selection pane"
-msgstr ""
+msgstr "Tampilkan nama halaman di panel pemilihan"
 
 #. label for plugin preferences dialog
 #: zim/plugins/tasklist/__init__.py:85
 msgid "Don't count Saturday and Sunday as working days"
-msgstr ""
+msgstr "Jangan menghitung Sabtu dan Minggu sebagai hari kerja"
 
 #. toolbar style
 #: zim/plugins/toolbar.py:19
-#, fuzzy
-#| msgid "Icon"
 msgid "Icons"
 msgstr "Ikon"
 
 #. toolbar style
 #: zim/plugins/toolbar.py:21
-#, fuzzy
-#| msgid "Icons _And Text"
 msgid "Icons & Text"
-msgstr "Ikon D_an Teks"
+msgstr "Ikon & Teks"
 
 #. toolbar style
 #: zim/plugins/toolbar.py:22
 msgid "Icons & Text horizontal"
-msgstr ""
+msgstr "Ikon & Teks horizontal"
 
 #. Toolbar size small
 #: zim/plugins/toolbar.py:30
 msgid "Small"
-msgstr ""
+msgstr "Kecil"
 
 #. Toolbar size large
 #: zim/plugins/toolbar.py:31
 msgid "Large"
-msgstr ""
+msgstr "Besar"
 
 #. plugin name
 #: zim/plugins/toolbar.py:41
-#, fuzzy
-#| msgid "_Toolbar"
 msgid "Tool Bar"
-msgstr "Bilah alat"
+msgstr "Bar Alat"
 
 #. plugin description
 #: zim/plugins/toolbar.py:42
-#, fuzzy
-#| msgid "This plugin adds the page index pane to the main window.\n"
 msgid "This plugin allows to customize the toolbar in the main window.\n"
-msgstr "Plugin ini menambahkan panel indeks halaman pada jendela utama.\n"
+msgstr ""
+"Plugin ini memungkinkan Anda untuk menyesuaikan toolbar di jendela utama.\n"
 
 #. option for plugin preferences
 #: zim/plugins/toolbar.py:51
-#, fuzzy
-#| msgid "Show in the toolbar"
 msgid "Show toolbar"
-msgstr "Tampilkan di bilah alat"
+msgstr "Tampilkan bilah alat"
 
 #. option for plugin preferences
 #: zim/plugins/toolbar.py:53
 msgid "Include formatting tools in toolbar"
-msgstr ""
+msgstr "Sertakan alat pemformatan di bilah alat"
 
 #. option for plugin preferences
 #: zim/plugins/toolbar.py:57
-#, fuzzy
-#| msgid "_Toolbar"
 msgid "Toolbar style"
-msgstr "Bilah alat"
+msgstr "Gaya toolbar"
 
 #. option for plugin preferences
 #: zim/plugins/toolbar.py:59
-#, fuzzy
-#| msgid "_Toolbar"
 msgid "Toolbar size"
-msgstr "Bilah alat"
+msgstr "Ukuran toolbar"
 
 #. plugin name
 #: zim/plugins/trayicon.py:69
@@ -4606,7 +4473,7 @@ msgstr "_Halaman"
 #. Button label
 #: zim/plugins/versioncontrol/__init__.py:837
 msgid "View _Annotated"
-msgstr ""
+msgstr "Lihat _Anotasi"
 
 #. Help text in versions dialog
 #: zim/plugins/versioncontrol/__init__.py:842
@@ -4641,7 +4508,7 @@ msgstr "Ber_sebelahan"
 #. dialog title
 #: zim/plugins/versioncontrol/__init__.py:981
 msgid "Annotated Page Source"
-msgstr ""
+msgstr "Sumber Halaman yang Dianotasi"
 
 #. Confirmation question
 #: zim/plugins/versioncontrol/__init__.py:990
@@ -4670,41 +4537,37 @@ msgstr "Perubahan"
 #. Column header versions dialog
 #: zim/plugins/versioncontrol/__init__.py:1064
 msgid "Rev"
-msgstr ""
+msgstr "Rev"
 
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:19
 msgid "Page Path - Notebook Name"
-msgstr ""
+msgstr "Jalur Halaman - Nama Buku Catatan"
 
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:20
 msgid "Notebook Name - Zim"
-msgstr ""
+msgstr "Nama Notebook - Zim"
 
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:21
 msgid "Page Name — Page Title — Zim"
-msgstr ""
+msgstr "Nama Halaman — Judul Halaman — Zim"
 
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:22
 msgid "Notebook Name: Page Title (Page Source Path)"
-msgstr ""
+msgstr "Nama Notebook: Judul Halaman (Jalur Sumber Halaman)"
 
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:23
-#, fuzzy
-#| msgid "Customize..."
 msgid "Custom"
-msgstr "Atur..."
+msgstr "Kustom"
 
 #. plugin name
 #: zim/plugins/windowtitleeditor.py:28
-#, fuzzy
-#| msgid "Table Editor"
 msgid "Window Title Editor"
-msgstr "Penyunting Tabel"
+msgstr "Editor Judul Jendela"
 
 #. plugin description
 #: zim/plugins/windowtitleeditor.py:29
@@ -4714,23 +4577,25 @@ msgid ""
 "Press \"Configure\" below to choose a preset\n"
 "or to create a custom one.\n"
 msgstr ""
+"Plugin ini memungkinkan pengeditan judul jendela.\n"
+"\n"
+"Tekan “Konfigurasi” di bawah ini untuk memilih preset\n"
+"atau membuat yang kustom.\n"
 
 #. window title editor preference option
 #: zim/plugins/windowtitleeditor.py:41
-#, fuzzy
-#| msgid "Template"
 msgid "Title template"
-msgstr "Pola"
+msgstr "Template judul"
 
 #. window title editor preference option
 #: zim/plugins/windowtitleeditor.py:45
 msgid "Template string for custom format"
-msgstr ""
+msgstr "Template string untuk format kustom"
 
 #. window title in case of critical error
 #: zim/plugins/windowtitleeditor.py:98
 msgid "Plugin error - check debug log! - Zim"
-msgstr ""
+msgstr "Kesalahan plugin - periksa log debug! - Zim"
 
 #. plugin name
 #: zim/plugins/zeitgeist-logger.py:33
