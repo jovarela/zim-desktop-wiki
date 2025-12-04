@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2025-12-03 15:00+0000\n"
+"PO-Revision-Date: 2025-12-04 16:00+0000\n"
 "Last-Translator: coolvitto <coolzdaddy55@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/zim/develop/ja/>"
 "\n"
@@ -275,7 +275,6 @@ msgstr "ツールバーに表示する"
 
 #. Short help text in "Edit Custom Tool" dialog. The "%" is literal - please include the html formatting
 #: zim/gui/customtools.py:709
-#, fuzzy
 msgid ""
 "The following parameters will be substituted\n"
 "in the command when it is executed:\n"
@@ -577,7 +576,6 @@ msgstr "このオプションではアプリケーションの再起動が必要
 
 #. option for preferences dialog
 #: zim/gui/mainwindow.py:71
-#, fuzzy
 msgid "Show controls in the window decoration"
 msgstr "ウィンドウのタイトルバーに操作ボタンを表示する"
 
@@ -595,7 +593,7 @@ msgstr "最後にページを開いていた時のカーソル位置を記録す
 #. button label for fullscreen window header
 #: zim/gui/mainwindow.py:152 zim/gui/mainwindow.py:273
 msgid "Leave Fullscreen"
-msgstr "全画面表示"
+msgstr "全画面表示を解除"
 
 #. Menu item
 #: zim/gui/mainwindow.py:295
@@ -718,7 +716,7 @@ msgstr "ホームページへ移動"
 
 #. Label for button with backlinks in statusbar
 #: zim/gui/mainwindow.py:1001
-#, fuzzy, python-format
+#, python-format
 msgid "%i _Backlink"
 msgid_plural "%i _Backlinks"
 msgstr[0] "%i バックリンク(_B)"
@@ -1167,7 +1165,7 @@ msgstr "ウィキマークアップを入力後、改行した際に自動的に
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:126
 msgid "Default format for copying text to the clipboard"
-msgstr "クリップボードにコピーするテキストの既定形式"
+msgstr "クリップボードにコピーするテキストの既定の形式"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:129
@@ -1242,7 +1240,7 @@ msgstr "斜体(_E)"
 #. menu item for formatting
 #: zim/gui/pageview/__init__.py:510 zim/gui/pageview/__init__.py:525
 msgid "_Mark"
-msgstr "マーク(_M)"
+msgstr "強調表示(_M)"
 
 #. Menu item | 
 #. menu item for formatting
@@ -1263,9 +1261,8 @@ msgstr "上付き文字(_S)"
 #. Menu item | 
 #. menu item for formatting
 #: zim/gui/pageview/__init__.py:514 zim/gui/pageview/__init__.py:527
-#, fuzzy
 msgid "_Verbatim"
-msgstr "等幅(_V)"
+msgstr "コード(_V)"
 
 #. menu item for formatting
 #: zim/gui/pageview/__init__.py:528
@@ -1297,7 +1294,7 @@ msgstr "形式を指定してコピー(_A)..."
 #. menu item for context menu of editor
 #: zim/gui/pageview/__init__.py:1386
 msgid "Paste As _Verbatim"
-msgstr "そのまま貼り付け(_V)"
+msgstr "コードとして貼り付け(_V)"
 
 #. Context menu item for pageview to move selected text to new/other page | 
 #. Menu item
@@ -1863,7 +1860,7 @@ msgstr "検索(_F)"
 #. checkbox option in search dialog
 #: zim/gui/searchdialog.py:54
 msgid "_Limit search to the current page and sub-pages"
-msgstr "検索を現在のページと子ページに限定する(_L)"
+msgstr "検索を現在のページと子ページに制限する(_L)"
 
 #. placeholder label when search has started
 #: zim/gui/searchdialog.py:67
@@ -1954,7 +1951,7 @@ msgstr "新しい子ページ(_U)..."
 #. Menu item
 #: zim/gui/uiactions.py:112
 msgid "_New Page Here..."
-msgstr "ここに新しいページ(_N)..."
+msgstr "新しいページ(_N)..."
 
 #. Menu item
 #: zim/gui/uiactions.py:120
@@ -1979,7 +1976,7 @@ msgstr "エクスポート(_X)..."
 #. Menu item
 #: zim/gui/uiactions.py:161
 msgid "_Send To..."
-msgstr "送る(_S)..."
+msgstr "メールで送信(_S)..."
 
 #. Menu item
 #: zim/gui/uiactions.py:174
@@ -2175,7 +2172,7 @@ msgstr "ページ \"%s\" の名前を変更"
 
 #. label in MovePage dialog - %i is number of backlinks
 #: zim/gui/uiactions.py:586
-#, fuzzy, python-format
+#, python-format
 msgid "Update %i page linking to this page"
 msgid_plural "Update %i pages linking to this page"
 msgstr[0] "このページにリンクしている %i ページを更新"
@@ -2223,9 +2220,7 @@ msgstr ""
 
 #. label in the TrashPage dialog to warn user of attachments being deleted
 #: zim/gui/uiactions.py:719
-#, fuzzy, python-format
-#| msgid "%i file will be deleted"
-#| msgid_plural "%i files will be deleted"
+#, python-format
 msgid "%i file will be trashed"
 msgid_plural "%i files will be trashed"
 msgstr[0] "%i 個のファイルがごみ箱に捨てられます"
@@ -2262,7 +2257,7 @@ msgstr ""
 
 #. label in the DeletePage dialog to warn user of attachments being deleted
 #: zim/gui/uiactions.py:761
-#, fuzzy, python-format
+#, python-format
 msgid "%i file will be deleted"
 msgid_plural "%i files will be deleted"
 msgstr[0] "%i 個のファイルが削除されます"
@@ -2534,7 +2529,7 @@ msgstr "%(file)s の %(line)i 行目の \"%(snippet)s\" 付近にエラーが発
 #. plugin name
 #: zim/plugins/arithmetic.py:16
 msgid "Arithmetic"
-msgstr "演算"
+msgstr "算術計算"
 
 #. plugin description
 #: zim/plugins/arithmetic.py:17
@@ -2631,7 +2626,7 @@ msgstr "ファイル名にパスを含めることはできません。"
 #. plugin name
 #: zim/plugins/attachmentbrowser/__init__.py:69
 msgid "Attachment Browser"
-msgstr "添付ブラウザー"
+msgstr "添付フォルダーペイン"
 
 #. plugin description
 #: zim/plugins/attachmentbrowser/__init__.py:70
@@ -2673,7 +2668,7 @@ msgstr "添付ファイルなし"
 
 #. Label for the statusbar, %i is the number of attachments for the current page
 #: zim/plugins/attachmentbrowser/__init__.py:198
-#, fuzzy, python-format
+#, python-format
 msgid "%i Atta_chment"
 msgid_plural "%i Atta_chments"
 msgstr[0] "%i 個の添付ファイル(_C)"
@@ -2714,13 +2709,11 @@ msgstr "バックリンク"
 #. placeholder label in sidepane
 #: zim/plugins/backlinkpane.py:84
 msgid "No backlinks"
-msgstr "バックリンクなし"
+msgstr "バックリンクはありません"
 
 #. Label for the statusbar, %i is the number of BackLinks to the current page
 #: zim/plugins/backlinkpane.py:125
-#, fuzzy, python-format
-#| msgid "%i _Backlink..."
-#| msgid_plural "%i _Backlinks..."
+#, python-format
 msgid "%i _BackLink"
 msgid_plural "%i _BackLinks"
 msgstr[0] "%i 個のバックリンク(_B)"
@@ -2792,7 +2785,7 @@ msgstr "ブックマーク"
 #. button label
 #: zim/plugins/bookmarksbar.py:184
 msgid "Add bookmark/Show settings"
-msgstr "ブックマークを追加/設定を表示"
+msgstr "ブックマークの追加"
 
 #. message for bookmark plugin
 #: zim/plugins/bookmarksbar.py:294
@@ -3347,7 +3340,7 @@ msgstr "索引(_X)"
 #. plugin name
 #: zim/plugins/pathbar.py:38
 msgid "Path Bar"
-msgstr "タブ"
+msgstr "パスバー"
 
 #. plugin description
 #: zim/plugins/pathbar.py:39
@@ -3356,14 +3349,14 @@ msgid ""
 "This \"path bar\" can show the notebook path for the current page,\n"
 "recent visited pages or recent edited pages.\n"
 msgstr ""
-"このプラグインは、ウィンドウの上部に「タブ」を追加します。\n"
-"この「タブ」には、現在のページ、最近アクセスしたページ、\n"
+"このプラグインは、ウィンドウの上部に「パスバー」を追加します。\n"
+"この「パスバー」には、現在のページ、最近アクセスしたページ、\n"
 "最近編集したページのノートブック パスが表示されます。\n"
 
 #. Menu title
 #: zim/plugins/pathbar.py:80
 msgid "P_athbar"
-msgstr "タブ(_A)"
+msgstr "パスバー(_A)"
 
 #. Menu option for View->Pathbar
 #: zim/plugins/pathbar.py:81
@@ -3393,7 +3386,7 @@ msgstr "ページ階層(_P)"
 #. plugin name
 #: zim/plugins/printtobrowser.py:30
 msgid "Print to Browser"
-msgstr "ブラウザで印刷"
+msgstr "ブラウザで表示"
 
 #. plugin description
 #: zim/plugins/printtobrowser.py:31
@@ -3417,7 +3410,7 @@ msgstr ""
 #. menu item
 #: zim/plugins/printtobrowser.py:63
 msgid "_Print to Browser"
-msgstr "ブラウザに印刷(_P)"
+msgstr "ブラウザで表示(_P)"
 
 #. menu item
 #: zim/plugins/printtobrowser.py:75
@@ -4055,7 +4048,7 @@ msgstr "タスク"
 
 #. number of tasks shown in tasklist window
 #: zim/plugins/tasklist/gui.py:454
-#, fuzzy, python-format
+#, python-format
 msgid "%s shown"
 msgstr "%s 表示"
 
@@ -4087,7 +4080,7 @@ msgstr "転送されたタスクを表示"
 #. Header for list selection in tasklist window
 #: zim/plugins/tasklist/gui.py:603
 msgid "Lists"
-msgstr "リスト"
+msgstr "箇条書き"
 
 #. selection of tasks without tags
 #: zim/plugins/tasklist/gui.py:696
