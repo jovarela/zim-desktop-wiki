@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2025-10-07 10:02+0000\n"
+"PO-Revision-Date: 2026-02-09 16:09+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/zim/develop/"
 "id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #. Error message when external application could not be found, %s is the command
 #: zim/applications.py:133
@@ -1287,7 +1287,7 @@ msgstr "Tak ada wiki yang ditentukan: %s"
 #: zim/gui/pageview/__init__.py:1321
 #, python-format
 msgid "Id \"%s\" not found on the current page"
-msgstr "ID “%s” tidak ditemukan di halaman saat ini"
+msgstr "Id \"%s\" tidak ditemukan pada halaman saat ini"
 
 #. menu item for context menu of editor
 #: zim/gui/pageview/__init__.py:1380
@@ -1297,7 +1297,7 @@ msgstr "S_alin Sebagai..."
 #. menu item for context menu of editor
 #: zim/gui/pageview/__init__.py:1386
 msgid "Paste As _Verbatim"
-msgstr "Salin sebagai _Verbatim"
+msgstr "Tempel Sebagai _Verbatim"
 
 #. Context menu item for pageview to move selected text to new/other page | 
 #. Menu item
@@ -1459,7 +1459,7 @@ msgstr "Jungkit Kotak Cek '>'"
 #. Menu item
 #: zim/gui/pageview/__init__.py:1676
 msgid "Toggle Checkbox '<'"
-msgstr "Aktifkan/Nonaktifkan Kotak Centang ‘<’"
+msgstr "Alihkan Kotak Centang '<'"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:1685
@@ -1517,7 +1517,7 @@ msgstr "Daftar _Kotak Cek"
 #. Menu item,
 #: zim/gui/pageview/__init__.py:1858
 msgid "_Remove List"
-msgstr "Hapus Daftar"
+msgstr "_Hapus Daftar"
 
 #. Menu item
 #: zim/gui/pageview/__init__.py:1886
@@ -1618,10 +1618,10 @@ msgid ""
 "or see errors due to encoding, please ensure to configure your system to use "
 "\"UTF-8\""
 msgstr ""
-"Pengaturan enkoding sistem Anda saat ini adalah %s. Jika Anda ingin "
-"mendukung karakter khusus\n"
-"atau mengalami kesalahan akibat masalah enkoding, pastikan untuk "
-"mengonfigurasi sistem Anda agar menggunakan “UTF-8”."
+"Pengodean sistem Anda diatur ke %s, jika Anda ingin dukungan untuk karakter "
+"khusus\n"
+"atau melihat kesalahan karena pengodean, pastikan untuk mengonfigurasi "
+"sistem Anda untuk menggunakan \"UTF-8\""
 
 #. Dialog title
 #: zim/gui/preferencesdialog.py:55
@@ -1806,7 +1806,7 @@ msgstr "Alamat Dokumen"
 #. label for properties dialog
 #: zim/gui/propertiesdialog.py:21
 msgid "Prefer short names for page links"
-msgstr "Gunakan nama pendek untuk tautan halaman"
+msgstr "Utamakan nama pendek untuk tautan halaman"
 
 #. label for properties dialog
 #: zim/gui/propertiesdialog.py:22
@@ -2106,7 +2106,7 @@ msgstr "Pertanyaan yang Sering Diajukan"
 #. Menu item
 #: zim/gui/uiactions.py:424
 msgid "_Keybindings"
-msgstr "Pengaturan Tombol"
+msgstr "_Keybindings"
 
 #. Menu item
 #: zim/gui/uiactions.py:429
@@ -2274,11 +2274,7 @@ msgstr "Sebuah wiki destop"
 #. This string needs to be translated with names of the translators for this language
 #: zim/gui/uiactions.py:799
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Hertatijanto Hartono https://launchpad.net/~dvertx\n"
-"  Triyan W. Nugroho https://launchpad.net/~triyan-wn\n"
-"  tunggul arif siswoyo https://launchpad.net/~tunggul"
+msgstr "translator-credits"
 
 #. dialog title
 #: zim/gui/widgets.py:519 zim/gui/widgets.py:1602
@@ -2661,7 +2657,7 @@ msgstr "Posisi pada jendela"
 #. option for plugin preferences
 #: zim/plugins/attachmentbrowser/__init__.py:84
 msgid "Use thumbnails"
-msgstr "Gunakan thumbnail"
+msgstr "Gunakan kelumit (thumbnails)"
 
 #. option for plugin preferences
 #: zim/plugins/attachmentbrowser/__init__.py:86
@@ -2909,8 +2905,8 @@ msgid ""
 "This plugin adds settings that help using zim\n"
 "as a distraction free editor.\n"
 msgstr ""
-"Plugin ini menambahkan pengaturan untuk menjadikan zim sebagai sebuah "
-"penyunting bebas gangguan.\n"
+"Plugin ini menambahkan pengaturan yang membantu penggunaan zim\n"
+"sebagai editor bebas gangguan.\n"
 
 #. plugin preference
 #: zim/plugins/distractionfree.py:36
@@ -3076,10 +3072,10 @@ msgid ""
 "\n"
 "This is a core plugin shipping with zim.\n"
 msgstr ""
-"Plugin ini mengizinkan anda menghitung suatu pernyataan matematika sederhana "
-"secara cepat di zim.\n"
+"Plugin ini memungkinkan Anda untuk mengevaluasi ekspresi matematika\n"
+"sederhana dengan cepat di zim.\n"
 "\n"
-"Ini adalah plugin inti zim.\n"
+"Ini adalah plugin inti yang disertakan dengan zim.\n"
 
 #. error message
 #: zim/plugins/inlinecalculator.py:271
@@ -3335,7 +3331,7 @@ msgstr "Gunakan bilah gulir horizontal (mungkin perlu me-restart)"
 #. preferences option
 #: zim/plugins/pageindex/__init__.py:71 zim/plugins/tags.py:55
 msgid "Use tooltips"
-msgstr "Gunakan tooltips"
+msgstr "Gunakan tip alat (tooltips)"
 
 #. menu item
 #: zim/plugins/pageindex/__init__.py:129
@@ -3415,12 +3411,13 @@ msgid ""
 "\n"
 "This is a core plugin shipping with zim.\n"
 msgstr ""
-"Plugin ini menyediakan sebuah solusi untuk kurangnya dukungan\n"
-"pencetak di zim. Plugin ini mengekspor halaman saat ini ke html \n"
-"dan membuka sebuah peramban. Dukungan pencetak pada peramban \n"
-"digunakan untuk mengirimkan data anda ke pencetak dalam dua langkah.\n"
+"Plugin ini menyediakan solusi sementara untuk kurangnya\n"
+"dukungan pencetakan di zim. Plugin ini mengekspor halaman saat ini\n"
+"ke html dan membuka peramban. Dengan asumsi peramban tersebut\n"
+"memiliki dukungan pencetakan, ini akan mengirimkan data Anda\n"
+"ke pencetak dalam dua langkah.\n"
 "\n"
-"Ini adalah plugin inti zim.\n"
+"Ini adalah plugin inti yang disertakan dengan zim.\n"
 
 #. menu item
 #: zim/plugins/printtobrowser.py:63
@@ -3450,11 +3447,10 @@ msgid ""
 "\n"
 "This is a core plugin shipping with zim.\n"
 msgstr ""
-"Plugin ini menambahkan sebuah dialog untuk menambahkan teks atau \n"
-"isi papan klip\n"
-" secara cepat ke sebuah halaman zim.\n"
+"Plugin ini menambahkan dialog untuk menjatuhkan beberapa teks atau konten\n"
+"papan klip ke dalam halaman zim dengan cepat.\n"
 "\n"
-"Ini adalah plugin inti zim.\n"
+"Ini adalah plugin inti yang disertakan dengan zim.\n"
 
 #. menu item
 #: zim/plugins/quicknote.py:161
@@ -3929,10 +3925,10 @@ msgid ""
 "\n"
 "This is a core plugin shipping with zim.\n"
 msgstr ""
-"Plugin ini menambahkan widget tambahan yang menampilkan sebuah daftar isi "
-"dari halaman saat ini.\n"
+"Plugin ini menambahkan widget tambahan yang menampilkan daftar\n"
+"isi untuk halaman saat ini.\n"
 "\n"
-"Ini adalah plugin inti zim.\n"
+"Ini adalah plugin inti yang disertakan dengan zim.\n"
 
 #. option for plugin preferences
 #: zim/plugins/tableofcontents.py:109
@@ -4282,7 +4278,7 @@ msgstr "Tampilkan bilah alat"
 #. option for plugin preferences
 #: zim/plugins/toolbar.py:53
 msgid "Include formatting tools in toolbar"
-msgstr "Sertakan alat pemformatan di bilah alat"
+msgstr "Sertakan alat pemformatan dalam bilah alat"
 
 #. option for plugin preferences
 #: zim/plugins/toolbar.py:57
@@ -4452,7 +4448,7 @@ msgstr "Simpan Versi"
 #. Dialog text
 #: zim/plugins/versioncontrol/__init__.py:758
 msgid "Please enter a comment for this version"
-msgstr "SIlakan masukkan komentar untuk versi ini"
+msgstr "Silakan masukkan komentar untuk versi ini"
 
 #. default version comment in the "save version" dialog
 #: zim/plugins/versioncontrol/__init__.py:764
