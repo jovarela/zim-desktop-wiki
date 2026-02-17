@@ -4,7 +4,6 @@
 # Tests: search gui.TestDialogs.testSearchDialog
 
 from gi.repository import Gtk
-from gi.repository import GObject
 import logging
 
 from zim.notebook import Path
@@ -163,7 +162,7 @@ class SearchResultsTreeView(BrowserTreeView):
 		BrowserTreeView.__init__(self, model)
 		self.navigation = navigation
 		self.query = None
-		self.selection = SearchSelection(notebook)
+		self._page_search = PageSearch(notebook, self._search_callback)
 		self.cancelled = False
 		self.hasresults = False
 
@@ -178,14 +177,20 @@ class SearchResultsTreeView(BrowserTreeView):
 				column.set_expand(True)
 			self.append_column(column)
 
-		# Don't sort here because we'll do more elaborate sorting later manually#
-		#model.set_sort_column_id(1, Gtk.SortType.DESCENDING)
+		model.set_sort_column_id(self.SCORE_COL, Gtk.SortType.DESCENDING)
 
 		self.connect('row-activated', self._do_open_page)
 		self.connect('destroy', self.__class__._cancel)
 
 	def _cancel(self):
 		self.cancelled = True
+
+	def _search_callback(self):
+		while Gtk.events_pending():
+			Gtk.main_iteration_do(False)
+
+		if self.cancelled:
+			raise SearchCancelledException
 
 	def search(self, query):
 		query = query.strip()
@@ -196,52 +201,15 @@ class SearchResultsTreeView(BrowserTreeView):
 		self.get_model().clear()
 		self.cancelled = False
 		self.hasresults = False
-		self.query = parse_page_search_query(query)
-		self.selection.search(self.query, callback=self._search_callback)
-		self._update_results(self.selection)
+		self.query = self._page_search.parse_page_search_query(query)
 
-	def _search_callback(self, results, path):
-		# Returning False will cancel the search
-		#~ print('!! CB', path)
-		if results is not None:
-			self._update_results(results)
-
-		while Gtk.events_pending():
-			Gtk.main_iteration_do(False)
-
-		return not self.cancelled
-
-	def _update_results(self, results):
 		model = self.get_model()
 		if not model:
 			return
 
-		# Update score for paths that are already present
-		order = []
-		seen = set()
-		i = -1
-		for i, row in enumerate(model):
-			path = row[self.PATH_COL]
-			if path in results:
-				score = results.scores.get(path, row[self.SCORE_COL])
-			else:
-				score = -1 # went missing !??? - technically a bug
-			row[self.SCORE_COL] = score
-			order.append((path, i, score))
-			seen.add(path)
-
-		# Add new paths
-		new = results - seen
-		for path in new:
-			score = results.scores.get(path, 0)
-			model.append((path.name, score, path))
-			i += 1
-			order.append((path, i, score))
-
-		# sort by score, then by name. This doesn't seem to work by setting a sort column.
-		order.sort(key=lambda i: i[0].name)
-		order.sort(key=lambda i: i[2], reverse=True)
-		model.reorder([x[1] for x in order])
+		for result in self._page_search.search_pages(self.query):
+			model.append((result.path.name, result.search_score, result.path))
+				# FUTURE - use result.search_snippets
 
 		self.hasresults = len(model) > 0
 

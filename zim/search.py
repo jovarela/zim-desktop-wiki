@@ -1,77 +1,56 @@
 
-# Copyright 2009-2025 Jaap Karssenberg <jaap.karssenberg@gmail.com>
+# Copyright 2009-2026 Jaap Karssenberg <jaap.karssenberg@gmail.com>
 
 '''
 This module contains the logic for searching in a notebook.
 
-See L{zim.parse.searchquery} for generic parsing of the query language
+The main class to use page search is L{PageSearch}. See the manual for
+documentation of the supported query language.
 
-Supported keywords:
-
-  - C{Content}
-  - C{Name}
-  - C{Section}: alias for "Name XXX or Name: XXX:*"
-  - C{Namespace}: alias for "Name XXX or Name: XXX:*" -- backward compatible
-  - C{Links}: forward - alias for linksfrom
-  - C{LinksFrom}: forward
-  - C{LinksTo}: backward
-  - C{ContentOrName}: the default, like Name: *X* or Content: X
-  - C{Tag}: look for a single tag
-
-For the Content field we need to request the actual page contents,
-all other fields we get from the index and are more efficient to
-query.
-
-For link keywords only a '*' at the right side is allowed
-For the name keyword a '*' is allowed on both sides
-For content '*' can occur on both sides, but does not match whitespace
+Also see L{zim.parse.searchquery} for generic parsing of the query language
 '''
+
+# One design objective here is to minimize the number of files being read
+# from disk for full content search. To achieve this the following logic
+# is imployed:
+# 
+# - in execution of the query, index terms are prioritized before content
+#   terms to reduce the selection of pages
+# - the execution processes pages linearly, so once a page is read, it 
+#   gets filtered through all remaining query terms while keeping the
+#   content in memory
+# - finally in reading a page, we first read the source text, and if there
+#   is no match there, we skip parsing the text
 
 
 import re
 import logging
+import itertools
 
+from collections.abc import Iterable, Callable
 from typing import Optional
 
-from zim.notebook import Path, \
-	PageNotFoundError, IndexNotFoundError, \
-	LINK_DIR_BACKWARD, LINK_DIR_FORWARD
+from zim.notebook import IndexNotFoundError, LINK_DIR_BACKWARD, LINK_DIR_FORWARD
 
-from zim.plugins import PluginManager
+from zim.plugins import extendable, ExtensionBase
 
 from zim.parse.searchquery import *
+from zim.parse.tokenlist import tokens_to_text
 
 
 logger = logging.getLogger('zim.search')
 
 
-
-KEYWORDS = {
-	'content': {},
-	'name': {},
-	'namespace': {},
-	'section': {},
-	'contentorname': {},
-	'links': {},
-	'linksfrom': {},
-	'linksto': {},
-	'tag': {'regex': search_tag_re}
-}
-DEFAULT_KEYWORD = 'contentorname'
-
-
-def parse_page_search_query(string: str) -> SearchQuery:
-	return parse_search_query(string, KEYWORDS, default_keyword=DEFAULT_KEYWORD)
-
-
 def find_query_from_search_query(query: SearchQuery) -> Optional['FindQuery']:
+	'''Turn a C{SearchQuery} into a C{FindQuery}
+	Alls positive terms that match content are taken into account
+	'''
 	from zim.gui.pageview.find import FindQuery, FIND_CASE_SENSITIVE, FIND_WHOLE_WORD, FIND_REGEX
 
 	strings = list(_walk_search_query(query))
-	if len(strings) == 1:
-		return FindQuery(strings[0])
-	elif strings:
-		return FindQuery('|'.join(re.escape(s) for s in strings if s), FIND_REGEX)
+	if strings:
+		regex = '|'.join(search_query_term_to_regex(s).pattern for s in strings)
+		return FindQuery(regex, FIND_REGEX)
 	else:
 		return None
 
@@ -79,458 +58,563 @@ def _walk_search_query(query):
 	for term in query:
 		if isinstance(term, SearchQuery):
 			if term.negate:
-				continue # skip negated content
+				continue # skip negated content (and ignore double negated...)
 			else:
-				for s in self._walk_text_content(term): # recurs
-					yield s
+				yield from _walk_search_query(term) # recurs
 		else: # SearchQueryTerm
 			if term.negate: # OPERATOR_NOT
 				continue
-			elif term.keyword in ('content', 'contentorname'):
-				yield term.value.strip('*') # strip "*" for partial matches
+			elif term.keyword in ('content', 'contentorname', 'text', 'any'):
+				yield term.value
 			elif term.keyword == 'tag':
-				yield '@' + term.value.lstrip('@').strip('*')
+				yield '@' + term.value.lstrip('@')
 			else:
 				pass # other terms select pages, but no (easy) match in the page
 
 
-class PageSelection(set):
-	'''This class is just a container of path objects'''
+class PageSearchResult:
+	'''Object to combine notebook path with text snippets and search score
+	It can also hold a reference to a C{Page} object for efficient caching
+	during execution of a query.
+	'''
 
+	# Choosen to not make this a subclass of Path in order to preserve IndexPaths
+	# this could improve lookup speed for index terms
+
+	__slots__ = ('path', '_page', 'search_snippets', 'search_score')
+
+	def __init__(self, path: 'Path', score: int = 1, snippets: Optional[list] = None):
+		self.path = path
+		self._page = None
+		self.search_score = score # deafult is 1 as any succesfull result has at least score 1
+		self.search_snippets = snippets
+
+	def get_page(self, notebook: 'Notebook') -> 'Page':
+		'''Proxy for C{notebook.get_page()} that caches result'''
+		if not self._page:
+			self._page = notebook.get_page(self.path)
+		return self._page
+
+	def add_search_snippet(self, snippet: str, score: int = 1):
+		'''Add a text snippet to the result and update the score
+		@param snippet: text fragment showing the match
+		@param score: add this count to the result score
+		'''
+		if not self.search_snippets:
+			self.search_snippets = []
+		self.search_snippets.append(snippet)
+		self.search_score += score
+
+
+class SearchCancelledException(Exception):
+	'''Exception to raise from ui callback to cancel the search'''
 	pass
 
 
-class SearchSelection(PageSelection):
-	'''This class wraps a set of Page or ResultPath objects which result
-	from processing a search query. The attribute 'scores' gives a dict
-	with an arbitrary integer for each path in this set to rank how well
-	they match the query.
+EXECUTION_PRIO_INDEX = 10 #: Search based on database index
+EXECUTION_PRIO_MIXED = 20 #: Nested group that has both index and content terms
+EXECUTION_PRIO_CONTENT = 30 #: Requires reading page content
+EXECUTION_PRIO_OFFSET_NEGATE = 5 #: Negation wrapper is less efficient, so gets offset
+
+UI_CALLBACK_RATE_FOR_CONTENT = 5 #: if set, call the callback for every n pages being read
+UI_CALLBACK_RATE_INDEX = 100 #: if set, call the callback for every n pages being yielded
+
+
+class PageSearchProvider():
+	'''Base class for "search providers"
+
+	These classes implement the search functionality for a single keyword term.
+	Depending on the place of the term in the query either C{generate()},
+	C{filter()}, or C{checker()} will be called.
+
+	The provider deals with L{PageSearchResult} objects which are notebook
+	paths. The provider can choose to add snippets to the result and/or change
+	the score.
+
+	See L{IndexSearchProvider} and L{ContentSearchProvider} for specific
+	optimizations.
 	'''
 
-	def __init__(self, notebook):
-		self.notebook = notebook
-		self.cancelled = False
-		self.query = None
-		self.scores = {}
+	SUPPORTS_NEGATE = False #: flag whether providers supports negation (NOT) or needs a wrapper
+	EXECUTION_PRIO = EXECUTION_PRIO_CONTENT # conservative default
 
-	def search(self, query, selection=None, callback=None):
-		'''Populate this SearchSelection with results for a query.
-		This method flushes any previous results in this set.
-
-		@param query: a L{Query} object
-		@param selection: a prior selection to search within, will result in a sub-set
-		@param callback: a function to call in between steps in the search.
-		It is called as::
-
-			callback(selection, path)
-
-		Where:
-		  - C{selection} is a L{SearchSelection} with partial results (if any)
-		  - C{path} is the C{Path} for the last searched path or C{None}
-
-		If the callback returns C{False} the search is cancelled.
+	def __init__(self, notebook: 'Notebook', term: SearchQueryTerm):
+		'''Constructor
+		@param notebook: the C{Notebook} object to search
+		@param term: a L{SearchQueryTerm} to search
 		'''
-		# Clear state
-		self.cancelled = False
-		self.query = query
-		self.clear()
-		self.scores = {}
+		self.notebook = notebook
+		self.term = term
+		self.ui_callback = None
 
-		# Actual search
-		self.update(self._process_group(query, selection, callback))
+	def walk_notebook(self) -> Iterable[PageSearchResult]:
+		'''Generator for all pages, yields L{PageSearchResult}s'''
+		for p in self.notebook.pages.walk():
+			yield PageSearchResult(p)
 
-		# Clean up results
-		scored = set(self.scores.keys())
-		for path in scored - self:
-			self.scores.pop(path)
+	def generate(self) -> Iterable[PageSearchResult]:
+		'''Generate results
+		This means searching the whole notebook and either yielding results
+		or returning an iterable for the results
+		The results should be L{PageSearchResult} objects
+		'''
+		raise NotImplementedError('generate in %s' % self.__class__.__name__)
 
-	def _process_group(self, group, scope=None, callback=None):
-		# This method processes all search terms in a SearchQuery
-		# it is recursive for nested SearchQuery objects and calls
-		# _process_from_index and _process_content to handle
-		# SearchQueryTerms in the group. It takes care of combining the
-		# results from various terms and calling the callback
-		# function when possible
+	def filter(self, source: Iterable[PageSearchResult]) -> Iterable[PageSearchResult]:
+		'''Filter results
+		Filtering results from a different source and either yielding results
+		or returning an iterable for the results
+		While filtering the search result can be updated with snippets and/or score
+		@param source: iterable of L{PageSearchResult}s
+		@returns: iterator of filtered results
+		'''
+		raise NotImplementedError('filter in %s' % self.__class__.__name__)
 
-		# Special case to optimize for simple OR query to give callback results
-		if len(group) == 1 and isinstance(group[0], SearchQuery):
-			group = group[0]
+	def checker(self) -> Callable[[PageSearchResult], bool]:
+		'''Create a check function
+		The check function can "freeze" state, link intermediate cached
+		results, and will have a shorter lifetime than the provider itself
+		Although the check function returns boolean, it may also update the search result
+		with snippets and/or score
+		@returns: a function with the spec: C{check(result: PageSearchResult) -> bool}
+		'''
+		raise NotImplementedError('checker in %s' % self.__class__.__name__)
 
-		# For optimization we sort the terms in the group based  on how
-		# easy we can get them. Anything that needs content is last.
-		indexterms = []
-		subgroups = []
-		contentterms = []
-		for term in group:
-			if isinstance(term, SearchQuery):
-				subgroups.append(term)
-			else:
-				assert isinstance(term, SearchQueryTerm)
-				if term.keyword in ('content', 'contentorname'):
-					contentterms.append(term)
-				else:
-					indexterms.append(term)
 
-		# Decide what operator to use
-		if group.operator == OPERATOR_AND:
-			op_func = self._and_operator
-		else:
-			op_func = self._or_operator
+class IndexedSearchProvider(PageSearchProvider):
+	'''Base class for "search providers" that are based on the index
+	Assumption is that these are optimized for fast lookup in the C{generate()}
+	function.
+	'''
 
-		# First process index terms - no callback in between - this is fast
-		results = None
-		for term in indexterms:
-			results, scope = op_func(results, scope,
-				self._process_from_index(term, scope))
+	EXECUTION_PRIO = EXECUTION_PRIO_INDEX
 
-		if callback:
-			if group.operator == OPERATOR_AND:
-				cont = callback(None, None) # do not transmit results yet
-			else:
-				cont = callback(results, None)
+	def filter(self, source):
+		'''Filter implementation based on caching the results from generate'''
+		mymatches = set(r.path.name for r in self.generate())
+		for r in source:
+			if r.path.name in mymatches:
+				r.search_score += 1
+				yield r
 
-			if not cont:
-				self.cancelled = True
-				return results or set()
+	def checker(self):
+		'''Check function implementation based on caching the results from generate'''
+		mymatches = set(r.path.name for r in self.generate())
 
-		# Next we process subgroups - recursing - callback after each group
-		def callbackwrapper(results, path):
-			# Don't update results from subgroup match, but do allow cancel
-			if callback:
-				return callback(None, path)
-			else:
+		def check(r):
+			if r.path.name in mymatches:
+				r.search_score += 1
 				return True
+			else:
+				return False
 
-		for term in subgroups:
-			newresults = self._process_group(term, scope, callbackwrapper)
-			if term.negate:
-				newresults = self._negate_op(scope, newresults)
-			results, scope = op_func(results, scope, newresults)
-
-			if callback:
-				if group.operator == OPERATOR_AND:
-					cont = callback(None, None) # do not transmit results yet
-				else:
-					cont = callback(results, None)
-
-				if not cont:
-					self.cancelled = True
-					return results or set()
-
-		# Optimization of the contentorname items to quickly show results for name
-		for term in contentterms:
-			if scope and id(scope) == id(results):
-				scope = scope.copy()
-			myscope = scope # local copy here, need to pass full scope to _process_content
-			if term.keyword == 'contentorname':
-				results, myscope = op_func(results, myscope,
-					self._process_from_index(term, myscope, scoring=10))
-
-		if callback and (
-			group.operator == OPERATOR_OR or
-			all(term.keyword == 'contentorname' for term in contentterms)
-		):
-			cont = callback(results, None)
-			if not cont:
-				self.cancelled = True
-				return results or set()
-
-		# If enabled, use the indexed_fts plugin for fast content search
-		if "indexed_fts" in PluginManager:
-			logger.debug("Searching using Indexed FTS plugin")
-			process_index_fts = PluginManager["indexed_fts"].process_index_fts
-
-			# For AND sets, scope will contain the results so far, and
-			# results only contains stuff from the contentorname query
-			# (which we don't need here)
-			# For OR sets, results is whatever was found so far, and should
-			# be extended with matches inside scope.
-			for term in contentterms:
-				if group.operator == OPERATOR_AND:
-					results, scope = self._and_operator(scope, scope,
-						process_index_fts(self, term, scope))
-				else:
-					results, scope = self._or_operator(results, scope,
-						process_index_fts(self, term, scope))
-
-		# Now do the content terms all at once per page - slow or very slow
-		elif contentterms:
-			results = self._process_content(
-				contentterms, results, scope, group.operator, callback)
-
-		# And return our results as summed by the operator
-		return results or set()
+		return check
 
 
-	@staticmethod
-	def _and_operator(results, scope, newresults):
-		# Returns new results and new scope
-		# For AND, the scope is always latest results
-		if results is None:
-			results = newresults
+class ContentSearchProvider(PageSearchProvider):
+	'''Base class for "search providers" that need to do a content check
+	per page.
+	Assumption is that these are based on a check function created by
+	C{checker()} that needs to visit each page and read content.
+
+	When reading files from disk, the provider should call the 
+	c{ui_callback} function once in a while, if it is set.
+	'''
+
+	EXECUTION_PRIO = EXECUTION_PRIO_CONTENT
+
+	def generate(self):
+		'''Generate implementation based on filtering the notebook'''
+		return self.filter(self.walk_notebook())
+
+	def filter(self, source):
+		'''Filter implementation based on the check function'''
+		check = self.checker()
+		for r in source:
+			if check(r):
+				yield r
+
+
+class PageNameProvider(IndexedSearchProvider):
+	'''Provider for the keywords `name`, `section` and `namespace`'''
+
+	SUPPORTS_NEGATE = True
+	EXECUTION_PRIO = EXECUTION_PRIO_INDEX - 1 # Most efficient provider, always first
+
+	def __init__(self, notebook, term):
+		super().__init__(notebook, term)
+		if term.keyword in ('namespace', 'section'):
+			value = '::' + term.value.strip(':') + ':' # force absolute lookup
 		else:
-			results &= newresults
-		return results, results
+			value = term.value
+		self.regex = search_query_pagename_term_to_regex(value)
 
-	@staticmethod
-	def _or_operator(results, scope, newresults):
-		# Returns new results and new scope
-		# For OR we always keep the original scope
-		if results is None:
-			results = newresults
+	def generate(self):
+		if self.term.negate:
+			return self.filter(self.walk_notebook())
 		else:
-			results |= newresults
-		return results, scope
+			# We generate candidates by lookup of pages by longest word in query
+			words = re.findall('\\w+', self.term.value, re.U)
+			if not words:
+				return [] # no valid pagename without any alphanumerics
 
-	def _negate_op(self, scope, newresults):
-		if not scope:
-			# initialize scope with whole notebook :S
-			scope = set()
-			for p in self.notebook.pages.walk():
-				scope.add(p)
-		return scope - newresults
+			words.sort(key=lambda w: len(w))
+			longest = words[-1]
+			return self.filter(self._generate(longest))
 
-	def _count_score(self, path, score):
-		self.scores[path] = self.scores.get(path, 0) + score
+	def _generate(self, text):
+			# Walk part of notebook that matches text
+			for p in self.notebook.pages.match_all_pages(text, limit=100_000): # arbitrairy high limit
+				yield PageSearchResult(p)
+				for c in self.notebook.pages.walk(p):
+					yield PageSearchResult(c)
 
-	def _process_from_index(self, term, scope, scoring=1):
-		# Process keywords we can get from the index, just one term at
-		# a time - leave it up to _process_group to combine them
-		myresults = SearchSelection(None)
-		myresults.scores = self.scores # HACK for callback function
-		scoped = False
+	def filter(self, source):
+		check = self.checker()
+		for r in source:
+			if check(r):
+				yield r
 
-		if term.keyword in ('name', 'namespace', 'section', 'contentorname'):
-			scoped = True # for these keywords we use scope immediatly
-			if scope:
-				generator = iter(scope)
-			else:
-				generator = self.notebook.pages.walk()
-
-			if term.keyword in ('namespace', 'section'):
-				regex = self._namespace_regex(term.value)
-			elif term.keyword == 'contentorname':
-				# More lax matching for default case
-				regex = self._name_regex('*' + term.value.strip('*') + '*')
-				term.name_regex = regex # needed in _process_content
-			else:
-				regex = self._name_regex(term.value)
-
-			#~ print('!! REGEX: ' + regex.pattern)
-			for path in generator:
-				if regex.match(path.name):
-					myresults.add(path)
-
-		elif term.keyword in ('links', 'linksfrom', 'linksto'):
-			if term.keyword in ('links', 'linksfrom'):
-				dir = LINK_DIR_FORWARD
-			else:
-				dir = LINK_DIR_BACKWARD
-
-			if term.value.endswith('*'):
-				recurs = True
-				string = term.value.rstrip('*')
-			else:
-				recurs = False
-				string = term.value
-
-			try:
-				path = self.notebook.pages.lookup_from_user_input(string)
-			except ValueError:
-				pass
-			else:
-
-				try:
-					if recurs:
-						links = self.notebook.links.list_links_section(path, dir)
-					else:
-						links = self.notebook.links.list_links(path, dir)
-				except IndexNotFoundError:
-					pass
-				else:
-
-					if dir == LINK_DIR_FORWARD:
-						for link in links:
-							myresults.add(link.target)
-					else:
-						for link in links:
-							myresults.add(link.source)
-
-		elif term.keyword == 'tag':
-			tag = term.value
-			try:
-				for path in self.notebook.tags.list_pages(tag):
-					myresults.add(path)
-			except IndexNotFoundError:
-				pass
+	def checker(self):
+		if self.term.negate:
+			return lambda r: not self.regex.search(r.path.name)
 		else:
-			assert False, 'BUG: unknown keyword: %s' % term.keyword
+			return lambda r: bool(self.regex.search(r.path.name))
 
-		# apply scope:
-		if scope and not scoped:
-			myresults &= scope # only keep results that in scope
 
-		# negate selection
-		if term.negate:
-			negate = self._negate_op(scope, myresults)
-			myresults.clear()
-			myresults.update(negate)
+class LinksProvider(IndexedSearchProvider):
+	'''Provider for the keywords `links`, `linksfrom` and `linksto`'''
 
-		for path in myresults:
-			self._count_score(path, scoring)
+	def __init__(self, notebook, term):
+		super().__init__(notebook, term)
+		self.link_dir = LINK_DIR_FORWARD if term.keyword in ('links', 'linksfrom') else LINK_DIR_BACKWARD
+		self.inner = PageNameProvider(notebook, term)
 
-		return myresults
+	def generate(self):
+		for pagename_result in self.inner.generate():
+			# FUTURE: could optimize for pagename queries ending in ":+" to use list_links_section()
+			# but currently list_links_section() is also not really optimized
+			links = self.notebook.links.list_links(pagename_result.path, self.link_dir)
+			if self.link_dir == LINK_DIR_FORWARD:
+				yield from [PageSearchResult(link.target) for link in links]
+			else:
+				yield from [PageSearchResult(link.source) for link in links]
 
-	def _process_content(self, terms, results, scope, operator, callback=None):
-		# Process terms for content, process many at once in order to
-		# only open the page once and allow for a linear behavior of the
-		# callback function. (We could also have relied on page objects
-		# caching the parsetree, but then there is no way to support a
-		# useful callback method.)
-		# Note that this rationale is for flat searches, once sub-groups
-		# are involved things get less optimized.
-		#
-		# For AND 'scope' will be the results of previous steps, we make a subset
-		# of this. In 'results' will only be any final results already obtained from
-		# contentorname optimization
-		# For OR 'results' is whatever was found so far while 'scope' can be larger
-		# we extend the results with any matches from scope
-		for term in terms:
-			term.content_regex = self._content_regex(term.value)
-			# term.name_regex already defined in _process_from_index
 
-		def page_generator(paths):
-			for path in paths:
-				try:
-					yield self.notebook.get_page(path)
-				except:
-					logger.exception('Exception opening: %s', path)
-					continue
+class TagsProvider(IndexedSearchProvider):
+	'''Provider for the `tag` keyword'''
 
-		if scope:
-			generator = page_generator(scope)
-		else:
-			generator = page_generator(self.notebook.pages.walk())
+	# FUTURE: support "*" to glob tags ?
 
-		if results is None:
-			results = SearchSelection(None)
+	def __init__(self, notebook, term):
+		super().__init__(notebook, term)
+		self.tag = term.value.lstrip('@')
 
-		for page in generator:
-			#~ print('!! Search content', page)
-			try:
+	def generate(self):
+		try:
+			return [PageSearchResult(p) for p in self.notebook.tags.list_pages(self.tag)]
+		except IndexNotFoundError:
+			return []
+
+
+class TextProvider(ContentSearchProvider):
+	'''Provider for the `text` or `content` keyword'''
+
+	SUPPORTS_NEGATE = True
+
+	def __init__(self, notebook, term):
+		super().__init__(notebook, term)
+		self.regex = search_query_term_to_regex(term.value)
+		self.ui_callback_counter = 0
+
+	def checker(self):
+		return self.check_content
+
+	def check_content(self, result):
+		try:
+			page = result.get_page(self.notebook)
+			if page.peek_has_parsetree():
 				tree = page.get_parsetree()
-			except:
-				logger.exception('Exception reading: %s', page)
-				continue
+			else:
+				# Prevent parsing the tree unless there is a match with the source code
+				source = page.peek_get_source()
 
-			if tree is None:
-				continue # Assume need to have content even for negative query
-
-			path = Path(page.name)
-			if operator == OPERATOR_AND:
-				score = 0
-				for term in terms:
-					#~ print('!! Count AND %s' % term)
-					myscore = tree.countre(term.content_regex)
-					if term.keyword == 'contentorname' \
-					and term.name_regex.match(path.name):
-						myscore += 1 # effective score going to 11
-
-					if bool(myscore) != term.negate: # implicit XOR
-						score += myscore or 1
+				if self.ui_callback:
+					# Make sure ui remains responsive
+					if self.ui_callback_counter == UI_CALLBACK_RATE_FOR_CONTENT:
+						self.ui_callback()
 					else:
-						score = 0
-						break
+						self.ui_callback_counter += 1
 
-				if score:
-					results.add(path)
-					self._count_score(path, score)
-			else: # OPERATOR_OR
-				for term in terms:
-					#~ print('!! Count OR %s' % term)
-					score = tree.countre(term.content_regex)
-					if term.keyword == 'contentorname' \
-					and term.name_regex.match(path.name):
-						score += 1 # effective score going to 11
+				if source and self.regex.search(source):
+					tree = page.get_parsetree()
+				else:
+					return self.term.negate
+		except SearchCancelledException:
+			raise
+		except:
+			logger.exception('Exception searching content: %s', result.path)
+			return False
 
-					if bool(score) != term.negate: # implicit XOR
-						results.add(path)
-						self._count_score(path, score or 1)
-
-			if callback:
-				# Since we are always last in the processing of the
-				# (top-level) group, we can call the callback with all results
-				cont = callback(results, path)
-				if not cont:
-					self.cancelled = True
-					break
-
-		return results
-
-	def _name_regex(self, string, case=False):
-		# Build a regex for matching a glob against a page name
-		# consider the ":" separator as the word boundary, even if name contains spaces
-		if string.startswith('*'):
-			prefix = r'.*'
-			string = string.lstrip('*')
+		if tree:
+			if not hasattr(tree, '__search_test'):
+				# Hack to buffer content
+				tree.__search_text = tokens_to_text(tree.iter_tokens())
+			count = len(self.regex.findall(tree.__search_text))
+			if count:
+				result.search_score += count
+			return bool(count) != self.term.negate
 		else:
-			prefix = r'(^|.*:)'
-			string = string.lstrip(':')
+			return self.term.negate
 
-		if string.endswith('*'):
-			# ":*" ending implicit here
-			postfix = r''
-			string = string.rstrip('*')
+
+class GroupProvider(PageSearchProvider):
+
+	def __init__(self, notebook, members):
+		super().__init__(notebook, None)
+
+		# Determine group execution prio
+		members.sort(key=lambda p: p.EXECUTION_PRIO)
+		if members[0].EXECUTION_PRIO < EXECUTION_PRIO_CONTENT \
+			and members[-1].EXECUTION_PRIO >= EXECUTION_PRIO_CONTENT:
+				self.EXECUTION_PRIO = EXECUTION_PRIO_MIXED
 		else:
-			postfix = r'(:|$)'
-			string = string.rstrip(':')
+			self.EXECUTION_PRIO = members[-1].EXECUTION_PRIO # Take max
 
-		regex = prefix + re.escape(string) + postfix
-		if case:
-			return re.compile(regex, re.U)
+		self.members = members
+
+
+class AndGroup(GroupProvider):
+	'''Provider for `(a AND b)`'''
+
+	def generate(self):
+		source = self.members[0].generate()
+		return self._filter(source, self.members[1:])
+
+	def filter(self, source):
+		return self._filter(source, self.members)
+
+	def _filter(self, source, members):
+		# Create pipeline of filters, yield results
+		# surviving all steps
+		it = members[0].filter(source)
+		for p in members[1:]:
+			it = p.filter(it)
+
+		yield from it
+
+	def checker(self):
+		checkers = [p.checker() for p in self.members]
+		return lambda r: all(c(r) for c in checkers)
+
+
+class OrGroup(GroupProvider):
+	'''Provider for `(a OR b)`'''
+
+	# To ensure only yielding once, we buffer results we have seen
+	# this gives penalty in memory usage for queries with many results
+
+	def generate(self):
+		# Used for top level query group, optimize between index lookup and 1-by-1 content checks
+		indexed = [p for p in self.members if isinstance(p, IndexedSearchProvider)]
+		content = [p for p in self.members if p not in indexed]
+
+		seen = set()
+		for p in indexed:
+			for r in p.generate():
+				if r.path.name not in seen:
+					seen.add(r.path.name)
+					# FUTURE: check remaining terms in the OR for text matches?
+					yield r
+
+		if content:
+			source = self.walk_notebook()
+			yield from self._filter(source, content, seen)
+
+	def filter(self, source):
+		return self._filter(source, self.members, set())
+
+	def _filter(self, source, providers, seen):
+		checks = [p.checker() for p in providers]
+		for r in source:
+			for check in checks:
+				if check(r):
+					if r.path.name not in seen:
+						seen.add(r.path.name)
+						# FUTURE: check remaining terms in the OR for text matches?
+						yield r
+
+	def checker(self):
+		checkers = [p.checker() for p in self.members]
+		return lambda r: any(c(r) for c in checkers)
+
+
+class NegateOperator():
+	'''Negate a SearchProvider'''
+
+	# Uses `itertools.tee` to duplicate source and compare results of wrapped
+	# provider versus source. Results that are not matched by the inner
+	# function are buffered in memory. These are the results we want after
+	# negation, so we assume these are limitted in number
+
+	def __init__(self, inner: PageSearchProvider):
+		self.inner = inner
+		self.EXECUTION_PRIO = inner.EXECUTION_PRIO + EXECUTION_PRIO_OFFSET_NEGATE
+
+	def walk_notebook(self):
+		return self.inner.walk_notebook()
+
+	def generate(self):
+		source = self.inner.walk_notebook()
+		return self.filter(source)
+
+	def filter(self, source):
+		it, ref = itertools.tee(source, 2)
+		for r in self.inner.filter(it):
+			for c in ref:
+				if c.path != r.path:
+					yield c
+				else:
+					break # pass over this item
 		else:
-			return re.compile(regex, re.U | re.I)
+			yield from ref # remainder did not match inner
 
-	def _namespace_regex(self, string, case=False):
-		# like _name_regex but adds recursive descent below the page
-		string = string.lstrip(':')
-		if string.endswith('*'):
-			# ":*" ending implicit here
-			postfix = r''
-			string = string.rstrip('*')
+	def checker(self):
+		check = self.inner.checker()
+		return lambda r: not check(r)
+
+
+class PageSearchExtension(ExtensionBase):
+	'''Base class for extensing search functionality'''
+
+	def __init__(self, plugin, page_search: 'PageSearch'):
+		super().__init__(plugin, page_search)
+		self.page_search = page_search
+
+	def add_keyword(self, keyword: str, **attributes):
+		'''Add custom search keyword or overload default keyword implementation
+
+		Overwrites existing keywords, so be carefull to merge attributes where needed
+		before calling this method
+
+		@param **attributes: keywords attributes used in page search, these include attributes
+		for search quary parsing and for execution. At minimum a "provider" attributes should be
+		specified, giving a L{PageSearchProvider} sub-class, or the "expand_terms" attribute
+		should be specified.
+		'''
+		if 'provider' in attributes:
+			assert issubclass(attributes['provider'], PageSearchProvider)
 		else:
-			postfix = r'(:|$)'
-			string = string.rstrip(':')
+			assert 'expand_terms' in attributes, 'Attributes should contain either "provider", or "expand_terms"'
 
-		regex = '^' + re.escape(string) + postfix
-		if case:
-			return re.compile(regex)
+		self.page_search.KEYWORDS[keyword] = attributes
+
+
+@extendable(PageSearchExtension)
+class PageSearch(object):
+	'''Object to handle page search
+	Can be extended by plugins to modify search behavior
+	'''
+
+	_KEYWORDS = {
+		'text': {'provider': TextProvider},
+		'content': {'provider': TextProvider},
+		'name': {'provider': PageNameProvider},
+		'namespace': {'provider': PageNameProvider},
+		'section': {'provider': PageNameProvider},
+		'links': {'provider': LinksProvider},
+		'linksfrom': {'provider': LinksProvider},
+		'linksto': {'provider': LinksProvider},
+		'tag': {'regex': search_tag_re, 'provider': TagsProvider},
+		'any': {'expand_terms': ['name', 'tag', 'linksfrom', 'text']},
+		'contentorname': {'expand_terms': ['name', 'content']}, # for backward compatibility, undocumented
+	}
+
+	_DEFAULT_KEYWORD = 'any'
+
+	def __init__(self, notebook: 'Notebook', ui_callback: Optional[Callable[[],None]]=None):
+		'''Constructor
+		@param notebook: a L{Notebook} object
+		@param ui_callback: optional function that is called during longer operations to keep
+		the ui responsive. Can raise L{SearchCancelledException} to break the search loop
+		'''
+		self.notebook = notebook
+		self.KEYWORDS = dict((k, dict(v)) for k, v in self._KEYWORDS.items()) # copy defaults
+		self.DEFAULT_KEYWORD = self._DEFAULT_KEYWORD
+		self.ui_callback = ui_callback
+		self.ui_callback_counter = 0
+
+	def parse_page_search_query(self, string: str) -> SearchQuery:
+		'''Parse string into L{SearchQuery} object'''
+		return parse_search_query(string, self.KEYWORDS, default_keyword=self.DEFAULT_KEYWORD)
+
+	def search_pages(self, query: SearchQuery) -> Iterable[PageSearchResult]:
+		'''Generator for page search results
+
+		@param query: L{SearchQuery} object created by L{parse_page_search_query()}
+		@returns: yields sets with results
+		'''
+		provider = self._compile_page_search(query)
+		try:
+			for r in provider.generate():
+				r._page = None # avoid leaking lots of Page references, keeping content in memory
+				if self.ui_callback:
+						# Make sure ui remains responsive
+						if self.ui_callback_counter == UI_CALLBACK_RATE_INDEX:
+							self.ui_callback()
+						else:
+							self.ui_callback_counter += 1
+				yield r
+		except SearchCancelledException:
+			pass
+
+	def _compile_page_search(self, query):
+		assert isinstance(query, SearchQuery)
+
+		if query.operator == OPERATOR_OR and query.negate:
+			# Optimize for equivalence NOT(a OR b) = (NOT a AND NOT b) since AND is more efficiently implemented
+			query = self._transform_not_or_group(query)
+
+		members = []
+		for term in query.terms:
+			if isinstance(term, SearchQuery):
+				provider = self._compile_page_search(term) # recurs for nested group
+			elif 'expand_terms' in self.KEYWORDS[term.keyword]:
+				provider = self._compile_expand_terms(term)
+			else:
+				cls = self.KEYWORDS[term.keyword]['provider']
+				provider = cls(self.notebook, term)
+				provider.ui_callback = self.ui_callback
+				if term.negate and not provider.SUPPORTS_NEGATE:
+					provider = NegateOperator(provider)
+
+			members.append(provider)
+
+		if len(members) == 1:
+			return members[0]
 		else:
-			return re.compile(regex, re.I)
+			group = AndGroup(self.notebook, members) if query.operator == OPERATOR_AND else OrGroup(self.notebook, members)
+			if query.negate:
+				group = NegateOperator(group)
+			return group
 
-	def _content_regex(self, string, case=False):
-		# Build a regex for a content search term, expands wildcards
-		# and sets case sensitivity. Tries to guess if we look for
-		# whole word or not.
+	def _transform_not_or_group(self, query):
+		# Transform `NOT (a OR b)` to `NOT a AND NOT b`
+		group = SearchQuery(OPERATOR_AND)
+		for t in query:
+			t = t.copy()
+			t.negate = t.negate != True # XOR
+			group.add(t)
 
-		# Build regex - first expand wildcards
-		parts = string.split('*')
-		regex = r'\S*'.join(map(re.escape, parts))
+		return group
 
-		# Next add word delimiters
-		# Avoid adding them next to non-word characters or next to chinese
-		# charaters. Chinese is treated special because it does not use
-		# whitespace as word delimiter.
-		if re.search(r'^[*\w]', string, re.U) \
-		and not '\u4e00' <= string[0] <= '\u9fff':
-			regex = r'\b' + regex
+	def _compile_expand_terms(self, term):
+		# Expand terms of an "any" keyword
+		# Either `a (a OR b)`` or a `NOT a AND NOT b` group
+		query = SearchQuery(OPERATOR_AND if term.negate else OPERATOR_OR)
+		for keyword in self.KEYWORDS[term.keyword]['expand_terms']:
+			t = SearchQueryTerm(keyword, term.value)
+			t.negate = term.negate
+			query.terms.append(t)
 
-		if re.search(r'[*\w]$', string, re.U) \
-		and not '\u4e00' <= string[-1] <= '\u9fff':
-			regex = regex + r'\b'
-
-		#~ print('SEARCH REGEX: >>%s<<' % regex)
-		if case:
-			return re.compile(regex, re.U)
-		else:
-			return re.compile(regex, re.U | re.I)
+		return self._compile_page_search(query)

@@ -26,15 +26,12 @@ This module does not implement the search itself, see C{zim.search} for page sea
 For other cases, the helper function L{compile_search_query_check_function()} can be used.
 '''
 
-from typing import Optional
 
 import re
 import logging
 
 from functools import partial
 from collections.abc import Callable
-
-from zim.errors import Error
 
 from .encode import unescape_string
 
@@ -113,11 +110,11 @@ def _indent(string):
 class SearchQuery:
 	'''Object to represent a search query'''
 
-	def __init__(self, operator=OPERATOR_AND, terms=None):
+	def __init__(self, operator=OPERATOR_AND, terms: 'Iterable|None'=None, negate: bool=False):
 		self.operator = operator
-		self.negate = False
 		self.terms = list(terms) if terms else []
 		assert all(isinstance(t, (SearchQuery, SearchQueryTerm)) for t in self.terms), self.terms
+		self.negate = negate
 
 	def __eq__(self, other):
 		return isinstance(other, self.__class__) and \
@@ -145,14 +142,18 @@ class SearchQuery:
 		i = self.terms.index(term)
 		self.terms.pop(i)
 
+	def copy(self):
+		'''Shallow copy'''
+		return self.__class__(self.operator, list(self.terms), self.negate)
+
 
 class SearchQueryTerm:
 	'''Object to represent a single keyword term in a search query'''
 
-	def __init__(self, keyword: str, value: str):
+	def __init__(self, keyword: str, value: str, negate: bool=False):
 		self.keyword = keyword.lower()
-		self.negate = False
 		self.value = value
+		self.negate = negate
 
 	def __eq__(self, other):
 		# Compare resulting term, not original string information
@@ -161,6 +162,10 @@ class SearchQueryTerm:
 
 	def __repr__(self):
 		return "<%s %r %r negate=%r>" % (self.__class__.__name__, self.keyword, self.value, self.negate)
+
+	def copy(self):
+		'''Shallow copy'''
+		return self.__class__(self.keyword, self.value, self.negate)
 
 
 def parse_search_query(string: str, keywords: dict, default_keyword: str='any') -> SearchQuery:
@@ -416,6 +421,7 @@ def search_query_pagename_term_to_regex(value: str) -> re.Pattern:
 	  - a ":" matches the start or end of a name segment
 	  - a "::" at the start matches start at the top-level of the notebook
 	  - a "::" at the end excludes sub-pages
+	  - a ":+" at the end gives sub-pages put excludes the parent page
 
 	@param value: the L{term.value} attribute of a L{SearchQueryTerm}
 	@param returns: a C{re.Pattern} object
@@ -440,6 +446,8 @@ def search_query_pagename_term_to_regex(value: str) -> re.Pattern:
 		regex = regex + r'\s+'
 	elif regex.endswith('::'):
 		regex = regex[:-2] + ':?$'
+	elif value.endswith(':+'):
+		regex = regex[:-3] + ':.+'
 	elif regex.endswith(':'):
 		regex = regex[:-1] + '(:|:?$)'
 

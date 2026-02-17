@@ -60,13 +60,15 @@ Queries can exist of just a word or a quoted string. Multiple words are interpre
 
 **Keywords:**
 ''Content:''	match page content
+''Text''		alias for ''content''
 ''Name:''		match the page name, matches anywhere in the full page name, including ":" separators
 ''Section:''	match the given page and any sub-pages, value should be a fully specified page name
 ''Namespace:''	alias for "''Section''"
 ''Tag:''		match tags on the page
-''LinksFrom:''	match pages linked, value should be a fully specified page name
-''LinksTo:''	match pages linking to the give page, value should be a fully specified page name
+''LinksFrom:''	match pages linked from the given page(s), value is interpreted as ''Name'' query
+''LinksTo:''	match pages linking to the given page(s), value is interpreted as ''Name'' query
 ''Links:''		alias for "''LinksFrom''"
+''Any:''		default keyword, matches text content, page name, links and tags - applied to all queries with a keyword
 
 
 ==== Operators ====
@@ -128,42 +130,36 @@ To match phrases, i.e. strings containing whitespace (blanks), or to match thing
 
 	''"foo bar" and "+1"''
 
-To match partial words you can use a "''*''" as wildcard. So the following query
-
-'''
-Some*
-'''
-
-will match all words starting with "Some", like "Someday", "Someplace" etc.
+To match partial words you can use a "''*''" as wildcard. The rules how these are applied vary slightly per keyword, as specified below.
 
 
 ==== Keyword searches ====
-So far we just searched for words in the page contents and page names. In all of the above examples a keyword-value pair can be used as a search term as well.
+So far we just searched for words. In all of the above examples a keyword-value pair can be used as a search term as well.
 
 Keywords are case-insensitive and end in a ":". The keyword can be followed by an optional whitespace. For example to only search the page names you can use:
 
 '''
-Name: *foo*
+Name: foo
 '''
 
-This query only returns pages that contain "foo" in the page name without looking at their content.
+This query only returns pages that contain "foo" in the page name without looking at their content and therefore is quite a bit faster.
 
 The same query can be written as:
 
 '''
-Name: *foo*
-name: *foo*
-name:*foo*
-name:"*foo*"
-Name:'*foo*'
-name: "*foo*"
+Name: foo
+name: foo
+name:foo
+name:"foo"
+Name:'foo'
+name: "foo"
 '''
 
 All of these result in the same query
 
-The "Content:" keyword only matches page contents and excludes e.g. page names.
+The "Content:" keyword only matches page contents and excludes e.g. page names. (Although if the pagename is given as a heading in the page, it still matches.)
 
-''Content: foo AND NOT Name: *foo*'' will find pages that have "foo" written somewhere in their page content but that do not contain "foo" in the page name.
+''Content: foo AND NOT Name: foo'' will find pages that have "foo" written somewhere in their page content but that do not contain "foo" in the page name.
 
 Most keywords support "*" to match partial words. The "*" matches any non-whitespace characters. Globs are expanded even in quoted strings.
 
@@ -174,7 +170,7 @@ As a special case, a keyword can also contain a group.
 
 ''name:(foo bar)'' is equivalent with ''(name:foo name:bar)''
 
-Such keyword groups cannot contain sub-groups or nested keyword terms and do not support ''AND'' and ''OR'' operators
+Such keyword groups cannot contain sub-groups or nested keyword terms and do not support ''AND'' and ''OR'' operators. However you can use ''name:(foo -bar)'' to include ''"foo"'' and exclude ''"bar"''.
 
 
 ==== Implicit keywords ====
@@ -183,28 +179,50 @@ A search for a single word that starts with an "''@''" will automatically be con
 
 ==== Supported Keywords ====
 
-=== ContentOrName ===
-This is the keyword that is being used for search terms without a specific keyword, it behaves like the "Content" keyword, but also matches anywhere in the page name
-
-=== Content ===
+=== Content, Text ===
 The "''Content:''" keyword matches text content anywhere in the page. A "''*''" can appear anywhere in the string (start, middle, end) and is expanded to match non-whitespace characters.
 
 This keyword does not match e.g. object attributes or the link target for links that have different value for the text and for the link target.
 
+The following rules are applied:
+
+* a "*" optionally matches any non-whitespace character
+* a space " " matches any combination of whitespace, or begin or end of the string
+* by default matches begin at a word boundary, unless they start with "*" or a chinese character
+* a space " " at the start does nothing but the default behavior, unless the first character is chinese
+* by default matches can end anywhere in a word, unless they end with a space " "
+* a "*" at the end does nothing but the default behavior
+
+For example "day" matches "day", "Day", and "days" and is equivalent with "day*". The value "*day" matches "Monday", "Tuesday", "Teusdays" but also "day" and "days", it is equivalent to "*day*".
+
+
+The "''Text:''" keyword is an alias for "''Content:''".
+
 === Name ===
-The "''Name:''" keyword matches anywhere in the full page name. This is the full page path, including "'':''" separators.
-A "''*''" will be expanded at the start or end of the string. It matches any character.
+The "''Name:''" keyword matches anywhere in the full page name. This is the full page name, including "'':''" separators.
 
-The "'':''" separators in the full page name are considered word boundaries. If the page name starts with a "'':''" it is matched from the start of the (sub-)page name. If the page name ends with ":" the name is matched till the end of the (sub-)page name. If the string ends in "'':*''" it will match only sub-pages of a matching page name,
+The following rules are applied:
 
-=== Section ===
+* a "*" optionally matches any character
+* a space " " matches any combination of whitespace
+* by default matches anywhere in the name, without word boundries, since page names can be CamelCase
+* a "*" at the start or the end does nothing but the default behavior
+* a ":" matches the start or end of a name segment
+* a "::" at the start matches start at the top-level of the notebook
+* a "::" at the end excludes sub-pages
+* a ":+" at the end gives sub-pages put excludes the parent page
+
+For example "''Name: Project''" will match any page with the word "Project" in the name and is equivalent to "''Name: *Project*''". To match an exact page name you can search "''Name: :Project:''" but this can still match many pages that have a page called "Project" as a parent. The query "''Name: ::Project:''" results only in pages which have the page ":Project" as their parent.
+
+
+=== Section, Namespace ===
 The "''Section:''" matches the given page and any sub-pages. This allows searching a sub-set of the full notebook. The value should be a fully specified name. The start is always the top level of the notebook.
 
 Suppose under Home you have the page "photo" as top-level page with multiple pages below it and you want to search only the photo part of your large notebook. You want to find all entries about the depth of field or its abbreviation DoF, so you type the following search:
 
 	''Section: Home:photo "depth of field" or dof''
 
-A "'':''" at the start will be ignored and a "''*''" at the start is not supported and taken as a literal character. At the end "''*''" is supported to expand the name and "'':*''" is supported to only match sub-pages, while excluding the top-level page of the section. Effectively this keyword behaves the same as the "''Name:''" keyword except expansion at the start is ignored and matches always start from the notebook top-level. If you want to also expand the start of the name, use the "''Name:''" keyword instead.
+The ''Section:'' keyword is identical to a ''Name:'' keyword if the value starts with "::" and ends in ":".
 
 The "''Namespace:''" keyword is an alias for "''Section:''".
 
@@ -224,15 +242,19 @@ The "Links" and "LinksFrom" keywords return all pages linked by a certain page w
 To exclude all pages linking to ":Done" try:
 
 '''
-NOT LinksTo: ":Done"
+NOT LinksTo: "::Done:"
 '''
 
 A complex example would be to find any pages in the section ":Date" that link to ":Planning".
 
 '''
-section: Date and linksto: Planning
+section: Date and linksto: ::Planning:
 '''
 
-For the keywords "''Links:''", "''LinksFrom:''" and "''LinksTo:''" currently no "''*''" expansion is supported. However a "''*''" can appear at the end but gets a special meaning. The value is supposed to be a fully specified name, if it ends in a "''*''", all sub-pages are also included.
+The glob expansion rules are the same as for the ''Name:'' keyword. So if you search ''Links: Project'' you will find links from any page that has the word "project" in the page name. If you only want the specific name you would search for ''Links: ::Project::''.
 
-So a query "''linksfrom: Projects''" only matches pages linked directly from the page "'':Projects''", while a query "''linksfrom: Projects*''" matches all pages linked from either the page "'':Projects''" or from any sub-page of "'':Projects''".
+
+=== Any ===
+The keyword "''Any:''" is applied implicitly to any query term that does not have a keyword. It just runs the term through the ''Content'', ''Page'', ''Tag'', and ''Links'' keywords
+
+It can be specified explicitly if a non-keyword term would ambigous
