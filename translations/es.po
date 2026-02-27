@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2025-09-28 18:01+0000\n"
-"Last-Translator: Alfredo Natale <alfredo.n@yandex.com>\n"
+"PO-Revision-Date: 2026-02-28 20:09+0000\n"
+"Last-Translator: Javier Peinado <javipz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/zim/develop/es/>"
 "\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:41+0000\n"
 
 #. Error message when external application could not be found, %s is the command
@@ -1105,7 +1105,7 @@ msgstr ""
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:87
 msgid "Preview link destination in overlay"
-msgstr ""
+msgstr "Previsualizar destino de enlace en superposición"
 
 #. option in preferences dialog
 #: zim/gui/pageview/__init__.py:90
@@ -3087,11 +3087,11 @@ msgstr ""
 
 #: zim/plugins/indexed_fts.py:57
 msgid "Remove diacritics before indexing"
-msgstr ""
+msgstr "Eliminar signos diacríticos antes de indexar"
 
 #: zim/plugins/indexed_fts.py:58
 msgid "Additional token characters"
-msgstr ""
+msgstr "Caracteres de token adicionales"
 
 #. error description
 #: zim/plugins/inlinecalculator.py:192
@@ -3315,31 +3315,22 @@ msgstr "Abrir siempre los enlaces en ventanas nuevas"
 
 #. plugin name
 #: zim/plugins/mermaiddiagrameditor.py:23
-#, fuzzy
-#| msgid "Insert Diagram"
 msgid "Insert Mermaid Diagram"
-msgstr "Insertar diagrama"
+msgstr "Insertar diagrama Mermaid"
 
 #. plugin description
 #: zim/plugins/mermaiddiagrameditor.py:24
-#, fuzzy
-#| msgid ""
-#| "This plugin provides a sequence diagram editor for zim based on seqdiag.\n"
-#| "It allows easy editing of sequence diagrams.\n"
 msgid ""
 "This plugin provides a Mermaid diagram editor for zim.\n"
 "It allows easy editing of Mermaid diagrams.\n"
 msgstr ""
-"Este plugin provee zim con un editor de diagrama de sequencia basado en "
-"seqdiag.\n"
-"Permite editar diagramas de sequencias fácilmente.\n"
+"Esta extensión proporciona un editor de diagramas Mermaid para zim.\n"
+"Permite editar diagramas Mermaid fácilmente.\n"
 
 #. menu item
 #: zim/plugins/mermaiddiagrameditor.py:56
-#, fuzzy
-#| msgid "Insert Diagram"
 msgid "Mermaid Diagram"
-msgstr "Insertar diagrama"
+msgstr "Diagrama Mermaid"
 
 #. plugin name
 #: zim/plugins/osx_menubar.py:74
@@ -3755,18 +3746,14 @@ msgstr "Corrector ortográfico"
 
 #. plugin description
 #: zim/plugins/spell.py:104
-#, fuzzy
-#| msgid ""
-#| "Adds spell checking support using gtkspell.\n"
-#| "\n"
-#| "This is a core plugin shipping with zim.\n"
 msgid ""
 "Adds spell checking support using \n"
 "gtkspellchecker, Gspell, or gtkspell libraries.\n"
 "\n"
 "This is a core plugin shipping with zim.\n"
 msgstr ""
-"Adiciona corrección ortográfica usando gtkspell.\n"
+"Añade corrección ortográfica usando\n"
+"gtkspellchecker, Gspellz o las librerías gtkspell.\n"
 "\n"
 "Esta es una extensión principal suministrada con zim.\n"
 
@@ -4623,10 +4610,8 @@ msgstr ""
 
 #. Option for Window Title template
 #: zim/plugins/windowtitleeditor.py:23
-#, fuzzy
-#| msgid "Customize..."
 msgid "Custom"
-msgstr "Personalizar…"
+msgstr "Personalizar"
 
 #. plugin name
 #: zim/plugins/windowtitleeditor.py:28
@@ -4643,13 +4628,16 @@ msgid ""
 "Press \"Configure\" below to choose a preset\n"
 "or to create a custom one.\n"
 msgstr ""
+"Este complemento permite editar el título de la ventana\n"
+"\n"
+"Haz clic en \"configurar\" abajo para seleccionar un ajuste  predeterminado "
+"\n"
+"o para crear uno personalizado\n"
 
 #. window title editor preference option
 #: zim/plugins/windowtitleeditor.py:41
-#, fuzzy
-#| msgid "Template"
 msgid "Title template"
-msgstr "Plantilla"
+msgstr "Plantilla de título"
 
 #. window title editor preference option
 #: zim/plugins/windowtitleeditor.py:45
@@ -4658,8 +4646,9 @@ msgstr ""
 
 #. window title in case of critical error
 #: zim/plugins/windowtitleeditor.py:98
+#, fuzzy
 msgid "Plugin error - check debug log! - Zim"
-msgstr ""
+msgstr "Error de complemento - compruebe el log de depuración - Zim"
 
 #. plugin name
 #: zim/plugins/zeitgeist-logger.py:33
