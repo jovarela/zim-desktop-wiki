@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2026-02-05 03:01+0000\n"
+"PO-Revision-Date: 2026-03-05 04:09+0000\n"
 "Last-Translator: 大王叫我来巡山 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:40+0000\n"
 
 #. Error message when external application could not be found, %s is the command
@@ -1767,7 +1767,7 @@ msgid ""
 msgstr ""
 "快捷键绑定可以通过点击列表中有按键组合的输入框，\n"
 "然后输入新的快捷键绑定。\n"
-"要禁用一个快捷键绑定，选择列表中的它，然后使用<tt>&lt;回车&gt;</tt>。"
+"要禁用一个快捷键绑定，选择列表中的它，然后使用<tt>&lt;Backspace 键&gt;</tt>。"
 
 #. Column header for keybinding list
 #: zim/gui/preferencesdialog.py:578
