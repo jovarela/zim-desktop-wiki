@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2026-02-09 16:09+0000\n"
+"PO-Revision-Date: 2026-03-06 07:09+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/zim/develop/"
 "id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #. Error message when external application could not be found, %s is the command
 #: zim/applications.py:133
@@ -446,13 +446,13 @@ msgstr "Berkas keluaran"
 #: zim/gui/exportdialog.py:417
 #, python-format
 msgid "%(n_error)i errors and %(n_warning)i warnings occurred, see log"
-msgstr "Terjadi %(n_error)i galat dan %(n_warning)i peringatan, lihat log"
+msgstr "Terjadi %(n_error)i kesalahan dan %(n_warning)i peringatan, lihat log"
 
 #. label in export dialog
 #: zim/gui/exportdialog.py:420
 #, python-format
 msgid "%i errors occurred, see log"
-msgstr "Terjadi %i galat, lihat log"
+msgstr "Terjadi %i kesalahan, lihat log"
 
 #. label in export dialog
 #: zim/gui/exportdialog.py:423
@@ -2532,7 +2532,7 @@ msgstr "<Tak diketahui>"
 #: zim/parse/regexparser.py:76
 #, python-format
 msgid "Error in %(file)s at line %(line)i near \"%(snippet)s\""
-msgstr "Galat pada %(file)s di baris %(line)i dekat \"%(snippet)s\""
+msgstr "Kesalahan pada %(file)s di baris %(line)i dekat \"%(snippet)s\""
 
 #. plugin name
 #: zim/plugins/arithmetic.py:16
@@ -2748,7 +2748,7 @@ msgid ""
 "An error occurred while generating the image.\n"
 "Do you want to save the source text anyway?"
 msgstr ""
-"Galat terjadi saat membuat gambar.\n"
+"Kesalahan terjadi saat membuat gambar.\n"
 "Anda tetap ingin menyimpan teks sumber?"
 
 #. plugin name
@@ -3567,7 +3567,7 @@ msgstr "detik"
 #: zim/plugins/screenshot.py:240
 #, python-format
 msgid "Some error occurred while running \"%s\""
-msgstr "Ada galat saat menjalankan \"%s\""
+msgstr "Ada kesalahan saat menjalankan \"%s\""
 
 #. plugin name
 #: zim/plugins/sequencediagrameditor.py:24
@@ -4262,7 +4262,7 @@ msgstr "Besar"
 #. plugin name
 #: zim/plugins/toolbar.py:41
 msgid "Tool Bar"
-msgstr "Bar Alat"
+msgstr "Bilah Alat"
 
 #. plugin description
 #: zim/plugins/toolbar.py:42
