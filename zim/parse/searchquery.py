@@ -61,8 +61,6 @@ _operators_allowed_in_keyword_group = ('+', '-')
 _operators_not_allowed_in_keyword_group = ('(', ')')
 # 'and' 'or' 'not' will be interpreted as string in keyword group context
 
-search_tag_re = re.compile(r'^\@(\w+)$', re.U)
-
 _word_re = re.compile(r'''
 	(	'(\\'|[^'])*' |  # single quoted word
 		"(\\"|[^"])*" |  # double quoted word
@@ -175,8 +173,8 @@ def parse_search_query(string: str, keywords: dict, default_keyword: str='any') 
 	The `keywords` dict should specify valid keywords as keys, the value should be a dict.
 	The following keys are supported:
 
-	  - `regex` defines a regex to be used to match this keyword implicit,
-	     e.g. `search_tag_re` for the `tag` keyword
+	  - `implicit_match` defines a regex object to be used to match this keyword implicit,
+	     e.g. `search_tag_re` for the `tags` keyword
 
 	For malformed queries warnings are logged while skipping over the errors.
 
@@ -199,8 +197,8 @@ def _tokenize_search_query(string: str, keywords: dict, default_keyword: str='an
 	implicit_keywords = {}
 	if isinstance(keywords, dict): # should always be a dict, but in testing we use sets
 		for k in keywords:
-			if 'regex' in keywords[k]:
-				r = keywords[k]['regex']
+			if 'implicit_match' in keywords[k]:
+				r = keywords[k]['implicit_match']
 				implicit_keywords[k] = re.compile(r, re.U) if isinstance(r, str) else r
 
 	def match_implicit_keyword(string):
@@ -385,6 +383,7 @@ def search_query_term_to_regex(value: str) -> re.Pattern:
 	@param value: the L{term.value} attribute of a L{SearchQueryTerm}
 	@param returns: a C{re.Pattern} object
 	'''
+	# NOTE: changes in above rules also need to be updated in the manual
 	case = False # TODO: how to switch this from the query?
 
 	# Globs to regex
@@ -426,6 +425,7 @@ def search_query_pagename_term_to_regex(value: str) -> re.Pattern:
 	@param value: the L{term.value} attribute of a L{SearchQueryTerm}
 	@param returns: a C{re.Pattern} object
 	'''
+	# NOTE: changes in above rules also need to be updated in the manual
 	case = False # TODO: how to switch this from the query?
 
 	# Globs to regex
@@ -457,53 +457,53 @@ def search_query_pagename_term_to_regex(value: str) -> re.Pattern:
 		return re.compile(regex, re.U | re.I)
 
 
+search_tag_re = re.compile(r'^@[\w*]+@?$', re.U) #: Inteded to be used for implicit keyword parsing
+
+
+def search_query_tags_term_to_regex(value: str) -> re.Pattern:
+	'''Return a regex object for a tag name
+
+	The following rules are applied:
+
+	  - a "*" optionally matches any character
+	  - a "*" at the start or the end does nothing but the default behavior
+	  - if the term starts with a "@" it will only match from the start of the name
+	  - if the term ends with a "@" it will only match from the end of the name
+
+	@param value: the L{term.value} attribute of a L{SearchQueryTerm}
+	@param returns: a C{re.Pattern} object
+	'''
+	startword = value.startswith('@')
+	endsword = value.endswith('@')
+	parts = value.strip('*').strip('@').split('*')
+	regex = r'.*'.join(map(re.escape, parts))
+	if startword:
+		regex = '\\b' + regex
+	if endsword:
+		regex = regex + '\\b'
+	return re.compile(regex, re.U | re.I)
+
+
 def check_func_constructor(term: SearchQueryTerm, keywords: dict) -> Callable[[object], bool]:
 	'''To be used as a constructor with L{compile_search_query_check_function}
-	The resulting check function does a string match based on C{search_query_term_to_regex}
+	The resulting check function does by default a string match based on C{search_query_term_to_regex}
 	on the value of the given key in the object.
 	Requires the C{key} to be specified in the keywords dict.
+	If a c{regex_constructor} function is given in the keyword dict, this is used instead
+	of C{search_query_term_to_regex}
 	'''
-	if 'regex' in keywords[term.keyword]:
-		# E.g. for `search_tag_re()` remove the leading "@"
-		r = keywords[term.keyword]['regex']
-		p = re.compile(r, re.U) if isinstance(r, str) else r
-		m =  p.match(term.value)
-		value = m.group(1) if m else term.value
+	if 'regex_constructor' in keywords[term.keyword]:
+		regex_constructor = keywords[term.keyword]['regex_constructor']
 	else:
-		value = term.value
+		regex_constructor = search_query_term_to_regex
 
-	pattern = search_query_term_to_regex(value)
+	pattern = regex_constructor(term.value)
 	key = keywords[term.keyword]['key']
 
 	def mychecker(record):
 		return bool(pattern.search(record[key]))
 
 	return mychecker
-
-
-def check_func_constructor_pagename(term: SearchQueryTerm, keywords: dict) -> Callable[[object], bool]:
-	'''To be used as a constructor with L{compile_search_query_check_function}
-	The resulting check function does a string match based on C{search_query_pagename_term_to_regex}
-	on the value of the given key in the object.
-	Requires the C{key} to be specified in the keywords dict.
-	'''
-	if 'regex' in keywords[term.keyword]:
-		# E.g. for `search_tag_re()` remove the leading "@"
-		r = keywords[term.keyword]['regex']
-		p = re.compile(r, re.U) if isinstance(r, str) else r
-		m =  p.match(term.value)
-		value = m.group(1) if m else term.value
-	else:
-		value = term.value
-
-	pattern = search_query_pagename_term_to_regex(value)
-	key = keywords[term.keyword]['key']
-
-	def mychecker(record):
-		return bool(pattern.search(record[key]))
-
-	return mychecker
-
 
 
 def check_func_constructor_any_keyword(term: SearchQueryTerm, keywords: dict) -> Callable[[object], bool]:

@@ -41,7 +41,7 @@ class TestParseSearchQuery(tests.TestCase):
 			self.assertEqual(query, wanted)
 
 	def testImplicitKeywordMatch(self):
-		keywords = {'tag': {'regex': search_tag_re}}
+		keywords = {'tag': {'implicit_match': search_tag_re}}
 		for string, wanted in (
 			('tag:Foo', _q(_t('tag', 'Foo'))),
 			('@Foo', _q(_t('tag', '@Foo'))),
@@ -189,6 +189,7 @@ class TestSearchQueryTermToRegex(tests.TestCase):
 			('foo bar', '\\bfoo\\s+bar'),
 			('foo*bar', '\\bfoo\\S*bar'),
 			('foo*', '\\bfoo'),
+			('foo+', '\\bfoo\\+'),
 			('foo ', '\\bfoo\\b'),
 			(' foo ', '\\bfoo\\b'),
 			('*foo*', 'foo'),
@@ -211,6 +212,7 @@ class TestSearchQueryPageNameTermToRegex(tests.TestCase):
 			('*foo', 'foo'),
 			('foo bar', 'foo\\s+bar'),
 			('foo*', 'foo'),
+			('foo+', 'foo\\+'),
 			('foo ', 'foo\\s+'),
 			(' foo ', '\\s+foo\\s+'),
 			('*foo*', 'foo'),
@@ -222,6 +224,24 @@ class TestSearchQueryPageNameTermToRegex(tests.TestCase):
 		):
 			#print(value, regex, search_query_pagename_term_to_regex(value))
 			self.assertEqual(search_query_pagename_term_to_regex(value), re.compile(regex, re.I))
+
+
+class TestSearchQueryTagsTermToRegex(tests.TestCase):
+
+	def runTest(self):
+		for value, regex in (
+			('foo', 'foo'),
+			('foo*', 'foo'),
+			('*foo', 'foo'),
+			('*foo*', 'foo'),
+			('foo*bar', 'foo.*bar'),
+			('foo+', 'foo\\+'),
+			('@foo', '\\bfoo'),
+			('foo@', 'foo\\b'),
+			('@foo@', '\\bfoo\\b')
+		):
+			#print(value, regex, search_query_tags_term_to_regex(value))
+			self.assertEqual(search_query_tags_term_to_regex(value), re.compile(regex, re.I))
 
 
 class TestSearchQueryToFindQuery(tests.TestCase):
@@ -305,19 +325,24 @@ class TestPageSearchProviders(tests.TestCase):
 		self.assertProviderResults(LinksProvider(notebook, SearchQueryTerm('linksto', query)), matchto)
 		self.assertFalse(LinksProvider.SUPPORTS_NEGATE) # else test here
 
-	def testTagsProvider(self):
+	def testTagsProviderBackward(self):
+		# Backward compatibility with exact match
 		content = {'Page1': '@foo', 'Page2': '@foo @bar', 'Page3': '', 'Page4': '@bar'}
-		match = ('Page1', 'Page2')
-
 		notebook = self.setUpNotebook(content=content)
-		self.assertProviderResults(TagsProvider(notebook, SearchQueryTerm('tag', '@foo')), match)
-		self.assertProviderResults(TagsProvider(notebook, SearchQueryTerm('tag', 'foo')), match)
+		self.assertProviderResults(TagsProvider(notebook, SearchQueryTerm('tag', '@foo')), ('Page1', 'Page2'))
+		self.assertProviderResults(TagsProvider(notebook, SearchQueryTerm('tag', 'foo')), ('Page1', 'Page2'))
+
+	def testTagsProvider(self):
+		content = {'A': '@projectA', 'B': '@projectB', 'some': '@someproject', 'project': '@project', 'empty': ''}
+		notebook = self.setUpNotebook(content=content)
+		self.assertProviderResults(TagsProvider(notebook, SearchQueryTerm('tags', 'project')), ('A', 'B', 'some', 'project'))
+		self.assertProviderResults(TagsProvider(notebook, SearchQueryTerm('tags', '@project')), ('A', 'B', 'project'))
+		self.assertProviderResults(TagsProvider(notebook, SearchQueryTerm('tags', '@project@')), ('project',))
 
 	def testTextProvider(self):
 		notebook = self.setUpNotebook(content={'test1': 'foo', 'test2': 'barfoo', 'test3': 'foobar', 'test4': 'foo**bar**'})
 		self.assertProviderResults(TextProvider(notebook, SearchQueryTerm('text', 'foo')), ('test1', 'test3', 'test4'))
 			# test2 does not match due to not starts word
-		print("====")
 		self.assertProviderResults(TextProvider(notebook, SearchQueryTerm('text', 'foo*bar')), ('test3', 'test4'))
 			# to match test4, search should ignore formatting
 
@@ -440,9 +465,6 @@ class TestPageSearch(tests.TestCase):
 
 		query = page_search.parse_page_search_query('Tag: tags')
 		self.assertEqual(query, _q(_t('tag', 'tags')))
-
-		query = page_search.parse_page_search_query('@tags') # implicit keyword
-		self.assertEqual(query, _q(_t('tag', '@tags')))
 		results = [r.path for r in page_search.search_pages(query)]
 		self.assertTrue(Path('Test:tags') in results and len(results) == 2)
 			# Tasklist:all is the second match
@@ -450,6 +472,26 @@ class TestPageSearch(tests.TestCase):
 		query = page_search.parse_page_search_query('Tag: NonExistingTag')
 		results = [r.path for r in page_search.search_pages(query)]
 		self.assertFalse(results)
+
+	def testTagsKeyword(self):
+		page_search = PageSearch(self.notebook)
+
+		query = page_search.parse_page_search_query('Tags: tags')
+		self.assertEqual(query, _q(_t('tags', 'tags')))
+
+		query = page_search.parse_page_search_query('@tags') # implicit keyword
+		self.assertEqual(query, _q(_t('tags', '@tags')))
+		results = [r.path for r in page_search.search_pages(query)]
+		self.assertTrue(Path('Test:tags') in results and len(results) == 2)
+			# Tasklist:all is the second match
+
+		query = page_search.parse_page_search_query('Tag: NonExistingTag')
+		results = [r.path for r in page_search.search_pages(query)]
+		self.assertFalse(results)
+
+		# more implicit
+		query = page_search.parse_page_search_query('@tags*foo@')
+		self.assertEqual(query, _q(_t('tags', '@tags*foo@')))
 
 	def testLinksToKeyword(self):
 		page_search = PageSearch(self.notebook)

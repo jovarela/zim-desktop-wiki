@@ -64,7 +64,8 @@ Queries can exist of just a word or a quoted string. Multiple words are interpre
 ''Name:''		match the page name, matches anywhere in the full page name, including ":" separators
 ''Section:''	match the given page and any sub-pages, value should be a fully specified page name
 ''Namespace:''	alias for "''Section''"
-''Tag:''		match tags on the page
+''Tag:''		match a given tag on the page
+''Tags:''		match multiple tags
 ''LinksFrom:''	match pages linked from the given page(s), value is interpreted as ''Name'' query
 ''LinksTo:''	match pages linking to the given page(s), value is interpreted as ''Name'' query
 ''Links:''		alias for "''LinksFrom''"
@@ -174,7 +175,7 @@ Such keyword groups cannot contain sub-groups or nested keyword terms and do not
 
 
 ==== Implicit keywords ====
-A search for a single word that starts with an "''@''" will automatically be converted in a search for a tag. For example "''@home''" will automatically be converted to "''Tag: home''"
+A search for a single word that starts with an "''@''" will automatically be converted in a search for tags. For example "''@home''" will automatically be converted to "''Tags: home''" which matches all tags starting with "home". For an exact tag match you can use "''@home@''". See the "''Tags:''" keyword for details.
 
 
 ==== Supported Keywords ====
@@ -200,6 +201,8 @@ The "''Text:''" keyword is an alias for "''Content:''".
 
 === Name ===
 The "''Name:''" keyword matches anywhere in the full page name. This is the full page name, including "'':''" separators.
+
+Since links can be CamelCase or consist of multiple words without whitespace, the word start heuristic as applied for text content is dropped here.
 
 The following rules are applied:
 
@@ -234,7 +237,25 @@ Tag: home
 Tag: @home
 '''
 
-Will return any page that has the tag "home". The "''*''" expansion is currently not supported for tags.
+Will return any page that has the tag "home".
+
+This keyword does a strict match for one given tag, to match multiple tags, see ''Tags''.
+
+
+=== Tags ===
+The keyword "''Tags:''" can be used to match multiple tags
+
+Since tags can be CamelCase or consist of multiple words without whitespace, the word start heuristic as applied for text content is dropped here.
+
+The following rules are applied:
+* a "*" optionally matches any character
+* a "*" at the start or the end does nothing but the default behavior
+* if the term starts with a "@" it will only match from the start of the name
+* if the term ends with a "@" it will only match from the end of the name
+
+For example "''Tags: @project'' matches any tag starting with project, like @projectA, @projectB etc. And "''Tags: project''" will also match @computer_project. The query "''Tags: @project@''" will only match @project, this is the same as "''Tag: project''".
+
+Search terms that start with a "''@''" and match a tag query are automatically interpreted as a "''Tags:''" keyword.
 
 === Links, LinksFrom, LinksTo ===
 The "Links" and "LinksFrom" keywords return all pages linked by a certain page while "LinksTo" returns all pages that link to a certain page, this is used to find back links.
@@ -255,6 +276,6 @@ The glob expansion rules are the same as for the ''Name:'' keyword. So if you se
 
 
 === Any ===
-The keyword "''Any:''" is applied implicitly to any query term that does not have a keyword. It just runs the term through the ''Content'', ''Page'', ''Tag'', and ''Links'' keywords
+The keyword "''Any:''" is applied implicitly to any query term that does not have a keyword. It just runs the term through the ''Content'', ''Page'', ''Tags'', and ''Links'' keywords
 
 It can be specified explicitly if a non-keyword term would ambigous

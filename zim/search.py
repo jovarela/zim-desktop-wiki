@@ -66,6 +66,11 @@ def _walk_search_query(query):
 				continue
 			elif term.keyword in ('content', 'contentorname', 'text', 'any'):
 				yield term.value
+			elif term.keyword == 'tags':
+				value = term.value.rstrip('@')
+				if not term.value.startswith('@'):
+					value = '*' + value
+				yield value
 			elif term.keyword == 'tag':
 				yield '@' + term.value.lstrip('@')
 			else:
@@ -302,19 +307,38 @@ class LinksProvider(IndexedSearchProvider):
 
 
 class TagsProvider(IndexedSearchProvider):
-	'''Provider for the `tag` keyword'''
-
-	# FUTURE: support "*" to glob tags ?
+	'''Provider for the `tags` keyword'''
 
 	def __init__(self, notebook, term):
 		super().__init__(notebook, term)
-		self.tag = term.value.lstrip('@')
+		if term.keyword == 'tag' or re.match('^@\\w+@$', term.value):
+			# Backward compatible exact match
+			# Or optimized for direct match
+			self.regex = None
+			self.generate = self.generate_exact
+		else:
+			self.regex = search_query_tags_term_to_regex(term.value)
+			self.generate = self.generate_glob
 
-	def generate(self):
+	def generate_exact(self):
+		tag = self.term.value.strip('@')
 		try:
-			return [PageSearchResult(p) for p in self.notebook.tags.list_pages(self.tag)]
+			return [PageSearchResult(p) for p in self.notebook.tags.list_pages(tag)]
 		except IndexNotFoundError:
 			return []
+
+	def generate_glob(self):
+		words = re.findall('\\w+', self.term.value, re.U)
+		if not words:
+			return [] # no valid pagename without any alphanumerics
+
+		words.sort(key=lambda w: len(w))
+		longest = words[-1]
+
+		for tag in self.notebook.tags.match_tags(longest):
+			if self.regex.search(tag.name):
+				for p in self.notebook.tags.list_pages(tag):
+					yield PageSearchResult(p)
 
 
 class TextProvider(ContentSearchProvider):
@@ -525,8 +549,9 @@ class PageSearch(object):
 		'links': {'provider': LinksProvider},
 		'linksfrom': {'provider': LinksProvider},
 		'linksto': {'provider': LinksProvider},
-		'tag': {'regex': search_tag_re, 'provider': TagsProvider},
-		'any': {'expand_terms': ['name', 'tag', 'linksfrom', 'text']},
+		'tag': {'provider': TagsProvider},
+		'tags': {'implicit_match': search_tag_re, 'provider': TagsProvider},
+		'any': {'expand_terms': ['name', 'tags', 'linksfrom', 'text']},
 		'contentorname': {'expand_terms': ['name', 'content']}, # for backward compatibility, undocumented
 	}
 

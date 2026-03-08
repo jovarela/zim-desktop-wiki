@@ -13,7 +13,7 @@ import re
 import zim.datetimetz as datetime
 from zim.base.naturalsort import natural_sorted
 from zim.parse.searchquery import parse_search_query, search_tag_re, SearchQuery, SearchQueryTerm, OPERATOR_AND, OPERATOR_OR, \
-		compile_search_query_check_function, check_func_constructor_pagename, check_func_constructor_any_keyword
+		compile_search_query_check_function, check_func_constructor_any_keyword, search_query_pagename_term_to_regex, search_query_tags_term_to_regex
 
 from zim.notebook import Path
 from zim.actions import toggle_action, initialize_actiongroup, PRIMARY_MODIFIER_MASK
@@ -831,14 +831,14 @@ def check_func_constructor_no_keyword(term, keywords):
 
 
 FILTER_QUERY_KEYWORDS = {
-	'page': {'key': PAGE_COL, 'check_func_constructor': check_func_constructor_pagename},
+	'page': {'key': PAGE_COL, 'regex_constructor': search_query_pagename_term_to_regex},
 	'text': {'key': DESC_COL},
-	'tag': {'key': TAGS_COL, 'regex': search_tag_re},
+	'tags': {'key': TAGS_COL, 'implicit_match': search_tag_re, 'regex_constructor': search_query_tags_term_to_regex},
 	'any': {'check_func_constructor': check_func_constructor_any_keyword, 'include': ('page', 'text', 'tag')},
 	'label': {'check_func_constructor': check_func_constructor_label_keyword, 'labels': ('TODO', 'FIXME')}, # default labels are overwritten on use
 	'no': {'check_func_constructor': check_func_constructor_no_keyword}
 }
-
+FILTER_QUERY_KEYWORDS['tag'] = FILTER_QUERY_KEYWORDS['tags'] # alias
 
 
 class TaskListTreeView(BrowserTreeView):
