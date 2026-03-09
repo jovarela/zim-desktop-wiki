@@ -604,6 +604,19 @@ class TestQueryGrouping(tests.TestCase):
 			self.assertEqual(results, set(Path(p) for p in pages))
 
 
+class TestUICallbackCancel(tests.TestCase):
+
+	def runTest(self):
+		def callback():
+			raise SearchCancelledException
+
+		content = dict(('page%i' % i, 'foo') for i in range(10))
+		notebook = self.setUpNotebook(content=content)
+		page_search = PageSearch(notebook, ui_callback=callback)
+		results = list(page_search.search_pages(page_search.parse_page_search_query('content: foo')))
+		self.assertEqual(len(results), UI_CALLBACK_RATE_FOR_CONTENT) # should be cancelled at first callback
+
+
 class TestCompileSearchQueryCheckFunction(tests.TestCase):
 
 	tuple_keywords = {

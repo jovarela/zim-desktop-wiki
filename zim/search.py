@@ -244,7 +244,9 @@ class PageNameProvider(IndexedSearchProvider):
 	'''Provider for the keywords `name`, `section` and `namespace`'''
 
 	SUPPORTS_NEGATE = True
-	EXECUTION_PRIO = EXECUTION_PRIO_INDEX - 1 # Most efficient provider, always first
+	EXECUTION_PRIO = EXECUTION_PRIO_INDEX + 1
+		# In comparison to other index providers this one also does optimized check and filter
+		# --> raise prio, let other index provider do generation if possible in query
 
 	def __init__(self, notebook, term):
 		super().__init__(notebook, term)
