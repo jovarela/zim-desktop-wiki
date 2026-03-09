@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2025-12-04 16:00+0000\n"
+"PO-Revision-Date: 2026-03-10 14:09+0000\n"
 "Last-Translator: coolvitto <coolzdaddy55@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/zim/develop/ja/>"
 "\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:41+0000\n"
 
 #. Error message when external application could not be found, %s is the command
@@ -137,7 +137,7 @@ msgid ""
 "when you are done"
 msgstr ""
 "外部アプリケーションでファイルを編集中です。作業が終了したら、このダイアログ"
-"を閉じてください。"
+"を閉じてください"
 
 #. Error message when external application could not be run in terminal, %s is the command
 #: zim/gui/applications.py:826
