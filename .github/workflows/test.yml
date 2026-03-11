@@ -5,9 +5,11 @@ on:
   push:
     branches:
       - develop
+      - test_ci
   pull_request:
     branches:
       - develop
+      - test_ci
 
 jobs:
   test_linux:
@@ -38,12 +40,10 @@ jobs:
       - name: Install Ubuntu system dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -qq -y gir1.2-gtk-3.0 gobject-introspection libgirepository1.0-dev xvfb
+          sudo apt-get install -qq -y gir1.2-gtk-3.0 gobject-introspection libgirepository1.0-dev xvfb python3-gi python3-xdg python3-pillow
 
       - name: Install Python dependencies
         run: |
-          pip install PyGObject
-          pip install pyxdg
           pip install setuptools
 
       - name: Configure git
