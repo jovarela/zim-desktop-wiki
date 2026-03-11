@@ -74,7 +74,7 @@ Download, install and update [MSYS2](https://www.msys2.org/) 64-bit by following
 
 Open "MSYS2 MSYS" terminal from the Start Menu and install GTK3, Python3 and Python bindings for GTK:
 
-`pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-gobject`
+`pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python mingw-w64-x86_64-python-gobject`
 
 The Windows drive is mounted on `/c`, browse your Windows user folder using:
 

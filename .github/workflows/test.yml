@@ -103,7 +103,7 @@ jobs:
       - name: Install system dependencies
         shell: msys2 {0}
         run: |
-          pacman -S --noconfirm git mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-gobject mingw-w64-x86_64-python-xdg mingw-w64-x86_64-python-setuptools
+          pacman -S --noconfirm git mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python mingw-w64-x86_64-python-gobject mingw-w64-x86_64-python-setuptools
 
       - name: Configure git
         shell: msys2 {0}
