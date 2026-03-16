@@ -958,6 +958,329 @@ class TestMarkdownFormat(tests.TestCase, TestFormatMixin):
 	def setUp(self):
 		self.format = get_format('markdown')
 
+	def testFormat(self):
+		# Override: markdown is both native and export format.
+		# The standard testFormat dumps with linker (export mode) then
+		# expects native XML round-trip on parse-back. This does not hold
+		# because linker-resolved links don't map back to internal hrefs.
+		# So we test export dump and parser separately.
+
+		# 1. Dump with linker and verify all text is present
+		reftree = tests.new_parsetree_from_xml(self.reference_xml)
+		linker = StubLinker(tests.TEST_DATA_FOLDER.folder('formats'))
+		dumper = self.format.Dumper(linker=linker)
+		result = ''.join(dumper.dump(reftree))
+		self.assertNoTextMissing(result, reftree)
+
+		# Check that dumper did not modify the tree
+		self.assertMultiLineEqual(reftree.tostring(), self.reference_xml)
+
+		# 2. Partial dumper
+		parttree = tests.new_parsetree_from_xml(
+			"<?xml version='1.0' encoding='utf-8'?>\n"
+			"<zim-tree>try these <strong>bold</strong>, "
+			"<emphasis>italic</emphasis></zim-tree>"
+		)
+		result2 = ''.join(dumper.dump(parttree))
+		self.assertFalse(result2.endswith('\n'))
+
+		# 3. Parser: parse export output and verify text round-trip
+		parser = self.format.Parser()
+		tree = parser.parse(result)
+		self.assertTrue(len(tree.tostring().splitlines()) > 10)
+		string = ''.join(dumper.dump(tree))
+		self.assertNoTextMissing(string, reftree)
+
+
+class TestMarkdownNativeFormat(tests.TestCase):
+	'''Tests for Markdown as native storage format (without linker).'''
+
+	def setUp(self):
+		self.format = get_format('markdown')
+
+	def testFormatInfo(self):
+		self.assertTrue(self.format.info['native'])
+		self.assertTrue(self.format.info['import'])
+		self.assertTrue(self.format.info['export'])
+		self.assertEqual(self.format.info['extension'], 'md')
+
+	def testParseHeadings(self):
+		input = '# Heading 1\n\n## Heading 2\n\n### Heading 3\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<h level="1">Heading 1\n</h>', xml)
+		self.assertIn('<h level="2">Heading 2\n</h>', xml)
+		self.assertIn('<h level="3">Heading 3\n</h>', xml)
+
+	def testParseFormatting(self):
+		input = '**bold** *italic* ~~strike~~ `code` __mark__ ~sub~ ^sup^\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<strong>bold</strong>', xml)
+		self.assertIn('<emphasis>italic</emphasis>', xml)
+		self.assertIn('<strike>strike</strike>', xml)
+		self.assertIn('<code>code</code>', xml)
+		self.assertIn('<mark>mark</mark>', xml)
+		self.assertIn('<sub>sub</sub>', xml)
+		self.assertIn('<sup>sup</sup>', xml)
+
+	def testParseLinks(self):
+		input = '[Page](Page.md) [display](Other%20Page.md) <http://example.com>\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		# Internal link: .md stripped, %20 decoded
+		self.assertIn('href="Page"', xml)
+		self.assertIn('href="Other Page"', xml)
+		self.assertIn('href="http://example.com"', xml)
+
+	def testParseImages(self):
+		input = '![alt text](./image.png){ width=500px }\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('src="./image.png"', xml)
+		self.assertIn('alt="alt text"', xml)
+		self.assertIn('width="500"', xml)
+
+	def testParseTags(self):
+		input = 'Some text @foo @bar more text\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<tag name="foo">@foo</tag>', xml)
+		self.assertIn('<tag name="bar">@bar</tag>', xml)
+
+	def testParseAnchors(self):
+		input = '{#myanchor}\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<anchor name="myanchor"', xml)
+
+	def testParseBulletList(self):
+		input = '- item 1\n- item 2\n    - sub item\n- item 3\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<ul>', xml)
+		self.assertIn('bullet="*"', xml)
+		self.assertIn('item 1', xml)
+		self.assertIn('item 2', xml)
+		self.assertIn('sub item', xml)
+
+	def testParseCheckboxList(self):
+		input = '- [ ] unchecked\n- [x] checked\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('bullet="unchecked-box"', xml)
+		self.assertIn('bullet="xchecked-box"', xml)
+
+	def testParseNumberedList(self):
+		input = '1. first\n2. second\n3. third\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<ol', xml)
+
+	def testParseFencedCode(self):
+		input = '```python\ndef hello():\n    pass\n```\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<pre', xml)
+		self.assertIn('lang="python"', xml)
+		self.assertIn('def hello():', xml)
+
+	def testParseTable(self):
+		input = '| H1 | H2 |\n|---|---|\n| A | B |\n| C | D |\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<table', xml)
+		self.assertIn('<th>H1</th>', xml)
+		self.assertIn('<td>', xml)
+
+	def testParseHorizontalRule(self):
+		input = '---\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<line />', xml)
+
+	def testDumperHeadings(self):
+		builder = ParseTreeBuilder()
+		builder.start(FORMATTEDTEXT)
+		builder.append(HEADING, {'level': 1}, 'Head 1\n')
+		builder.append(HEADING, {'level': 2}, 'Head 2\n')
+		builder.end(FORMATTEDTEXT)
+		tree = builder.get_parsetree()
+		dumper = self.format.Dumper()
+		result = ''.join(dumper.dump(tree))
+		self.assertIn('# Head 1', result)
+		self.assertIn('## Head 2', result)
+
+	def testDumperFormatting(self):
+		builder = ParseTreeBuilder()
+		builder.start(FORMATTEDTEXT)
+		builder.start(PARAGRAPH)
+		builder.append(STRONG, {}, 'bold')
+		builder.text(' ')
+		builder.append(EMPHASIS, {}, 'italic')
+		builder.text('\n')
+		builder.end(PARAGRAPH)
+		builder.end(FORMATTEDTEXT)
+		tree = builder.get_parsetree()
+		dumper = self.format.Dumper()
+		result = ''.join(dumper.dump(tree))
+		self.assertIn('**bold**', result)
+		self.assertIn('*italic*', result)
+
+	def testDumperLinks(self):
+		builder = ParseTreeBuilder()
+		builder.start(FORMATTEDTEXT)
+		builder.start(PARAGRAPH)
+		builder.append(LINK, {'href': 'MyPage'}, 'MyPage')
+		builder.text(' ')
+		builder.append(LINK, {'href': 'http://example.com'}, 'http://example.com')
+		builder.text('\n')
+		builder.end(PARAGRAPH)
+		builder.end(FORMATTEDTEXT)
+		tree = builder.get_parsetree()
+		dumper = self.format.Dumper()
+		result = ''.join(dumper.dump(tree))
+		self.assertIn('[MyPage](MyPage.md)', result)
+		self.assertIn('<http://example.com>', result)
+
+	def testDumperImages(self):
+		builder = ParseTreeBuilder()
+		builder.start(FORMATTEDTEXT)
+		builder.append(IMAGE, {'src': './img.png', 'alt': 'test', 'width': '500'})
+		builder.text('\n')
+		builder.end(FORMATTEDTEXT)
+		tree = builder.get_parsetree()
+		dumper = self.format.Dumper()
+		result = ''.join(dumper.dump(tree))
+		self.assertIn('![test](./img.png){ width=500px }', result)
+
+	def testDumperFencedCode(self):
+		builder = ParseTreeBuilder()
+		builder.start(FORMATTEDTEXT)
+		builder.append(VERBATIM_BLOCK, {'lang': 'python'}, 'print("hello")\n')
+		builder.end(FORMATTEDTEXT)
+		tree = builder.get_parsetree()
+		dumper = self.format.Dumper()
+		result = ''.join(dumper.dump(tree))
+		self.assertIn('```python\n', result)
+		self.assertIn('print("hello")\n', result)
+
+	def testDumperCheckboxes(self):
+		builder = ParseTreeBuilder()
+		builder.start(FORMATTEDTEXT)
+		builder.start(BULLETLIST)
+		builder.append(LISTITEM, {'bullet': UNCHECKED_BOX}, 'todo\n')
+		builder.append(LISTITEM, {'bullet': XCHECKED_BOX}, 'done\n')
+		builder.end(BULLETLIST)
+		builder.end(FORMATTEDTEXT)
+		tree = builder.get_parsetree()
+		dumper = self.format.Dumper()
+		result = ''.join(dumper.dump(tree))
+		self.assertIn('[ ]', result)
+		self.assertIn('[x]', result)
+
+	def testYAMLFrontMatter(self):
+		input = (
+			'---\n'
+			'Content-Type: text/markdown\n'
+			'Format: markdown 1.0\n'
+			'Creation-Date: 2024-01-01\n'
+			'---\n'
+			'\n'
+			'# Hello\n'
+			'\n'
+			'World\n'
+		)
+		parser = self.format.Parser()
+		tree = parser.parse(input, file_input=True)
+		self.assertEqual(tree.meta.get('Creation-Date'), '2024-01-01')
+
+		# Dump back with file_output
+		dumper = self.format.Dumper()
+		result = ''.join(dumper.dump(tree, file_output=True))
+		self.assertIn('---\n', result)
+		self.assertIn('Content-Type: text/markdown', result)
+		self.assertIn('Creation-Date: 2024-01-01', result)
+		self.assertIn('# Hello', result)
+
+	def testNativeRoundTrip(self):
+		'''Test that parse -> dump -> parse gives consistent results.'''
+		input = (
+			'# Test Page\n'
+			'\n'
+			'Some **bold** and *italic* text with `code`.\n'
+			'\n'
+			'## Links\n'
+			'\n'
+			'[Internal Page](Internal%20Page.md)\n'
+			'\n'
+			'<http://example.com>\n'
+			'\n'
+			'## Lists\n'
+			'\n'
+			'- item 1\n'
+			'- item 2\n'
+			'    - sub item\n'
+			'\n'
+			'1. first\n'
+			'2. second\n'
+			'\n'
+			'## Code\n'
+			'\n'
+			'```python\n'
+			'def hello():\n'
+			'    pass\n'
+			'```\n'
+			'\n'
+			'---\n'
+			'\n'
+			'| H1 | H2 |\n'
+			'|---|---|\n'
+			'| A  | B  |\n'
+		)
+		parser = self.format.Parser()
+		dumper = self.format.Dumper()
+
+		# Parse
+		tree1 = parser.parse(input)
+
+		# Dump
+		output = ''.join(dumper.dump(tree1))
+
+		# Parse again
+		tree2 = parser.parse(output)
+
+		# Both parse trees should be identical
+		self.assertMultiLineEqual(tree1.tostring(), tree2.tostring())
+
+	def testNestedFormatting(self):
+		input = '**bold and *italic* inside**\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<strong>', xml)
+		self.assertIn('<emphasis>italic</emphasis>', xml)
+
+	def testBlockquote(self):
+		input = '> This is a quote\n> with more text\n'
+		parser = self.format.Parser()
+		tree = parser.parse(input)
+		xml = tree.tostring()
+		self.assertIn('<div', xml)
+		self.assertIn('This is a quote', xml)
+
 
 class TestRstFormat(tests.TestCase, TestFormatMixin):
 

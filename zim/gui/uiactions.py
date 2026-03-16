@@ -523,7 +523,19 @@ class ImportPageDialog(FileDialog):
 		self.navigation = navigation
 		self.notebook = notebook
 
-		self.add_filter(_('Text Files'), '*.txt') # T: File filter for '*.txt'
+		# Add "All Supported Formats" filter with both .txt and .md
+		filter_supported = Gtk.FileFilter()
+		filter_supported.set_name(_('All Supported Formats') + ' (.txt, .md)')
+			# T: File filter for all supported import formats (.txt, .md)
+		filter_supported.add_pattern('*.txt')
+		filter_supported.add_pattern('*.md')
+		self.filechooser.add_filter(filter_supported)
+		self.filechooser.set_filter(filter_supported)
+
+		self.add_filter(_('Text Files') + ' (.txt)', '*.txt') # T: File filter for '*.txt'
+		self.add_filter(_('Markdown Files' + ' (.md)'), '*.md') # T: File filter for '*.md'
+		self._add_filter_all()
+		self.filechooser.set_filter(filter_supported)
 
 		if page is not None:
 			self.add_shortcut(notebook, page)
@@ -535,7 +547,8 @@ class ImportPageDialog(FileDialog):
 		if file is None:
 			return False
 
-		page = import_file_from_user_input(file, self.notebook)
+		format = 'markdown' if file.basename.endswith('.md') else 'wiki'
+		page = import_file_from_user_input(file, self.notebook, format=format)
 		self.navigation.open_page(page)
 		return True
 

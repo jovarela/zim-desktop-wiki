@@ -167,6 +167,22 @@ TEXT = 'T'
 END = '/'
 
 
+_FORMAT_EXTENSION_MAP = {
+	'markdown': '.md',
+	'zim-wiki': '.txt',
+	'wiki': '.txt',
+}
+
+
+def get_format_extension(format_name):
+	'''Return the default file extension for a given storage format name.
+
+	@param format_name: one of C{'markdown'}, C{'zim-wiki'}, or C{'wiki'}
+	@returns: file extension string, e.g. C{'.md'} or C{'.txt'}
+	'''
+	return _FORMAT_EXTENSION_MAP[format_name]
+
+
 _letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 def increase_list_iter(listiter):
@@ -240,6 +256,7 @@ def canonical_name(name):
 
 _aliases = {
 	'zim-wiki': 'wiki',
+	'markdown-native': 'markdown',
 }
 
 def get_format(name):
