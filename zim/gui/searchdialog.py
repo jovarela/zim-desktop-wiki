@@ -97,10 +97,9 @@ class SearchDialog(Dialog):
 			string = 'Section: "%s" ' % self.page.name + string
 		#~ print('!! QUERY: ' + string)
 
-		self.results_treeview.hasresults = False # XXX reset state before starting new search
 		self._set_state(self.SEARCHING)
 		try:
-			self.results_treeview.search(string)
+			self.results_treeview.search(string, self._set_show_results)
 		except Exception as error:
 			ErrorDialog(self, error).run()
 
@@ -130,7 +129,7 @@ class SearchDialog(Dialog):
 			show(self.search_button)
 			if state == self.READY:
 				self._stack.set_visible_child_name('ready')
-			elif self.results_treeview.hasresults:
+			elif len(self.results_treeview.get_model()):
 				self._stack.set_visible_child_name('results')
 			else:
 				self._stack.set_visible_child_name('no-results')
@@ -141,12 +140,12 @@ class SearchDialog(Dialog):
 				show(self.spinner)
 				self.spinner.start()
 			show(self.cancel_button)
-			if self.results_treeview.hasresults:
-				self._stack.set_visible_child_name('results')
-			else:
-				self._stack.set_visible_child_name('searching')
+			self._stack.set_visible_child_name('searching')
 		else:
 			assert False, 'BUG: invalid state'
+
+	def _set_show_results(self):
+		self._stack.set_visible_child_name('results')
 
 
 
@@ -164,7 +163,6 @@ class SearchResultsTreeView(BrowserTreeView):
 		self.query = None
 		self._page_search = PageSearch(notebook, self._search_callback)
 		self.cancelled = False
-		self.hasresults = False
 
 		cell_renderer = Gtk.CellRendererText()
 		for name, i in (
@@ -186,32 +184,42 @@ class SearchResultsTreeView(BrowserTreeView):
 		self.cancelled = True
 
 	def _search_callback(self):
-		while Gtk.events_pending():
+		if Gtk.events_pending():
 			Gtk.main_iteration_do(False)
 
 		if self.cancelled:
 			raise SearchCancelledException
 
-	def search(self, query):
+	def search(self, query, set_show_results_cb=None):
 		query = query.strip()
 		if not query:
 			return
 		logger.info('Searching for: %s', query)
 
-		self.get_model().clear()
 		self.cancelled = False
-		self.hasresults = False
 		self.query = self._page_search.parse_page_search_query(query)
 
 		model = self.get_model()
 		if not model:
 			return
 
-		for result in self._page_search.search_pages(self.query):
+		model.clear()
+		it = self._page_search.search_pages(self.query)
+		try:
+			result = next(it)
+		except StopIteration:
+			return
+		else:
+			# Handle first with cb
 			model.append((result.path.name, result.search_score, result.path))
-				# FUTURE - use result.search_snippets
+					# FUTURE - use result.search_snippets
+			if set_show_results_cb:
+				set_show_results_cb()
 
-		self.hasresults = len(model) > 0
+			# Iter through rest without cb
+			for result in it:
+				model.append((result.path.name, result.search_score, result.path))
+					# FUTURE - use result.search_snippets
 
 	def _do_open_page(self, view, path, col):
 		page = Path(self.get_model()[path][0])
