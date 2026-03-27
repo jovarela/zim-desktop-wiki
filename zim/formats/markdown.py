@@ -786,4 +786,4 @@ class Dumper(TextDumper):
 	dump_th = dump_td
 
 	def dump_line(self, tag, attrib, strings=None):
-		return '\n---\n'
+		return '---\n'
