@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2026-02-07 07:01+0000\n"
+"PO-Revision-Date: 2026-03-28 16:09+0000\n"
 "Last-Translator: 麋麓 BigELK176 <BigELK176@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/zim/develop/zh_Hant/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2020-01-01 13:40+0000\n"
 
 #. Error message when external application could not be found, %s is the command
@@ -2890,7 +2890,7 @@ msgid ""
 "This plugin adds settings that help using zim\n"
 "as a distraction free editor.\n"
 msgstr ""
-"此外掛程式增加設定，用來輔助運用 Zim\n"
+"此外掛程式添加設定，用來輔助運用 Zim\n"
 "如同免除干擾編輯器。\n"
 
 #. plugin preference
@@ -3287,7 +3287,7 @@ msgstr "頁面索引"
 #. plugin description
 #: zim/plugins/pageindex/__init__.py:52
 msgid "This plugin adds the page index pane to the main window.\n"
-msgstr "此外掛程式在主要視窗上增加頁面索引面板。\n"
+msgstr "此外掛程式添加頁面索引面板至主要視窗。\n"
 
 #. preferences option
 #: zim/plugins/pageindex/__init__.py:63
@@ -3767,7 +3767,7 @@ msgstr "表格"
 #. menu item
 #: zim/plugins/tableeditor.py:534 zim/plugins/tableeditor.py:690
 msgid "Add row"
-msgstr "增加行欄"
+msgstr "添加行欄"
 
 #. tooltip on mouse hover
 #: zim/plugins/tableeditor.py:535
@@ -3864,7 +3864,7 @@ msgstr "對齊"
 #. hoover tooltip
 #: zim/plugins/tableeditor.py:1050
 msgid "Add column"
-msgstr "增加欄列"
+msgstr "添加欄列"
 
 #. hoover tooltip
 #: zim/plugins/tableeditor.py:1051
@@ -3899,7 +3899,7 @@ msgid ""
 "\n"
 "This is a core plugin shipping with zim.\n"
 msgstr ""
-"此外掛程式增加額外小工具用來顯示\n"
+"此外掛程式添加額外小工具用來顯示\n"
 "目前頁面的目錄表列。\n"
 "\n"
 "此為核心外掛程式，隨同 Zim 發行。\n"
