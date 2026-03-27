@@ -1180,10 +1180,12 @@ class TestMarkdownNativeFormat(tests.TestCase):
 	def testDumperCheckboxes(self):
 		builder = ParseTreeBuilder()
 		builder.start(FORMATTEDTEXT)
+		builder.start(PARAGRAPH)
 		builder.start(BULLETLIST)
 		builder.append(LISTITEM, {'bullet': UNCHECKED_BOX}, 'todo\n')
 		builder.append(LISTITEM, {'bullet': XCHECKED_BOX}, 'done\n')
 		builder.end(BULLETLIST)
+		builder.end(PARAGRAPH)
 		builder.end(FORMATTEDTEXT)
 		tree = builder.get_parsetree()
 		dumper = self.format.Dumper()
