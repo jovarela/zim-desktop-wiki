@@ -99,6 +99,7 @@ For example, to find any task tagged "@roadmap" in your notebook section ":proje
 
 Or to list tasks without tags you can use "''no:tags''" or the opposite, tasks with any tag as "''not no:tags''".
 
+The "''Text''" and "''Page''" keywords can match case-sensitive by using the "'':=''" operator. E.g. "''Text:= TODO''" only matches the word "TODO" in all caps.
 
 ===== Usage =====
 
