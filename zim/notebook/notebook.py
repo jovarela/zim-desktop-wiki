@@ -213,7 +213,7 @@ class Notebook(ConnectorMixin, SignalEmitter):
 		'page-info-changed': (SIGNAL_NORMAL, None, (object,)),
 		'get-page-template': (SIGNAL_NORMAL, str, (object,)),
 		'init-page-template': (SIGNAL_NORMAL, None, (object, object)),
-
+ 
 		# Hooks
 		'suggest-link': (SIGNAL_NORMAL, object, (object, object)),
 	}
@@ -1131,38 +1131,48 @@ class Notebook(ConnectorMixin, SignalEmitter):
 		'''
 		return self.layout.get_attachments_folder(path)
 
-	def get_template(self, path, context=None):
-		'''Get a template for the intial text on new pages
+	def get_new_page_template(self, path, support_cursor=False) -> 'ParseTree':
+		'''Get and evaluate template for the intial text on new pages
 		@param path: a L{Path} object
-		@param context: optional dict with additional context parameters
+		@param support_cursor: bool whether "place_cursor" is supported in the template, if so, it
+		will be evaluated with unicode character "\\ufffe"
 		@returns: a L{ParseTree} object
 		'''
 		# FIXME hardcoded that template must be wiki format
 
-		template = self.get_page_template_name(path)
+		template = self.get_new_page_template_name(path)
 		logger.debug('Got page template \'%s\' for %s', template, path)
 		template = zim.templates.get_template('wiki', template)
-		return self.eval_new_page_template(path, template, context)
+		return self.eval_new_page_template(path, template, support_cursor)
 
-	def get_page_template_name(self, path=None):
+	def get_new_page_template_name(self, path=None):
 		'''Returns the name of the template to use for a new page.
 		(To get the contents of the template directly, see L{get_template()})
 		'''
 		default_page_template = self.config['Notebook'].get('default_page_template', 'Default')
 		return self.emit_return_first('get-page-template', path or Path(':')) or default_page_template
 
-	def eval_new_page_template(self, path, template, context=None):
+	def eval_new_page_template(self, path, template, support_cursor=False) -> 'ParseTree':
+		'''Evaluate a template for the intial text on new pages
+		@param path: a L{Path} object
+		@param template: a template onkect
+		@param support_cursor: bool whether "place_cursor" is supported in the template, if so, it
+		will be evaluated with unicode character "\\ufffe"
+		'''
+		from zim.templates.expression import ExpressionFunction
+		CURSOR_CHAR = '\ufffe' # unicode "non-character"
+
 		lines = []
+		cursor_replace = CURSOR_CHAR if support_cursor else ''
 		mycontext = {
 			'page': {
 				'name': path.name,
 				'basename': path.basename,
 				'section': path.namespace,
 				'namespace': path.namespace, # backward compat
-			}
+			},
+			'place_cursor': ExpressionFunction(lambda: cursor_replace),
 		}
-		if context:
-			mycontext.update(context)
 		self.emit('init-page-template', path, template) # plugin hook
 		template.process(lines, mycontext)
 

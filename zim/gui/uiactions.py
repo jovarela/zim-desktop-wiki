@@ -461,7 +461,7 @@ class NewPageDialog(Dialog):
 		self.notebook = notebook
 		self.navigation = navigation
 
-		default = notebook.get_page_template_name(path)
+		default = notebook.get_new_page_template_name(path)
 		templates = [t[0] for t in list_templates('wiki')]
 		if not default in templates:
 			templates.insert(0, default)
