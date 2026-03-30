@@ -63,11 +63,11 @@ _operators_not_allowed_in_keyword_group = ('(', ')')
 
 
 OPERATOR_MATCH = 'MATCH'
-OPERATOR_EQUAL = 'EQ'
-OPERATOR_LESS_THAN = 'LT'
-OPERATOR_GREATER_THAN = 'GT'
-OPERATOR_LESS_EQUAL = 'LE'
-OPERATOR_GREATER_EQUAL = 'GE'
+OPERATOR_EQUAL = '__eq__'
+OPERATOR_LESS_THAN = '__lt__'
+OPERATOR_GREATER_THAN = '__gt__'
+OPERATOR_LESS_EQUAL = '__le__'
+OPERATOR_GREATER_EQUAL = '__ge__'
 
 
 _keyword_operators = {
@@ -551,6 +551,24 @@ def check_func_constructor_any_keyword(term: SearchQueryTerm, keywords: dict) ->
 	return mychecker
 
 
+def check_comparison_func_constructor(term: SearchQueryTerm, keywords: dict) -> Callable[[object], bool]:
+	'''To be used as a constructor with L{compile_search_query_check_function}
+	The resulting function uses the comparison functions `<`, `>`, `=`, `<=`, `>=`, where `:` is interpreted
+	as `=`. The c{'comparison'} value in the keywords dict should provide a type (e.g. `str` or `int`)
+	that is used for the comparison
+	'''
+	key = keywords[term.keyword]['key']
+	ctype = keywords[term.keyword]['comparison']
+	try:
+		ref = ctype(term.value) # e.g. str -> int
+	except ValueError:
+		logger.warning('Invalid value for type \'%s\': %s' % ctype.__name__, term.value)
+		return lambda r: False
+
+	op = ctype.__eq__ if term.kw_operator == OPERATOR_MATCH else getattr(ctype, term.kw_operator)
+	return lambda r: op(r[key], ref)
+
+
 def _negate_checker(checker, *a):
 	return not checker(*a)
 
@@ -590,9 +608,8 @@ def compile_search_query_check_function(query: SearchQuery, keywords: dict) -> C
 	These check functions only need to check for a positive match, the wrapper takes care of
 	operators and negation.
 
-	Check function constructors included here are L{check_func_constructor_pagename} and 
-	L{check_func_constructor_any_keyword} which implement a different regex for pagenames and 
-	a check any field behavior.
+	Check function constructors included here are L{check_func_constructor_pagename},
+	L{check_comparison_func_constructor}, L{check_func_constructor_any_keyword}.
 
 	@param keywords: dict with keywords as keys and a dict with attributes (e.g. the type) as values
 	@returns: a check function for the whole query C{check(record: Mapping) -> bool}

@@ -727,3 +727,58 @@ class TestCompileSearchQueryCheckFunction(tests.TestCase):
 			check_func = compile_search_query_check_function(p_query, keywords)
 			result = list(map(check_func, records))
 			self.assertEqual(result, wanted, msg='Query: %s' % query)
+
+
+class TestCompileSearchQueryComparisonFunction(tests.TestCase):
+
+	keywords = {
+		'date': {'key': 0, 'check_func_constructor': check_comparison_func_constructor, 'comparison': str},
+		'prio': {'key': 1, 'check_func_constructor': check_comparison_func_constructor, 'comparison': int},
+	}
+	records = [
+		('2020-01-01', 5),
+		('2020-05-05', 1),
+		('2020-08-08', 2),
+		('2020-12-12', 3),
+	]
+	queries = [
+		('date>2020-06-01', [False, False, True, True]),
+		('date:>2020-06-01', [False, False, True, True]),
+		('date>=2020-06-01', [False, False, True, True]),
+		('date:>=2020-06-01', [False, False, True, True]),
+
+		('date<2020-06-01', [True, True, False, False]),
+		('date:<2020-06-01', [True, True, False, False]),
+		('date<=2020-06-01', [True, True, False, False]),
+		('date:<=2020-06-01', [True, True, False, False]),
+
+		('date: 2020-05-05', [False, True, False, False]),
+		('date:2020-05-05', [False, True, False, False]),
+		('date=2020-05-05', [False, True, False, False]),
+		('date= 2020-05-05', [False, True, False, False]),
+		('date:=2020-05-05', [False, True, False, False]),
+
+		('date<2020-05-05', [True, False, False, False]),
+		('date<=2020-05-05', [True, True, False, False]),
+		('date>2020-05-05', [False, False, True, True]),
+		('date>=2020-05-05', [False, True, True, True]),
+
+		('-date>2020-06-01', [True, True, False, False]),
+		('-date>=2020-06-01', [True, True, False, False]),
+		('-date: 2020-05-05', [True, False, True, True]),
+
+		('prio>2', [True, False, False, True]),
+		('prio>=2', [True, False, True, True]),
+		('prio=2', [False, False, True, False]),
+		('prio: 2', [False, False, True, False]),
+		('prio<2', [False, True, False, False]),
+		('prio<=2', [False, True, True, False]),
+	]
+
+	def runTest(self):
+		for query, wanted in self.queries:
+			p_query = parse_search_query(query, self.keywords)
+			#print('>>>', query, '\n', '===', p_query)
+			check_func = compile_search_query_check_function(p_query, self.keywords)
+			result = list(map(check_func, self.records))
+			self.assertEqual(result, wanted, msg='Query: %s' % query)
