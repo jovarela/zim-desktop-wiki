@@ -43,6 +43,7 @@ usage: zim [OPTIONS] [NOTEBOOK [PAGE_LINK]]
    or: zim --import [OPTIONS] NOTEBOOK PAGE FILES
    or: zim --search [OPTIONS] NOTEBOOK QUERY
    or: zim --index  [OPTIONS] NOTEBOOK
+   or: zim --convert-notebook [OPTIONS] NOTEBOOK
    or: zim --plugin PLUGIN [ARGUMENTS]
    or: zim --manual [OPTIONS] [PAGE_LINK]
    or: zim --help
@@ -94,12 +95,15 @@ Import Options:
   --format          format to read (defaults to 'wiki')
   --assubpage       import files as sub-pages of PATH, this is implicit true
                     when PATH ends with a ":" or when multiple files are given
-
 Search Options:
   -s, --with-scores print score for each page, sort by score
 
 Index Options:
   -f, --flush       flush the index first and force re-building
+
+Convert Notebook Options !!!EXPERIMENTAL MAKE A BACKUP FIRST!!!:
+  -F, --format      change the source format and re-write all pages in
+                    the new format ('zim-wiki', 'markdown')
 
 Try 'zim --manual' for more help.
 '''
@@ -659,8 +663,8 @@ def get_format_name(target_format):
 	return _FORMAT_NAME_MAP[target_format]
 
 
-class ConvertFormatCommand(NotebookCommand):
-	'''Class implementing the C{--convert-format} command.
+class ConvertNotebookCommand(NotebookCommand):
+	'''Class implementing the C{--convert-notebook} command.
 
 	Converts a notebook between storage formats (e.g. zim-wiki to markdown
 	or vice versa). This rewrites all page source files in the target format
@@ -668,8 +672,8 @@ class ConvertFormatCommand(NotebookCommand):
 
 	Usage::
 
-		zim --convert-format --format=markdown NOTEBOOK
-		zim --convert-format --format=zim-wiki NOTEBOOK
+		zim --convert-notebook --format=markdown NOTEBOOK
+		zim --convert-notebook --format=zim-wiki NOTEBOOK
 	'''
 
 	arguments = ('NOTEBOOK',)
@@ -678,8 +682,10 @@ class ConvertFormatCommand(NotebookCommand):
 	)
 
 	def run(self):
-		import shutil
-		from datetime import datetime
+		import time
+
+		logger.warning('!!! THIS IS AN EXPERIMENTAL FEATURE - Ctrl-C new if you don\'t have a backup !!!')
+		time.sleep(10)
 
 		target_format = self.opts.get('format')
 		if not target_format:
@@ -710,6 +716,7 @@ class ConvertFormatCommand(NotebookCommand):
 		converted = 0
 		errors = 0
 		for page_path in list(notebook.pages.walk()):
+			logger.info('Converting: %s' % page_path)
 			try:
 				page = notebook.get_page(page_path)
 				tree = page.get_parsetree()
@@ -731,6 +738,8 @@ class ConvertFormatCommand(NotebookCommand):
 					new_rel_path = rel_path + target_extension
 
 				new_file = notebook.folder.file(new_rel_path)
+				if new_file.exists():
+					raise AssertionError('Could not convert %s to %s since the latter already exists' % (old_file, new_file))
 
 				# Write the new file
 				new_file.writelines(lines)
@@ -768,7 +777,7 @@ commands = {
 	'import': ImportCommand,
 	'search': SearchCommand,
 	'index': IndexCommand,
-	'convert-format': ConvertFormatCommand,
+	'convert-notebook': ConvertNotebookCommand,
 }
 
 
