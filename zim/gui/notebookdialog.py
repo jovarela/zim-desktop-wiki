@@ -438,7 +438,7 @@ class AddNotebookDialog(Dialog):
 		self.add_form((
 			('name', 'string', _('Name')), # T: input field in 'Add Notebook' dialog
 			('folder', 'dir', _('Folder')), # T: input field in 'Add Notebook' dialog
-			('format', 'choice', _('Storage format'), format_options), # T: choice field in 'Add Notebook' dialog
+			('format', 'choice', _('Default file format') + ' ('+_('Experimental')+')', format_options), # T: choice field in 'Add Notebook' dialog
 			('template', 'choice', _('Page template'), templates),  # T: choice field in 'Add Notebook' dialog
 		), {
 			'name': name,
