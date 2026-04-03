@@ -8,6 +8,7 @@ It supports full round-trip as a native storage format: pages can be
 stored as ``.md`` files with YAML front matter for metadata.
 '''
 
+import os.path
 import re
 import logging
 
@@ -17,7 +18,7 @@ from zim.parse import convert_space_to_tab, fix_unicode_whitespace
 from zim.parse.encode import escape_string, url_encode, URL_ENCODE_DATA, \
 	split_escaped_string, unescape_string
 from zim.parse.regexparser import Rule, RegexParser
-from zim.parse.links import is_url_link, match_url_link, url_link_re, old_url_link_re, link_type
+from zim.parse.links import is_url_link, match_url_link, url_link_re, old_url_link_re, link_type, is_path_re
 
 from zim.formats import *
 from zim.formats.plain import Dumper as TextDumper
@@ -446,11 +447,18 @@ class MarkdownParser(object):
 
 		# Detect if this is an internal page link
 		if not is_url_link(href) and not href.startswith('#'):
-			# Strip .md extension for internal links
-			if href.lower().endswith('.md'):
-				href = href[:-3]
-			# Convert path separators and URL encoding to page names
-			href = href.replace('/', ':').replace('%20', ' ')
+			_, ext = os.path.splitext(href.split('?')[0])
+			if ext and ext.lower() != '.md':
+				# Non-wiki file reference (e.g. document.pdf).
+				# Ensure href looks like a path so link_type() returns 'file'
+				# and the indexer does not create a placeholder page.
+				if not is_path_re.match(href):
+					href = './' + href
+			else:
+				# Internal page link: strip .md and convert separators to page names
+				if href.lower().endswith('.md'):
+					href = href[:-3]
+				href = href.replace('/', ':').replace('%20', ' ')
 
 		if text and text != href:
 			builder.start(LINK, {'href': href})
@@ -718,8 +726,15 @@ class Dumper(TextDumper):
 				return ['[%s](%s)' % (text, href)]
 			else:
 				# Internal page link - convert : to / and add .md
+				# But if the href already has a non-.md file extension (e.g. "document.pdf"),
+				# treat it as a file reference and leave it as-is.
 				page_href = href.replace(':', '/').replace(' ', '%20')
-				if not page_href.lower().endswith('.md'):
+				_, ext = os.path.splitext(page_href)
+				if ext and ext.lower() != '.md':
+					# file reference — strip ./ prefix added by parse_link
+					if page_href.startswith('./'):
+						page_href = page_href[2:]
+				elif not page_href.lower().endswith('.md'):
 					page_href = page_href + '.md'
 				text = text or href
 				return ['[%s](%s)' % (text, page_href)]
