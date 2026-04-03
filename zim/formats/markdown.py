@@ -40,7 +40,7 @@ info = {
 
 # ---- YAML front matter helpers ----
 
-_yaml_front_matter_re = re.compile(r'\A---[ \t]*\n(.*?\n)---[ \t]*\n', re.DOTALL)
+_yaml_front_matter_re = re.compile(r'\A---[ \t]*\n(.*?\n)---[ \t]*\n\n?', re.DOTALL)
 _yaml_kv_re = re.compile(r'^([\w-]+):\s+(.*?)$', re.M)
 
 

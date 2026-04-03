@@ -1196,9 +1196,9 @@ class TestMarkdownNativeFormat(tests.TestCase):
 	def testYAMLFrontMatter(self):
 		input = (
 			'---\n'
+			'Creation-Date: 2024-01-01\n'
 			'Content-Type: text/markdown\n'
 			'Format: markdown 1.0\n'
-			'Creation-Date: 2024-01-01\n'
 			'---\n'
 			'\n'
 			'# Hello\n'
@@ -1212,10 +1212,7 @@ class TestMarkdownNativeFormat(tests.TestCase):
 		# Dump back with file_output
 		dumper = self.format.Dumper()
 		result = ''.join(dumper.dump(tree, file_output=True))
-		self.assertIn('---\n', result)
-		self.assertIn('Content-Type: text/markdown', result)
-		self.assertIn('Creation-Date: 2024-01-01', result)
-		self.assertIn('# Hello', result)
+		self.assertEqual(result, input)
 
 	def testNativeRoundTrip(self):
 		'''Test that parse -> dump -> parse gives consistent results.'''
