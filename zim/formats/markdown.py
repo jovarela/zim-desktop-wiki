@@ -18,7 +18,7 @@ from zim.parse import convert_space_to_tab, fix_unicode_whitespace
 from zim.parse.encode import escape_string, url_encode, URL_ENCODE_DATA, \
 	split_escaped_string, unescape_string
 from zim.parse.regexparser import Rule, RegexParser
-from zim.parse.links import is_url_link, match_url_link, url_link_re, old_url_link_re, link_type, is_path_re
+from zim.parse.links import is_url_link, match_url_link, url_link_re, link_type, is_path_re
 
 from zim.formats import *
 from zim.formats.plain import Dumper as TextDumper
@@ -82,16 +82,16 @@ def dump_yaml_front_matter(meta):
 # GFM task list: - [ ], - [x], - [X]
 # Regular bullets: -, *, +
 # Numbered: 1. 2. etc.
-md_bullet_pattern = r'(?:[-*+]|\d+\.)[ \t]+'
-md_checkbox_pattern = r'(?:[-*+])[ \t]+\[([ xX*><])\][ \t]+'
 md_bullet_line_re = re.compile(
-	r'^([ \t]*)((?:[-*+]|\d+\.)[ \t]+(?:\[[ xX*><]\][ \t]+)?)(.*$\n?)',
+	r'^([ \t]*)((?:[-*+]|\d+\.|[a-zA-Z]\.)[ \t]+(?:\[[ xX*><]\][ \t]+)?)(.*$\n?)',
 	re.M
 )
-md_number_bullet_re = re.compile(r'^(\d+)\.$')
-md_empty_lines_re = re.compile(r'((?:^[ \t]*\n)+)', re.M | re.U)
-md_unindented_line_re = re.compile(r'^\S', re.M)
+md_checkbox_re = re.compile(r'[-*+]\s+\[([ xX*><])\]')
+md_number_bullet_re = re.compile(r'^(\d+|[a-zA-Z])\.$')
 
+md_empty_lines_re = re.compile(r'((?:^[ \t]*\n)+)', re.M | re.U)
+
+blockquote_line_re = re.compile(r'^((?:>[ \t]?)+)(.*\n?)')
 
 # ---- Markdown Parser ----
 
@@ -110,8 +110,9 @@ class MarkdownParser(object):
 	}
 
 	def __init__(self):
+		self.blockquote_indent = None
 		self.inline_parser = self._init_inline_parser()
-		self.list_and_indent_parser = self._init_intermediate_parser()
+		self.para_parser = self._init_intermediate_parser()
 		self.block_parser = self._init_block_parser()
 
 	def __call__(self, builder, text):
@@ -124,6 +125,7 @@ class MarkdownParser(object):
 		descent = lambda *a: self.nested_inline_parser_below_link(*a)
 		self.nested_inline_parser_below_link = (
 			Rule(TAG, r'(?<!\S)@\w+', process=self.parse_tag)
+			| Rule(EMPHASIS, r'\\\*', process=self._unescape_char)
 			| Rule(EMPHASIS, r'(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)', descent=descent)
 			| Rule(STRONG, r'\*\*(?!\*)(.+?)\*\*', descent=descent)
 			| Rule(MARK, r'__(?!_)(.+?)__', descent=descent)
@@ -137,11 +139,14 @@ class MarkdownParser(object):
 		descent = lambda *a: self.inline_parser(*a)
 		return (
 			Rule(LINK, r'<([a-zA-Z][a-zA-Z0-9.+-]*:[^\s>]+)>', process=self.parse_autolink)
+			| Rule(LINK, r'<([a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>', process=self.parse_autolink) # email autolink
 			| Rule(LINK, url_link_re, process=self.parse_url)
-			| Rule(IMAGE, r'!\[([^\]]*)\]\(([^)]+)\)(\{[^}]*\})?', process=self.parse_image)
+			| Rule(IMAGE, r'\[!\[([^\]]*)\]\(([^)]+)\)(\{[^}]*\})?\]\(([^)]+)\)', process=self.parse_image_with_href)
+			| Rule(IMAGE,   r'!\[([^\]]*)\]\(([^)]+)\)(\{[^}]*\})?', process=self.parse_image)
 			| Rule(LINK, r'\[([^\]]+)\]\(([^)]+)\)', process=self.parse_link)
 			| Rule(ANCHOR, r'\{\#(\w[\w-]*)\}', process=self.parse_anchor)
 			| Rule(TAG, r'(?<!\S)@\w+', process=self.parse_tag)
+			| Rule(EMPHASIS, r'\\\*', process=self._unescape_char)
 			| Rule(EMPHASIS, r'(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)', descent=descent)
 			| Rule(STRONG, r'\*\*(?!\*)(.+?)\*\*', descent=descent)
 			| Rule(MARK, r'__(?!_)(.+?)__', descent=descent)
@@ -154,28 +159,16 @@ class MarkdownParser(object):
 
 	def _init_intermediate_parser(self):
 		p = RegexParser(
-			Rule(
-				'X-Bullet-List',
-				r'''(
-					^[ \t]* (?:[-*+]|\d+\.) [ \t]+ (?:\[[ xX*><]\][ \t]+)? .* $\n?    # Line with bullet
-					(?:
-						^[ \t]* (?:[-*+]|\d+\.) [ \t]+ (?:\[[ xX*><]\][ \t]+)? .* $\n? # More items
-					)*
-				)''',
+			Rule('X-Bullet-List', r'''(
+				^[ \t]* (?:[-*+]|\d+\.|[a-zA-Z]\.) [ \t]+ (?:\[[ xX*><]\][ \t]+)? .* $\n?    # Line with bullet
+				(?:
+					^[ \t]* (?:[-*+]|\d+\.|[a-zA-Z]\.) [ \t]+ (?:\[[ xX*><]\][ \t]+)? .* $\n? # More items
+				)*
+			)''',
 				process=self.parse_list
 			),
-			Rule(
-				'X-Blockquote',
-				r'''(
-					^(?P<bq_indent>>[ \t]?) .* $\n?			# Line with > prefix
-					(?:
-						^>[ \t]? .* $\n?						# More quoted lines
-					)*
-				)''',
-				process=self.parse_blockquote
-			),
 		)
-		p.process_unmatched = self.inline_parser
+		p.process_unmatched = self.parse_inline_block
 		return p
 
 	def _init_block_parser(self):
@@ -213,18 +206,53 @@ class MarkdownParser(object):
 			# GFM pipe table
 			Rule(TABLE, r'''
 				^(\|.+\|)[ \t]*\n								# header row
-				^([ \t]*\|[ \t\-:|]+\|[ \t]*\n)				# separator row
+				^([ \t]*\|[ \t\-:|]+\|[ \t]*\n)					# separator row
 				((?:^[ \t]*\|.+\|[ \t]*\n)+)					# body rows
 			''',
 				process=self.parse_table
 			),
 			# Horizontal rule
 			Rule(LINE, r'^[ \t]*(?:[-*_][ \t]*){3,}$\n?', process=self.parse_line),
+			# Blockquote
+			Rule('X-Blockquote',
+				r'((?:^>[ \t]?.*$\n?)+)',						# Lines with > prefix
+				process=self.parse_blockquote
+			),
 		)
 		p.process_unmatched = self.parse_para
 		return p
 
+	@staticmethod
+	def _unescape_char(builder, text):
+		builder.text(text[1:]) # strip leading "\"
+
 	# --- Block-level handlers ---
+
+	def parse_blockquote(self, builder, text):
+		# First break into blocks with same indenting, then recurs block parser per block
+		# We set blockquote_indent to apply indent to embedded blocks / paras
+		lines = text.splitlines(True)
+		blocklvl, block = None, []
+		while lines:
+			line = lines.pop(0)
+			m = blockquote_line_re.match(line)
+			lvl = m.group(1).count('>')
+			if blocklvl is None:
+				blocklvl = lvl
+				block.append(m.group(2))
+			elif lvl != blocklvl:
+				self.blockquote_indent = blocklvl
+				self.block_parser(builder, ''.join(block))
+				self.blockquote_indent = None
+
+				blocklvl, block = lvl, [m.group(2)]
+			else:
+				block.append(m.group(2))
+
+		if block:
+			self.blockquote_indent = blocklvl
+			self.block_parser(builder, ''.join(block))
+			self.blockquote_indent = None
 
 	def parse_heading(self, builder, hashes, text):
 		level = min(len(hashes), 6)
@@ -240,6 +268,9 @@ class MarkdownParser(object):
 			lang = info.strip().split()[0]
 			if lang:
 				attrib = {'lang': lang}
+		if self.blockquote_indent:
+			attrib = attrib if attrib else {}
+			attrib['indent'] = self.blockquote_indent
 		builder.append(VERBATIM_BLOCK, attrib, text)
 
 	def parse_object(self, builder, otype, param, body):
@@ -255,6 +286,8 @@ class MarkdownParser(object):
 			attrib[key] = value
 
 		attrib['type'] = otype
+		if self.blockquote_indent:
+			attrib['indent'] = self.blockquote_indent
 		builder.append(OBJECT, attrib, body)
 
 	def parse_table(self, builder, headerline, alignstyle, body):
@@ -285,14 +318,20 @@ class MarkdownParser(object):
 		headers = []
 		wraps = []
 		for celltext in headerrow:
-			headers.append(celltext.strip())
-			wraps.append(0)
+			if celltext.rstrip().endswith('<'):
+				celltext = celltext.rstrip().rstrip('<')
+				wraps.append(1)
+			else:
+				wraps.append(0)
+			headers.append(celltext)
 
 		while len(headers) < n_cols:
 			headers.append('')
 			wraps.append(0)
 
 		attrib = {'aligns': ','.join(aligns), 'wraps': ','.join(map(str, wraps))}
+		if self.blockquote_indent:
+			attrib['indent'] = self.blockquote_indent
 		builder.start(TABLE, attrib)
 
 		builder.start(HEADROW)
@@ -326,26 +365,18 @@ class MarkdownParser(object):
 				else:
 					block = convert_space_to_tab(block)
 					builder.start(PARAGRAPH)
-					self.list_and_indent_parser(builder, block)
+					self.para_parser(builder, block)
 					builder.end(PARAGRAPH)
 
-	def parse_blockquote(self, builder, text, indent=None):
-		# Strip leading '> ' from each line
-		lines = text.splitlines(True)
-		stripped = []
-		for line in lines:
-			if line.startswith('> '):
-				stripped.append(line[2:])
-			elif line.startswith('>'):
-				stripped.append(line[1:])
-			else:
-				stripped.append(line)
-		inner = ''.join(stripped)
-		builder.start(BLOCK, {'indent': 1})
-		self.inline_parser(builder, inner)
-		builder.end(BLOCK)
+	def parse_inline_block(self, builder, text):
+		if self.blockquote_indent:
+			builder.start(BLOCK, {'indent': self.blockquote_indent})
+			self.inline_parser(builder, text)
+			builder.end(BLOCK)
+		else:
+			self.inline_parser(builder, text)
 
-	def parse_list(self, builder, text, indent=None):
+	def parse_list(self, builder, text):
 		lines = text.splitlines(True)
 		self.parse_list_lines(builder, lines)
 
@@ -363,8 +394,12 @@ class MarkdownParser(object):
 					break
 			return count
 
-		def start_list(number_m, my_indent, list_indent=None):
-			attrib = {'indent': list_indent} if (list_indent is not None and len(stack) == 1) else None
+		def start_list(number_m, my_indent):
+			if self.blockquote_indent and len(stack) == 1:
+				attrib = {'indent': self.blockquote_indent}
+			else:
+				attrib = None
+
 			if number_m:
 				l = NUMBEREDLIST
 				attrib = attrib or {}
@@ -385,9 +420,9 @@ class MarkdownParser(object):
 			my_indent = get_indent(prefix)
 
 			# Parse bullet type and checkbox
+			number_m = None
 			bullet_stripped = bullet_full.strip()
-			checkbox_m = re.match(r'[-*+]\s+\[([ xX*><])\]', bullet_stripped)
-
+			checkbox_m = md_checkbox_re.match(bullet_stripped)
 			if checkbox_m:
 				checkbox_char = checkbox_m.group(1)
 				checkbox_map = {
@@ -401,13 +436,9 @@ class MarkdownParser(object):
 				bullet_type = checkbox_map.get(checkbox_char, UNCHECKED_BOX)
 			else:
 				# Check for numbered list
-				num_m = re.match(r'(\d+)\.', bullet_stripped)
-				if num_m:
-					bullet_type = None  # numbered
-				else:
+				number_m = md_number_bullet_re.match(bullet_stripped)
+				if not number_m:
 					bullet_type = BULLET
-
-			number_m = re.match(r'(\d+)\.', bullet_stripped) if bullet_type is None else None
 
 			if my_indent > stack[-1][-1]:
 				start_list(number_m, my_indent)
@@ -443,8 +474,20 @@ class MarkdownParser(object):
 		text = text.strip()
 
 		if not href:
+			if text:
+				builder.text(text)
 			return
 
+		href = self._parse_href(href)
+
+		if text and text != href:
+			builder.start(LINK, {'href': href})
+			self.nested_inline_parser_below_link(builder, text)
+			builder.end(LINK)
+		else:
+			builder.append(LINK, {'href': href}, text or href)
+
+	def _parse_href(self, href):
 		# Detect if this is an internal page link
 		if not is_url_link(href) and not href.startswith('#'):
 			_, ext = os.path.splitext(href.split('?')[0])
@@ -460,22 +503,23 @@ class MarkdownParser(object):
 					href = href[:-3]
 				href = href.replace('/', ':').replace('%20', ' ')
 
-		if text and text != href:
-			builder.start(LINK, {'href': href})
-			self.nested_inline_parser_below_link(builder, text)
-			builder.end(LINK)
-		else:
-			builder.append(LINK, {'href': href}, text or href)
+		return href
 
-	@staticmethod
-	def parse_image(builder, alt, src, props_str=None):
+	def parse_image_with_href(self, builder, *groups):
+		self.parse_image(builder, *groups[:-1], href=groups[-1])
+
+	def parse_image(self, builder, alt, src, props_str=None, href=None):
 		'''Parse ![alt](src){props} images'''
 		attrib = ParserClass.parse_image_url(src.strip())
 
 		if alt:
 			attrib['alt'] = alt
 
-		# Parse Pandoc-style properties: { width=500px height=20px #id }
+		href = href.strip() if href else None
+		if href:
+			attrib['href'] = self._parse_href(href)
+
+		# Parse Pandoc-style properties: {#id width=500px height=20px}
 		if props_str:
 			props_str = props_str.strip('{}').strip()
 			for part in props_str.split():
@@ -488,7 +532,12 @@ class MarkdownParser(object):
 						v = v[:-2]
 					attrib[k] = v
 
-		builder.append(IMAGE, attrib)
+		if attrib.get('type'):
+			# Backward compatibility of image generators < zim 0.70
+			attrib['type'] = 'image+' + attrib['type']
+			builder.append(OBJECT, attrib)
+		else:
+			builder.append(IMAGE, attrib)
 
 	def parse_url(self, builder, *a):
 		text = a[0]
@@ -560,21 +609,22 @@ class Dumper(TextDumper):
 	using raw hrefs suitable for storage).
 	'''
 
-	BULLETS = {
-		UNCHECKED_BOX: '-',  # will add [ ] in dump_li
-		XCHECKED_BOX: '-',   # will add [x] in dump_li
-		CHECKED_BOX: '-',    # will add [x] in dump_li
-		MIGRATED_BOX: '-',   # will add [>] in dump_li
-		TRANSMIGRATED_BOX: '-', # will add [<] in dump_li
+	EXPORT_BULLETS = {
+		UNCHECKED_BOX: '- \u2610',
+		XCHECKED_BOX: '- \u2612',
+		CHECKED_BOX: '- \u2611',
+		MIGRATED_BOX: '- \u25B7',
+		TRANSMIGRATED_BOX: '- \u25C1',
 		BULLET: '-',
 	}
 
-	CHECKBOX_MARKS = {
-		UNCHECKED_BOX: '[ ]',
-		XCHECKED_BOX: '[x]',
-		CHECKED_BOX: '[x]',
-		MIGRATED_BOX: '[>]',
-		TRANSMIGRATED_BOX: '[<]',
+	NATIVE_BULLETS = {
+		UNCHECKED_BOX: '- [ ]',
+		XCHECKED_BOX: '- [x]',
+		CHECKED_BOX: '- [*]',
+		MIGRATED_BOX: '- [>]',
+		TRANSMIGRATED_BOX: '- [<]',
+		BULLET: '-',
 	}
 
 	TAGS = {
@@ -588,9 +638,18 @@ class Dumper(TextDumper):
 		SUPERSCRIPT: ('^', '^'),
 	}
 
+	def __init__(self, linker=None, template_options=None):
+		super().__init__(linker, template_options)
+		self.set_native(not linker) # HACK use precense of linker to detect native mode
+
+	def set_native(self, native):
+		self.native = native
+		self.BULLETS = self.NATIVE_BULLETS if self.native else self.EXPORT_BULLETS
+
 	def dump(self, tree, file_output=False):
 		if file_output:
-			# Native mode: dump with YAML front matter, no linker needed
+			# Dump with YAML front matter, assuming native mode
+			self.set_native(True) # just to be sure
 			header_meta = {}
 			if hasattr(tree, 'meta') and tree.meta:
 				header_meta.update(tree.meta)
@@ -604,11 +663,14 @@ class Dumper(TextDumper):
 			if body and not body[-1].endswith('\n'):
 				body[-1] = body[-1] + '\n'
 			return [dump_yaml_front_matter(header_meta), '\n'] + body
-		elif self.linker:
-			return TextDumper.dump(self, tree)
 		else:
-			# No linker and not file_output - just dump raw
 			return TextDumper.dump(self, tree)
+
+	def encode_text(self, tag, text):
+		if tag in (VERBATIM, VERBATIM_BLOCK):
+			return text
+		else:
+			return text.replace('*', '\\*')
 
 	def dump_indent(self, tag, attrib, strings):
 		if attrib and 'indent' in attrib:
@@ -622,21 +684,15 @@ class Dumper(TextDumper):
 
 	def dump_list(self, tag, attrib, strings):
 		if 'indent' in attrib:
-			# Use spaces for markdown list indentation
-			indent_level = int(attrib['indent'])
-			prefix = '    ' * indent_level
-			del attrib['indent']
-			strings = TextDumper.dump_list(self, tag, attrib, strings)
+			# top level list with specified indent
+			prefix = '> ' * int(attrib['indent'])
 			return self.prefix_lines(prefix, strings)
-
-		strings = TextDumper.dump_list(self, tag, attrib, strings)
-
-		if self.context[-1].tag == LISTITEM:
-			# sub-list - indent
-			return self.prefix_lines('    ', strings)
+		elif self.context[-1].tag == LISTITEM:
+			# indent sub list
+			prefix = '  '
+			return self.prefix_lines(prefix, strings)
 		else:
-			# top level list - blank line separation is handled by
-			# inter-element whitespace in the tree, so no extra \n needed
+			# top level list, no indent
 			return strings
 
 	dump_ul = dump_list
@@ -645,27 +701,13 @@ class Dumper(TextDumper):
 	def dump_li(self, tag, attrib, strings):
 		# Handle numbered lists - convert letters to numbers
 		if self.context[-1].tag in (BULLETLIST, NUMBEREDLIST):
-			if self.context[-1].tag == NUMBEREDLIST \
+			if not self.native and self.context[-1].tag == NUMBEREDLIST \
 				and not self.context[-1].attrib.get('_iter'):
 					iter = self.context[-1].attrib.get('start', '1')
 					self.context[-1].attrib['_iter'] = convert_list_iter_letter_to_number(iter)
 
-		# Get the base list item from parent
-		result = TextDumper.dump_li(self, tag, attrib, strings)
-
-		# Add checkbox syntax for task list items
-		bullet_type = attrib.get('bullet', BULLET) if attrib else BULLET
-		if bullet_type in self.CHECKBOX_MARKS:
-			checkbox = self.CHECKBOX_MARKS[bullet_type]
-			# Insert checkbox after "- "
-			result_list = list(result)
-			for i, s in enumerate(result_list):
-				if s == ' ' and i > 0:
-					result_list.insert(i + 1, checkbox + ' ')
-					break
-			return tuple(result_list)
-
-		return result
+		# Get the base list item from parent - includes HACK for raw dump from textbuffer
+		return TextDumper.dump_li(self, tag, attrib, strings, indent_string='  ')
 
 	def dump_pre(self, tag, attrib, strings):
 		# Use fenced code blocks
@@ -711,7 +753,7 @@ class Dumper(TextDumper):
 			# Export mode: resolve links through linker
 			href = self.linker.link(href)
 			text = text or href
-			if href == text and old_url_link_re.match(href):
+			if href == text and url_link_re.match(href):
 				return ['<', href, '>']
 			else:
 				return ['[%s](%s)' % (text, href)]
@@ -721,7 +763,7 @@ class Dumper(TextDumper):
 			if is_url_link(href) or href.startswith('#'):
 				# External URL or anchor reference
 				text = text or href
-				if href == text and old_url_link_re.match(href):
+				if href == text and url_link_re.match(href):
 					return ['<', href, '>']
 				return ['[%s](%s)' % (text, href)]
 			else:
@@ -747,25 +789,23 @@ class Dumper(TextDumper):
 
 		text = attrib.get('alt', '')
 
-		# Pandoc-style dimensions: ![alt](src){ width=500px height=20px }
-		dimensions = filter(lambda i: i[0] in ['width', 'height'], attrib.items())
-		properties = ["%s=%spx" % (k, v) for k, v in dimensions]
+		# Pandoc-style dimensions: ![alt](src){width=500px height=20px}
+		properties = ["%s=%spx" % (k, attrib[k]) for k in ('width', 'height') if k in attrib]
+
+		if 'type' in attrib:
+			properties.append('type=%s' % attrib['type'])
 
 		if 'id' in attrib:
-			properties.append('#' + attrib['id'])
+			properties.insert(0, '#' + attrib['id'])
 
-		if len(properties) > 0:
-			props = '{ %s }' % (' '.join(properties))
-		else:
-			props = ''
-
+		props = '{%s}' % (' '.join(properties)) if len(properties) > 0 else ''
 		if 'href' in attrib:
 			href = attrib['href']
 			if self.linker:
 				href = self.linker.link(href)
 			return ['[![%s](%s)%s](%s)' % (text, src, props, href)]
-
-		return ['![%s](%s)%s' % (text, src, props)]
+		else:
+			return ['![%s](%s)%s' % (text, src, props)]
 
 	def dump_object_fallback(self, tag, attrib, strings=None):
 		assert "type" in attrib, "Undefined type of object"
@@ -784,15 +824,19 @@ class Dumper(TextDumper):
 		table = []
 		rows = strings
 
-		aligns, _wraps = TableParser.get_options(attrib)
+		aligns, wraps = TableParser.get_options(attrib)
 		maxwidths = TableParser.width2dim(rows)
-		headsep = TableParser.headsep(maxwidths, aligns, x='|', y='-')
 		rowline = lambda row: TableParser.rowline(row, maxwidths, aligns)
 
-		table += [rowline(rows[0])]
-		table.append(headsep)
-		table += [rowline(row) for row in rows[1:]]
-		return [line + "\n" for line in table]
+		if self.native:
+			table.append(TableParser.headline(rows[0], maxwidths, aligns, wraps) + '\n')
+		else:
+			# Pandoc supports table format, but without wrapping logic
+			table.append(rowline(rows[0]) + '\n')
+
+		table.append(TableParser.headsep(maxwidths, aligns, x='|', y='-') + '\n')
+		table.extend(rowline(row) + '\n' for row in rows[1:])
+		return table
 
 	def dump_td(self, tag, attrib, strings):
 		text = ''.join(strings) if strings else ''
