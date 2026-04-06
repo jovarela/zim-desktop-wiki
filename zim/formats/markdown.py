@@ -595,9 +595,7 @@ class Parser(ParserClass):
 
 		parsetree = builder.get_parsetree()
 		if meta is not None:
-			for k, v in list(meta.items()):
-				if k not in ('Content-Type', 'Format'):
-					parsetree.meta[k] = v
+			parsetree.meta.update(meta)
 		return parsetree
 
 
@@ -653,11 +651,6 @@ class Dumper(TextDumper):
 			header_meta = {}
 			if hasattr(tree, 'meta') and tree.meta:
 				header_meta.update(tree.meta)
-
-			if 'Content-Type' not in header_meta:
-				header_meta['Content-Type'] = 'text/markdown'
-			if 'Format' not in header_meta:
-				header_meta['Format'] = MARKDOWN_FORMAT_VERSION
 
 			body = TextDumper.dump(self, tree)
 			if body and not body[-1].endswith('\n'):
