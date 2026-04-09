@@ -431,7 +431,7 @@ class AddNotebookDialog(Dialog):
 			folder = nb_folder + name
 		# else set below by _changed methods
 
-		templates = [t[0] for t in list_templates('wiki')]
+		templates = [t[0] for t in list_templates('wiki')] # TODO make new page template flexible
 
 		format_options = ['Zim Wiki (.txt)', 'Markdown (.md)']
 

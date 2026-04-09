@@ -562,7 +562,7 @@ class ImportCommand(NotebookCommand):
 
 		notebook, href = self.build_notebook()
 		path = Path(href.names) if href else None
-		format = self.opts.get('format', 'wiki')
+		format = self.opts.get('format', 'wiki') # TODO derive from extension between wiki and markdown (and other supported import formats)
 		assubpage = self.opts.get('assubpage', False)
 
 		n, p, *files = self.get_arguments()

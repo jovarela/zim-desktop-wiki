@@ -486,11 +486,12 @@ class ParseTreeData(ClipboardData):
 			dumper = get_format('html').Dumper(
 				linker=StaticExportLinker(self.notebook, source=self.path))
 			html = ''.join(dumper.dump(self.parsetree))
-			return wrap_html(html, self.format)
+			return wrap_html(html, self.format) # TODO: bug here for identifying HTML format
 		elif targetid == TEXT_TARGET_ID:
 			if self.format in ('wiki', 'plain'):
 				dumper = get_format(self.format).Dumper()
 			else:
+				# markdown included here - use export version
 				dumper = get_format(self.format).Dumper(
 					linker=StaticExportLinker(self.notebook, source=self.path))
 
@@ -620,7 +621,7 @@ class ClipboardManager(object):
 		@param notebook: the L{Notebook} object
 		@param path: the L{Path} object - used to resolve links etc.
 		@param parsetree: the actual L{ParseTree} to be set on the clipboard
-		@keyword format: the format to use for pasting text, e.g. 'wiki' or 'plain'
+		@keyword format: the format to use for pasting text, e.g. 'wiki', 'markdown' or 'plain'
 		'''
 		self.set_clipboard_data(
 			ParseTreeData(notebook, path, parsetree, format) )

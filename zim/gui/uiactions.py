@@ -462,7 +462,7 @@ class NewPageDialog(Dialog):
 		self.navigation = navigation
 
 		default = notebook.get_page_template_name(path)
-		templates = [t[0] for t in list_templates('wiki')]
+		templates = [t[0] for t in list_templates('wiki')] # TODO make page template format flexible
 		if not default in templates:
 			templates.insert(0, default)
 
@@ -503,7 +503,7 @@ class NewPageDialog(Dialog):
 			if page.exists():
 				raise PageExistsError(path)
 
-			template = get_template('wiki', self.form['template'])
+			template = get_template('wiki', self.form['template']) # TODO make page template format flexible
 			tree = self.notebook.eval_new_page_template(page, template)
 			page.set_parsetree(tree)
 			self.notebook.store_page(page)
@@ -547,7 +547,7 @@ class ImportPageDialog(FileDialog):
 		if file is None:
 			return False
 
-		format = 'markdown' if file.basename.endswith('.md') else 'wiki'
+		format = 'markdown' if file.basename.endswith('.md') else 'wiki' # TODO interface to support all source formats
 		page = import_file_from_user_input(file, self.notebook, format=format)
 		self.navigation.open_page(page)
 		return True
@@ -559,7 +559,8 @@ class SaveCopyDialog(FileDialog):
 		FileDialog.__init__(self, widget, _('Save Copy'), Gtk.FileChooserAction.SAVE)
 			# T: Dialog title of file save dialog
 		self.page = page
-		self.filechooser.set_current_name(page.name + '.txt')
+		file, folder = notebook.layout.map_page(page)
+		self.filechooser.set_current_name(file.basename)
 		self.add_shortcut(notebook, page)
 
 		# TODO also include headers
@@ -569,7 +570,7 @@ class SaveCopyDialog(FileDialog):
 		file = self.get_file()
 		if file is None:
 			return False
-		format = 'wiki'
+		format = 'markdown' if file.basename.endswith('.md') else 'wiki' # TODO interface to support all source formats
 		logger.info("Saving a copy of %s using format '%s'", self.page, format)
 		lines = self.page.dump(format)
 		file.writelines(lines)

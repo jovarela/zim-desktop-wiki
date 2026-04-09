@@ -203,7 +203,5 @@ def init_notebook(dir, name=None, page_template='Default', file_format='zim-wiki
 	config = NotebookConfig(dir.file('notebook.zim'))
 	config['Notebook']['name'] = name or dir.basename
 	config['Notebook']['default_file_format'] = file_format
-	# Use 'wiki' as template format name for both formats
-	template_format = 'wiki' if file_format == 'zim-wiki' else 'wiki'
-	config['Notebook']['default_page_template'] = valid_template_name(template_format, page_template)
+	config['Notebook']['default_page_template'] = valid_template_name('wiki', page_template) # TODO: make template format flexible
 	config.write()

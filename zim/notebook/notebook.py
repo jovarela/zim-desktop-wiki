@@ -1148,7 +1148,7 @@ class Notebook(ConnectorMixin, SignalEmitter):
 
 		template = self.get_page_template_name(path)
 		logger.debug('Got page template \'%s\' for %s', template, path)
-		template = zim.templates.get_template('wiki', template)
+		template = zim.templates.get_template('wiki', template) # TODO: make template format flexible
 		return self.eval_new_page_template(path, template, context)
 
 	def get_page_template_name(self, path=None):
@@ -1173,5 +1173,5 @@ class Notebook(ConnectorMixin, SignalEmitter):
 		self.emit('init-page-template', path, template) # plugin hook
 		template.process(lines, mycontext)
 
-		parser = zim.formats.get_parser('wiki')
+		parser = zim.formats.get_parser('wiki') # TODO: make template format flexible
 		return parser.parse(lines)
