@@ -29,12 +29,12 @@ And some empty space here:
 
 
 ### head 3
-[foo](foo)  links to page in the current namespace or parents
-[:foo](:foo) links to page in the root namespace
-[+foo](+foo) links to page in a subnamespace
+[](foo)  links to page in the current namespace or parents
+[](:foo) links to page in the root namespace
+[](+foo) links to page in a subnamespace
 [bar](foo) links to "foo" but display "bar"
 
-[:foo:bar](:foo:bar) [./file.png](./file.png) <file:///etc/passwd>
+[](:foo:bar) [](./file.png) <file:///etc/passwd>
 
 <mailto:foo@bar.org>
 [wp?Test](interwiki:wp?Test)
@@ -47,8 +47,8 @@ External links like <http://nongnu.org> and [foo@bar.org](mailto:foo@bar.org) ar
 ![](./foobar.png)
 ![](./foobar.png){height=50px}
 ![Foo Bar](../my-image.png){width=600px}
-[![](my-image.png)](Foo)
-[![Foo Bar](../my-image.png){width=600px}](:foo:bar)
+![](my-image.png){href=Foo}
+![Foo Bar](../my-image.png){href=":foo:bar" width=600px}
 
 ![](./equation001.png){type=equation} This equation has a source .tex file
 ![](./equation002.png){type=equation} for this one it is missing
@@ -57,7 +57,7 @@ External links like <http://nongnu.org> and [foo@bar.org](mailto:foo@bar.org) ar
 
 Tags: @foo @bar
 
-Anchors: {#foo}  [#foo](#foo)  [page#foo](page#foo)
+Anchors: {#foo}  [](#foo)  [](page#foo)
 
 
 #### head 4 {#head-4-anchor}

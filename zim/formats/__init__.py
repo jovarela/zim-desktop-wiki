@@ -224,14 +224,6 @@ def convert_list_iter_letter_to_number(listiter):
 			return None
 
 
-def encode_xml(text):
-	'''Encode text such that it can be used in xml
-	@param text: label text as string
-	@returns: encoded text
-	'''
-	return text.replace('&', '&amp;').replace('>', '&gt;').replace('<', '&lt;').replace('"', '&quot;').replace("'", '&apos;')
-
-
 def list_formats(type):
 	if type == EXPORT_FORMAT:
 		return ['HTML', 'LaTeX', 'Markdown (pandoc)', 'RST (sphinx)']

@@ -151,6 +151,21 @@ class TestFormatMixin(object):
 			else:
 				pass
 
+	def assertParseEquals(self, text, xml):
+		xml = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<zim-tree>%s</zim-tree>' % xml
+		tree = self.format.Parser().parse(text)
+		self.assertEqual(tree.tostring(), xml, 'Parsing: %r' % text)
+
+	def assertDumpEquals(self, xml, text):
+		myxml = '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<zim-tree>%s</zim-tree>' % xml
+		tree = ParseTree().fromstring(myxml)
+		lines = self.format.Dumper().dump(tree)
+		self.assertEqual(''.join(lines), text, 'Dumping: %r' % xml)
+
+	def assertParseAndDumpEquals(self, text, xml):
+		self.assertParseEquals(text, xml)
+		self.assertDumpEquals(xml, text)
+
 
 class TestListFormats(tests.TestCase):
 
@@ -1049,25 +1064,6 @@ class TestMarkdownNativeFormat(tests.TestCase, TestFormatMixin):
 		self.assertIn('<sub>sub</sub>', xml)
 		self.assertIn('<sup>sup</sup>', xml)
 
-	def testParseLinks(self):
-		input = '[Page](Page.md) [display](Other%20Page.md) <http://example.com>\n'
-		parser = self.format.Parser()
-		tree = parser.parse(input)
-		xml = tree.tostring()
-		# Internal link: .md stripped, %20 decoded
-		self.assertIn('href="Page"', xml)
-		self.assertIn('href="Other Page"', xml)
-		self.assertIn('href="http://example.com"', xml)
-
-	def testParseImages(self):
-		input = '![alt text](./image.png){width=500px}\n'
-		parser = self.format.Parser()
-		tree = parser.parse(input)
-		xml = tree.tostring()
-		self.assertIn('src="./image.png"', xml)
-		self.assertIn('alt="alt text"', xml)
-		self.assertIn('width="500"', xml)
-
 	def testParseTags(self):
 		input = 'Some text @foo @bar more text\n'
 		parser = self.format.Parser()
@@ -1161,33 +1157,6 @@ class TestMarkdownNativeFormat(tests.TestCase, TestFormatMixin):
 		result = ''.join(dumper.dump(tree))
 		self.assertIn('**bold**', result)
 		self.assertIn('*italic*', result)
-
-	def testDumperLinks(self):
-		builder = ParseTreeBuilder()
-		builder.start(FORMATTEDTEXT)
-		builder.start(PARAGRAPH)
-		builder.append(LINK, {'href': 'MyPage'}, 'MyPage')
-		builder.text(' ')
-		builder.append(LINK, {'href': 'http://example.com'}, 'http://example.com')
-		builder.text('\n')
-		builder.end(PARAGRAPH)
-		builder.end(FORMATTEDTEXT)
-		tree = builder.get_parsetree()
-		dumper = self.format.Dumper()
-		result = ''.join(dumper.dump(tree))
-		self.assertIn('[MyPage](MyPage.md)', result)
-		self.assertIn('<http://example.com>', result)
-
-	def testDumperImages(self):
-		builder = ParseTreeBuilder()
-		builder.start(FORMATTEDTEXT)
-		builder.append(IMAGE, {'src': './img.png', 'alt': 'test', 'width': '500'})
-		builder.text('\n')
-		builder.end(FORMATTEDTEXT)
-		tree = builder.get_parsetree()
-		dumper = self.format.Dumper()
-		result = ''.join(dumper.dump(tree))
-		self.assertIn('![test](./img.png){width=500px}', result)
 
 	def testDumperFencedCode(self):
 		builder = ParseTreeBuilder()
@@ -1332,6 +1301,30 @@ dus ja
 		tree = parser.parse(input)
 		xml = tree.tostring()
 		self.assertIn(wanted, xml)
+
+	def testLinks(self):
+		for markdown, xml in (
+			('[](./foo.pdf)', '<p><link href="./foo.pdf">./foo.pdf</link></p>'),
+			('[some text](./foo.pdf)', '<p><link href="./foo.pdf">some text</link></p>'),
+			('[](./foo(part1).pdf)', '<p><link href="./foo(part1).pdf">./foo(part1).pdf</link></p>'), # balanced pair of ()
+			('[](./foo(part1).pdf) and (this)', '<p><link href="./foo(part1).pdf">./foo(part1).pdf</link> and (this)</p>'), # balanced pair of ()
+			('[](./foo\\(part1.pdf)', '<p><link href="./foo(part1.pdf">./foo(part1.pdf</link></p>'), # escaped (
+			('<http://example.com>', '<p><link href="http://example.com">http://example.com</link></p>'),
+			('[Page](Page.md)', '<p><link href="Page">Page</link></p>'),
+			('[display](Other%20Page.md)', '<p><link href="Other Page">display</link></p>'),
+		):
+			self.assertParseAndDumpEquals(markdown, xml)
+
+	def testImages(self):
+		for markdown, xml in (
+			('![alt text](./image.png){width=500px}', '<p><img alt="alt text" src="./image.png" width="500" /></p>'),
+			('![](./image.png){width=500px}', '<p><img src="./image.png" width="500" /></p>'),
+			('![](./image.png){#myid width=500px}', '<p><img id="myid" src="./image.png" width="500" /></p>'),
+			('![](./image.png)', '<p><img src="./image.png" /></p>'),
+			('![](./image.png){href=Page}', '<p><img href="Page" src="./image.png" /></p>'),
+			('![](./image.png){href="Page Foo %quot;Bar%quot;"}', '<p><img href="Page Foo %quot;Bar%quot;" src="./image.png" /></p>'),
+		):
+			self.assertParseAndDumpEquals(markdown, xml)
 
 
 class TestRstFormat(tests.TestCase, TestFormatMixin):

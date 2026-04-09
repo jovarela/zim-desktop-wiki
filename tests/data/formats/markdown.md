@@ -34,7 +34,7 @@ And some empty space here:
 [+foo](+foo.md) links to page in a subnamespace
 [bar](foo.md) links to "foo" but display "bar"
 
-[:foo:bar](/foo/bar.md) [./file.png](file.png) <file:///etc/passwd>
+[:foo:bar](/foo/bar.md) [](./file.png) <file:///etc/passwd>
 
 <mailto:foo@bar.org>
 [wp?Test](wp?Test.md)
@@ -47,8 +47,8 @@ External links like <http://nongnu.org> and <foo@bar.org> are also supported
 ![](./foobar.png)
 ![](./foobar.png){height=50px}
 ![Foo Bar](../my-image.png){width=600px}
-[![](my-image.png)](Foo)
-[![Foo Bar](../my-image.png){width=600px}](:foo:bar)
+![](my-image.png){href=Foo}
+![Foo Bar](../my-image.png){href=":foo:bar" width=600px}
 
 ![](./equation001.png){type=equation} This equation has a source .tex file
 ![](./equation002.png){type=equation} for this one it is missing
@@ -57,7 +57,7 @@ External links like <http://nongnu.org> and <foo@bar.org> are also supported
 
 Tags: @foo @bar
 
-Anchors: {#foo}  [#foo](#foo)  [page#foo](page#foo.md)
+Anchors: {#foo}  [](#foo)  [page#foo](page#foo.md)
 
 
 #### head 4 {#head-4-anchor}

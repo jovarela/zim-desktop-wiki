@@ -16,7 +16,7 @@ logger = logging.getLogger('zim.formats.markdown')
 
 from zim.parse import convert_space_to_tab, fix_unicode_whitespace
 from zim.parse.encode import escape_string, url_encode, URL_ENCODE_DATA, \
-	split_escaped_string, unescape_string
+	split_escaped_string, unescape_string, encode_xml_attrib, decode_xml
 from zim.parse.regexparser import Rule, RegexParser
 from zim.parse.links import is_url_link, match_url_link, url_link_re, link_type, is_path_re
 
@@ -93,6 +93,12 @@ md_empty_lines_re = re.compile(r'((?:^[ \t]*\n)+)', re.M | re.U)
 
 blockquote_line_re = re.compile(r'^((?:>[ \t]?)+)(.*\n?)')
 
+def _has_valid_href_parenthesis(href):
+	# Either ensure balanced pairs of unescaped ()
+	open = len(re.findall(r'(?<!\\)\(', href))
+	close = len(re.findall(r'(?<!\\)\)', href))
+	return open == close
+
 # ---- Markdown Parser ----
 
 class MarkdownParser(object):
@@ -141,9 +147,8 @@ class MarkdownParser(object):
 			Rule(LINK, r'<([a-zA-Z][a-zA-Z0-9.+-]*:[^\s>]+)>', process=self.parse_autolink)
 			| Rule(LINK, r'<([a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>', process=self.parse_autolink) # email autolink
 			| Rule(LINK, url_link_re, process=self.parse_url)
-			| Rule(IMAGE, r'\[!\[([^\]]*)\]\(([^)]+)\)(\{[^}]*\})?\]\(([^)]+)\)', process=self.parse_image_with_href)
 			| Rule(IMAGE,   r'!\[([^\]]*)\]\(([^)]+)\)(\{[^}]*\})?', process=self.parse_image)
-			| Rule(LINK, r'\[([^\]]+)\]\(([^)]+)\)', process=self.parse_link)
+			| Rule(LINK, r'\[([^\]]*)\]\((\S+)\)', process=self.parse_link)
 			| Rule(ANCHOR, r'\{\#(\w[\w-]*)\}', process=self.parse_anchor)
 			| Rule(TAG, r'(?<!\S)@\w+', process=self.parse_tag)
 			| Rule(EMPHASIS, r'\\\*', process=self._unescape_char)
@@ -470,15 +475,11 @@ class MarkdownParser(object):
 
 	def parse_link(self, builder, text, href):
 		'''Parse [text](href) links'''
-		href = href.strip()
+		if '(' in href or ')' in href:
+			href = self._parse_href_parenthesis(href)
+
+		href = self._parse_href(href.strip())
 		text = text.strip()
-
-		if not href:
-			if text:
-				builder.text(text)
-			return
-
-		href = self._parse_href(href)
 
 		if text and text != href:
 			builder.start(LINK, {'href': href})
@@ -486,6 +487,14 @@ class MarkdownParser(object):
 			builder.end(LINK)
 		else:
 			builder.append(LINK, {'href': href}, text or href)
+
+	def _parse_href_parenthesis(self, href):
+		while ')' in href and not _has_valid_href_parenthesis(href):
+			i = href.rfind(')')
+			self.inline_parser.backup_parser_offset(len(href) - i)
+			href = href[:i]
+
+		return href.replace('\\(', '(').replace('\\)', ')')
 
 	def _parse_href(self, href):
 		# Detect if this is an internal page link
@@ -505,12 +514,9 @@ class MarkdownParser(object):
 
 		return href
 
-	def parse_image_with_href(self, builder, *groups):
-		self.parse_image(builder, *groups[:-1], href=groups[-1])
-
 	def parse_image(self, builder, alt, src, props_str=None, href=None):
 		'''Parse ![alt](src){props} images'''
-		attrib = ParserClass.parse_image_url(src.strip())
+		attrib = {'src': src.strip()}
 
 		if alt:
 			attrib['alt'] = alt
@@ -522,14 +528,16 @@ class MarkdownParser(object):
 		# Parse Pandoc-style properties: {#id width=500px height=20px}
 		if props_str:
 			props_str = props_str.strip('{}').strip()
-			for part in props_str.split():
-				if part.startswith('#'):
-					attrib['id'] = part[1:]
-				elif '=' in part:
-					k, v = part.split('=', 1)
-					# Strip 'px' suffix for width/height
+			for m in re.findall('#\\w+|\\w+=(?:".*?"|\\w+)', props_str):
+				if m.startswith('#'):
+					attrib['id'] = m[1:]
+				else:
+					k, v = m.split('=')
 					if k in ('width', 'height') and v.endswith('px'):
-						v = v[:-2]
+						v = v[:-2] # Strip 'px' suffix for width/height
+					else:
+						v = decode_xml(v.strip('"'))
+
 					attrib[k] = v
 
 		if attrib.get('type'):
@@ -748,8 +756,7 @@ class Dumper(TextDumper):
 			text = text or href
 			if href == text and url_link_re.match(href):
 				return ['<', href, '>']
-			else:
-				return ['[%s](%s)' % (text, href)]
+			# else continue below
 		else:
 			# Native / file mode: use raw href
 			# For page links (not URLs), convert to relative .md path
@@ -758,21 +765,25 @@ class Dumper(TextDumper):
 				text = text or href
 				if href == text and url_link_re.match(href):
 					return ['<', href, '>']
-				return ['[%s](%s)' % (text, href)]
+				# else continue below
 			else:
 				# Internal page link - convert : to / and add .md
 				# But if the href already has a non-.md file extension (e.g. "document.pdf"),
 				# treat it as a file reference and leave it as-is.
-				page_href = href.replace(':', '/').replace(' ', '%20')
-				_, ext = os.path.splitext(page_href)
+				href = href.replace(':', '/').replace(' ', '%20')
+				_, ext = os.path.splitext(href)
 				if ext and ext.lower() != '.md':
-					# file reference — strip ./ prefix added by parse_link
-					if page_href.startswith('./'):
-						page_href = page_href[2:]
-				elif not page_href.lower().endswith('.md'):
-					page_href = page_href + '.md'
-				text = text or href
-				return ['[%s](%s)' % (text, page_href)]
+					pass
+				elif not href.lower().endswith('.md'):
+					href = href + '.md'
+
+		if href == text:
+			text = ''
+
+		if not _has_valid_href_parenthesis(href):
+			href = href.replace('(', '\\(').replace(')', '\\)')
+
+		return ['[%s](%s)' % (text, href)]
 
 	def dump_img(self, tag, attrib, strings=None):
 		if self.linker:
@@ -783,22 +794,28 @@ class Dumper(TextDumper):
 		text = attrib.get('alt', '')
 
 		# Pandoc-style dimensions: ![alt](src){width=500px height=20px}
-		properties = ["%s=%spx" % (k, attrib[k]) for k in ('width', 'height') if k in attrib]
-
-		if 'type' in attrib:
-			properties.append('type=%s' % attrib['type'])
-
+		opts = []
 		if 'id' in attrib:
-			properties.insert(0, '#' + attrib['id'])
+			opts.append('#' + attrib['id'])
 
-		props = '{%s}' % (' '.join(properties)) if len(properties) > 0 else ''
-		if 'href' in attrib:
-			href = attrib['href']
-			if self.linker:
-				href = self.linker.link(href)
-			return ['[![%s](%s)%s](%s)' % (text, src, props, href)]
-		else:
-			return ['![%s](%s)%s' % (text, src, props)]
+		items = sorted(attrib.items())
+		for k, v in items:
+			if k in ('src', 'alt', 'id') or k.startswith('_'):
+				continue
+			elif v: # skip None, "" and 0
+				if k in ('width', 'height'):
+					v = "%spx" % v
+				elif k == 'href' and self.linker:
+					v = self.linker.link(v)
+
+				data = encode_xml_attrib(v)
+				if re.match('^\\w+$', data):
+					opts.append('%s=%s' % (k, data))
+				else:
+					opts.append('%s="%s"' % (k, data))
+
+		props = '{%s}' % (' '.join(opts)) if len(opts) > 0 else ''
+		return ['![%s](%s)%s' % (text, src, props)]
 
 	def dump_object_fallback(self, tag, attrib, strings=None):
 		assert "type" in attrib, "Undefined type of object"
