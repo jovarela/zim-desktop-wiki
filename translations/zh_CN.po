@@ -8,9 +8,8 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2026-03-05 04:09+0000\n"
-"Last-Translator: 大王叫我来巡山 "
-"<hamburger2048@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-04-12 15:09+0000\n"
+"Last-Translator: 麋麓 BigELK176 <BigELK176@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/zim/develop/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2147,7 +2146,7 @@ msgstr "导入页面"
 #. File filter for all supported import formats (.txt, .md)
 #: zim/gui/uiactions.py:528
 msgid "All Supported Formats"
-msgstr ""
+msgstr "檔案篩選器 用於全部已有支援的匯入格式 (.txt、.md)"
 
 #. File filter for '*.txt'
 #: zim/gui/uiactions.py:535
@@ -2157,7 +2156,7 @@ msgstr "文本文件"
 #. File filter for '*.md'
 #: zim/gui/uiactions.py:536
 msgid "Markdown Files"
-msgstr ""
+msgstr "Markdown 檔案"
 
 #. Dialog title of file save dialog
 #: zim/gui/uiactions.py:558
