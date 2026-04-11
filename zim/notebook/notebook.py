@@ -60,8 +60,7 @@ class NotebookConfig(INIConfigFile):
 			('paste_image_template', String('pasted_image_%y%m%d')),
 			('endofline', Choice(endofline, {'dos', 'unix'})),
 			('disable_trash', Boolean(False)),
-			('default_file_format', String('zim-wiki')),
-			('default_file_extension', String('.txt')),
+			('default_file_format', Choice('zim-wiki', {'zim-wiki', 'markdown'})),
 			('default_page_template', String('Default')),
 			('notebook_layout', String('files')),
 		))
@@ -251,11 +250,14 @@ class Notebook(ConnectorMixin, SignalEmitter):
 
 		folder = LocalFolder(dir.path)
 		if config['Notebook']['notebook_layout'] == 'files':
+			file_format = config['Notebook']['default_file_format']
+			from zim.formats import get_format_extension
+			file_extension=get_format_extension(file_format)
 			layout = FilesLayout(
 				folder,
 				config['Notebook']['endofline'],
-				config['Notebook']['default_file_format'],
-				config['Notebook']['default_file_extension']
+				file_format,
+				file_extension
 			)
 		else:
 			raise ValueError('Unkonwn notebook layout: %s' % config['Notebook']['notebook_layout'])
@@ -362,6 +364,11 @@ class Notebook(ConnectorMixin, SignalEmitter):
 			self.icon = None
 		self.document_root = document_root
 
+		file_format = properties['default_file_format']
+		from zim.formats import get_format_extension
+		file_extension = get_format_extension(file_format)
+
+		self.layout.update_format(file_format, file_extension)
 		self.interwiki = create_valid_interwiki_key(properties['interwiki'] or self.name)
 
 	def suggest_link(self, source, word):
@@ -1142,7 +1149,7 @@ class Notebook(ConnectorMixin, SignalEmitter):
 
 		template = self.get_new_page_template_name(path)
 		logger.debug('Got page template \'%s\' for %s', template, path)
-		template = zim.templates.get_template('wiki', template)
+		template = zim.templates.get_template('wiki', template) # TODO: make template format flexible
 		return self.eval_new_page_template(path, template, support_cursor)
 
 	def get_new_page_template_name(self, path=None):
@@ -1176,5 +1183,5 @@ class Notebook(ConnectorMixin, SignalEmitter):
 		self.emit('init-page-template', path, template) # plugin hook
 		template.process(lines, mycontext)
 
-		parser = zim.formats.get_parser('wiki')
+		parser = zim.formats.get_parser('wiki') # TODO: make template format flexible
 		return parser.parse(lines)

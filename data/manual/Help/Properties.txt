@@ -20,4 +20,6 @@ The property **Prefer short names for page links** controls the behavior e.g. wh
 When the property **Do not use system trash for this notebook** is enabled, the "//Delete page//" menu action will perform a permanent delete instead of a moving files to trash.
 
 The property **Filename template for pasted images** gives a base name to save image files when images are pasted into a page. This string can contain `strftime` codes for date and time.
- 
+
+The **Default file format** sets the file format used for new pages in the notebook. The default is "zim-wiki" (the native zim wiki format). Selecting "markdown" stores pages as Markdown files (`.md`) with YAML front matter - this feature is currently experimental for testing.
+

@@ -21,6 +21,8 @@ notebook_properties = (
 	('short_links', 'bool', _('Prefer short names for page links'), False), # T: label for properties dialog
 	('disable_trash', 'bool', _('Do not use system trash for this notebook'), False), # T: label for properties dialog
 	('paste_image_template', 'string', _('Filename template for pasted images')),
+	#('default_file_format', 'choice', _('Default file format') + ' ('+ _('Experimantal') + ')', ['zim-wiki', 'markdown']), # T: label for properties dialog
+		## Only unhide option here once we can support multiple formats at once - else changing it makes notebook un-useable ##
 	# 'shared' property is not shown in properties anymore
 )
 
