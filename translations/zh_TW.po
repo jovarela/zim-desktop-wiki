@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: zim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
-"PO-Revision-Date: 2026-04-06 22:47+0000\n"
+"PO-Revision-Date: 2026-04-12 15:09+0000\n"
 "Last-Translator: 麋麓 BigELK176 <BigELK176@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/zim/develop/zh_Hant/>\n"
@@ -259,7 +259,7 @@ msgstr "指令不會修改資料"
 #. Input in "Edit Custom Tool" dialog
 #: zim/gui/customtools.py:700
 msgid "Output should replace current selection"
-msgstr "其產出將會取代目前所選範圍"
+msgstr "其輸出結果即會取代目前所選擇的"
 
 #. Input in "Edit Custom Tool" dialog
 #: zim/gui/customtools.py:701
@@ -282,17 +282,17 @@ msgid ""
 "<b>%T</b> the selected text including wiki formatting\n"
 "</tt>\n"
 msgstr ""
-"執行指令之時，\n"
+"執行指令之時， \n"
 "下列參數將會被置換： \n"
-"<tt>\n"
-"<b>%f</b> 頁面原始檔案作為暫時檔案\n"
-"<b>%d</b> 目前頁面附件的路徑\n"
-"<b>%s</b> 實際頁面原始檔案 (如果有)\n"
-"<b>%p</b> 頁面名稱\n"
-"<b>%n</b> 筆記本位置 (檔案或資料夾)\n"
-"<b>%D</b> 文件根目錄 (如果有）\n"
-"<b>%t</b> 選取的內文或游標下的文字\n"
-"<b>%T</b> 包含維基格式之所選取內文\n"
+"<tt> \n"
+"<b>%f</b> 頁面原始檔案作為暫時檔案 \n"
+"<b>%d</b> 目前頁面附件的路徑 \n"
+"<b>%s</b> 實際頁面來源檔案 (如果有) \n"
+"<b>%p</b> 頁面名稱 \n"
+"<b>%n</b> 筆記本位置 (檔案或資料夾 ) \n"
+"<b>%D</b> 文件根目錄 (如果有） \n"
+"<b>%t</b> 選取的文字或游標下的字詞 \n"
+"<b>%T</b> 所選的文字 包含維基格式 \n"
 "</tt>\n"
 
 #. dialog title
@@ -489,7 +489,7 @@ msgstr "不明物件"
 #. label for inserted object
 #: zim/gui/insertedobjects.py:362
 msgid "Unkown Image type"
-msgstr "不明圖片類型"
+msgstr "不明的圖片類型"
 
 #. Menu title
 #: zim/gui/mainwindow.py:49
@@ -2031,7 +2031,7 @@ msgstr "最近變更..."
 #. Menu item
 #: zim/gui/uiactions.py:297
 msgid "Open Attachments _Folder"
-msgstr "開啟附件的資料夾(_F)"
+msgstr "開啟附件資料夾(_F)"
 
 #. Error message
 #: zim/gui/uiactions.py:302
@@ -2141,7 +2141,7 @@ msgstr "匯入頁面"
 #. File filter for all supported import formats (.txt, .md)
 #: zim/gui/uiactions.py:528
 msgid "All Supported Formats"
-msgstr ""
+msgstr "全部已有支援的格式"
 
 #. File filter for '*.txt'
 #: zim/gui/uiactions.py:535
@@ -2151,7 +2151,7 @@ msgstr "文字檔案"
 #. File filter for '*.md'
 #: zim/gui/uiactions.py:536
 msgid "Markdown Files"
-msgstr ""
+msgstr "Markdown 檔案"
 
 #. Dialog title of file save dialog
 #: zim/gui/uiactions.py:558
