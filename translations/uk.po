@@ -2167,13 +2167,23 @@ msgstr "Шаблон сторінки"
 msgid "Import Page"
 msgstr "Імпортувати сторінку"
 
+#. File filter for all supported import formats (.txt, .md)
+#: zim/gui/uiactions.py:528
+msgid "All Supported Formats"
+msgstr ""
+
 #. File filter for '*.txt'
-#: zim/gui/uiactions.py:526
+#: zim/gui/uiactions.py:535
 msgid "Text Files"
 msgstr "Текстові файли"
 
+#. File filter for '*.md'
+#: zim/gui/uiactions.py:536
+msgid "Markdown Files"
+msgstr ""
+
 #. Dialog title of file save dialog
-#: zim/gui/uiactions.py:546
+#: zim/gui/uiactions.py:558
 msgid "Save Copy"
 msgstr "Зберегти копію"
 
@@ -3217,8 +3227,8 @@ msgid ""
 msgstr ""
 "Цей плагін сортує вибрані лінії в алфавітному порядку.\n"
 "Якщо список вже відсортовано замовлення буде зворотно\n"
-"(А-З до З-А). Додаткові функції: переміщення текстових рядків вгору або вниз,"
-"\n"
+"(А-З до З-А). Додаткові функції: переміщення текстових рядків вгору або "
+"вниз,\n"
 "дублікати або видаляти лінії тексту.\n"
 
 #. Error message for linesorter plugin

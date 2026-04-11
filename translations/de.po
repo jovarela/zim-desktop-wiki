@@ -2174,8 +2174,9 @@ msgstr "Textdateien"
 #: zim/gui/uiactions.py:536
 msgid "Markdown Files"
 msgstr "Markdowndateien"
+
 #. Dialog title of file save dialog
-#: zim/gui/uiactions.py:546
+#: zim/gui/uiactions.py:558
 msgid "Save Copy"
 msgstr "Kopie speichern"
 

@@ -2144,13 +2144,23 @@ msgstr "页模板"
 msgid "Import Page"
 msgstr "导入页面"
 
+#. File filter for all supported import formats (.txt, .md)
+#: zim/gui/uiactions.py:528
+msgid "All Supported Formats"
+msgstr ""
+
 #. File filter for '*.txt'
-#: zim/gui/uiactions.py:526
+#: zim/gui/uiactions.py:535
 msgid "Text Files"
 msgstr "文本文件"
 
+#. File filter for '*.md'
+#: zim/gui/uiactions.py:536
+msgid "Markdown Files"
+msgstr ""
+
 #. Dialog title of file save dialog
-#: zim/gui/uiactions.py:546
+#: zim/gui/uiactions.py:558
 msgid "Save Copy"
 msgstr "保存副本"
 

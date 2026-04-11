@@ -10,8 +10,8 @@ msgstr ""
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
 "PO-Revision-Date: 2025-02-27 01:21+0000\n"
 "Last-Translator: Chraaz <m.n.tarasov@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/zim/develop/ru/>"
-"\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/zim/develop/ru/"
+">\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1783,8 +1783,8 @@ msgid ""
 msgstr ""
 "Комбинации клавиш можно изменить: щёлкните по полю с комбинацией клавиш\n"
 "в списке и затем нажмите новую комбинацию клавиш.\n"
-"Чтобы отключить комбинацию клавиш, выберите её в списке и нажмите <tt>&lt;"
-"Backspace&gt;</tt>."
+"Чтобы отключить комбинацию клавиш, выберите её в списке и нажмите "
+"<tt>&lt;Backspace&gt;</tt>."
 
 #. Column header for keybinding list
 #: zim/gui/preferencesdialog.py:578
@@ -2167,13 +2167,23 @@ msgstr "Шаблон страницы"
 msgid "Import Page"
 msgstr "Импорт страницы"
 
+#. File filter for all supported import formats (.txt, .md)
+#: zim/gui/uiactions.py:528
+msgid "All Supported Formats"
+msgstr ""
+
 #. File filter for '*.txt'
-#: zim/gui/uiactions.py:526
+#: zim/gui/uiactions.py:535
 msgid "Text Files"
 msgstr "Текстовые файлы"
 
+#. File filter for '*.md'
+#: zim/gui/uiactions.py:536
+msgid "Markdown Files"
+msgstr ""
+
 #. Dialog title of file save dialog
-#: zim/gui/uiactions.py:546
+#: zim/gui/uiactions.py:558
 msgid "Save Copy"
 msgstr "Сохранить копию страницы"
 

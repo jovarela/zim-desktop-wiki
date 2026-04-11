@@ -1691,8 +1691,8 @@ msgid ""
 "\n"
 msgstr ""
 "Cet greffon n'a pas être activé à cause des dépendances manquantes.\n"
-"Veuillez voir la section des dépendances ci-dessous pour plus d'informations."
-"\n"
+"Veuillez voir la section des dépendances ci-dessous pour plus "
+"d'informations.\n"
 "\n"
 
 #. help text when plugin cannot be loaded due to bug / issue
@@ -2166,13 +2166,23 @@ msgstr "Modèle de page"
 msgid "Import Page"
 msgstr "Importer la page"
 
+#. File filter for all supported import formats (.txt, .md)
+#: zim/gui/uiactions.py:528
+msgid "All Supported Formats"
+msgstr ""
+
 #. File filter for '*.txt'
-#: zim/gui/uiactions.py:526
+#: zim/gui/uiactions.py:535
 msgid "Text Files"
 msgstr "Fichiers texte"
 
+#. File filter for '*.md'
+#: zim/gui/uiactions.py:536
+msgid "Markdown Files"
+msgstr ""
+
 #. Dialog title of file save dialog
-#: zim/gui/uiactions.py:546
+#: zim/gui/uiactions.py:558
 msgid "Save Copy"
 msgstr "Enregistrer une copie"
 
@@ -3797,8 +3807,8 @@ msgid ""
 msgstr ""
 "Avec ce greffon, vous pouvez insérer un tableau dans une page wiki. Les "
 "tableaux seront représentés par \n"
-"un composant GTK TreeView. Ils pourront être exportés en différents formats ("
-"HTML/LaTex par exemple).\n"
+"un composant GTK TreeView. Ils pourront être exportés en différents formats "
+"(HTML/LaTex par exemple).\n"
 
 #. option value
 #: zim/plugins/tableeditor.py:131

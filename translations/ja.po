@@ -10,8 +10,8 @@ msgstr ""
 "POT-Creation-Date: 2025-02-14 15:34+0100\n"
 "PO-Revision-Date: 2026-03-10 14:09+0000\n"
 "Last-Translator: coolvitto <coolzdaddy55@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/zim/develop/ja/>"
-"\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/zim/develop/ja/"
+">\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -143,7 +143,8 @@ msgstr ""
 #: zim/gui/applications.py:826
 #, python-format
 msgid "Cound not find terminal emulator to run application: %s"
-msgstr "アプリケーションを実行するための端末エミュレータが見つかりませんでした : %s"
+msgstr ""
+"アプリケーションを実行するための端末エミュレータが見つかりませんでした : %s"
 
 #. label to customize 'open with' menu
 #: zim/gui/applications.py:1080
@@ -446,7 +447,8 @@ msgstr "出力ファイル"
 #: zim/gui/exportdialog.py:417
 #, python-format
 msgid "%(n_error)i errors and %(n_warning)i warnings occurred, see log"
-msgstr "%(n_error)i 件のエラーと%(n_warning)i 件の警告が発生しました、ログを参照して"
+msgstr ""
+"%(n_error)i 件のエラーと%(n_warning)i 件の警告が発生しました、ログを参照して"
 "ください"
 
 #. label in export dialog
@@ -1771,8 +1773,8 @@ msgid ""
 msgstr ""
 "キーの割り当てを変更するには、リスト内のキーの組み合わせがある\n"
 "フィールドをクリックし、新しいキーの割り当てを押します。\n"
-"キーの割り当てを無効にするには、リストでキーの割り当てを選択し、<tt>"
-"&lt;Backspace&gt;</tt>を使用します。"
+"キーの割り当てを無効にするには、リストでキーの割り当てを選択し、"
+"<tt>&lt;Backspace&gt;</tt>を使用します。"
 
 #. Column header for keybinding list
 #: zim/gui/preferencesdialog.py:578
@@ -2149,13 +2151,23 @@ msgstr "ページ テンプレート"
 msgid "Import Page"
 msgstr "ページをインポート"
 
+#. File filter for all supported import formats (.txt, .md)
+#: zim/gui/uiactions.py:528
+msgid "All Supported Formats"
+msgstr ""
+
 #. File filter for '*.txt'
-#: zim/gui/uiactions.py:526
+#: zim/gui/uiactions.py:535
 msgid "Text Files"
 msgstr "テキストファイル"
 
+#. File filter for '*.md'
+#: zim/gui/uiactions.py:536
+msgid "Markdown Files"
+msgstr ""
+
 #. Dialog title of file save dialog
-#: zim/gui/uiactions.py:546
+#: zim/gui/uiactions.py:558
 msgid "Save Copy"
 msgstr "コピーを保存"
 
@@ -2415,7 +2427,8 @@ msgstr "エクスポート用の出力場所が必要です"
 #: zim/main/__init__.py:472
 msgid ""
 "Output folder exists and not empty, specify \"--overwrite\" to force export"
-msgstr "出力フォルダーが存在し、空ではありません。強制的にエクスポートするには \"--"
+msgstr ""
+"出力フォルダーが存在し、空ではありません。強制的にエクスポートするには \"--"
 "overwrite\" を指定してください"
 
 #. error message for export
@@ -3738,8 +3751,8 @@ msgid ""
 msgstr ""
 "このプラグインを使用すると、Wikiページに表を埋め込むことができます。表はGTK "
 "TreeViewウィジェットとして表示されます。\n"
-"さまざまな形式 (HTML/LaTeX など) にエクスポートすると、機能セットが完成します"
-"。\n"
+"さまざまな形式 (HTML/LaTeX など) にエクスポートすると、機能セットが完成しま"
+"す。\n"
 
 #. option value
 #: zim/plugins/tableeditor.py:131
@@ -3968,7 +3981,8 @@ msgstr "タグ"
 msgid ""
 "This plugin provides a page index filtered by means of selecting tags in a "
 "cloud.\n"
-msgstr "このプラグインはタグクラウドから選択したタグでページ索引をフィルタリングする"
+msgstr ""
+"このプラグインはタグクラウドから選択したタグでページ索引をフィルタリングする"
 "機能を提供します。\n"
 
 #. title for sidepane tab
@@ -4125,8 +4139,8 @@ msgid ""
 "This is a core plugin shipping with zim.\n"
 msgstr ""
 "このプラグインは、このノートブック内の未完了のタスクをすべて表示する\n"
-"ダイアログを追加します。未完了のタスクとは、チェックボックスが開いているか"
-"、\n"
+"ダイアログを追加します。未完了のタスクとは、チェックボックスが開いている"
+"か、\n"
 "「TODO」や「FIXME」などのタグが付けられた項目のいずれかです。\n"
 "\n"
 "これは、zim に同梱されているコア プラグインです。\n"
@@ -4254,7 +4268,8 @@ msgstr "ツールバー"
 #. plugin description
 #: zim/plugins/toolbar.py:42
 msgid "This plugin allows to customize the toolbar in the main window.\n"
-msgstr "このプラグインを使用すると、メイン ウィンドウのツールバーをカスタマイズできま"
+msgstr ""
+"このプラグインを使用すると、メイン ウィンドウのツールバーをカスタマイズできま"
 "す。\n"
 
 #. option for plugin preferences
