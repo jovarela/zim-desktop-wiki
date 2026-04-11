@@ -29,15 +29,15 @@ And some empty space here:
 
 
 ### head 3
-[foo](foo.md)  links to page in the current namespace or parents
-[:foo](/foo.md) links to page in the root namespace
-[+foo](+foo.md) links to page in a subnamespace
-[bar](foo.md) links to "foo" but display "bar"
+[[foo]]  links to page in the current namespace or parents
+[[:foo]] links to page in the root namespace
+[[+foo]] links to page in a subnamespace
+[[foo|bar]] links to "foo" but display "bar"
 
-[:foo:bar](/foo/bar.md) [](./file.png) <file:///etc/passwd>
+[[:foo:bar]] [](./file.png) <file:///etc/passwd>
 
 <mailto:foo@bar.org>
-[wp?Test](wp?Test.md)
+[[wp?Test]]
 
 External links like <http://nongnu.org> and <foo@bar.org> are also supported
 
@@ -57,7 +57,7 @@ External links like <http://nongnu.org> and <foo@bar.org> are also supported
 
 Tags: @foo @bar
 
-Anchors: {#foo}  [](#foo)  [page#foo](page#foo.md)
+Anchors: {#foo}  [[#foo]]  [[page#foo]]
 
 
 #### head 4 {#head-4-anchor}
@@ -172,11 +172,11 @@ the Achaeans.
 
 ## A table
 
-|        H1       <|                 H2 h2 | H3                  <|
-|:----------------:|----------------------:|:---------------------|
-|    Column A1     |             Column A2 | a                    |
-| a very long cell |         **bold text** | b                    |
-|    hyperlinks    | [wp?wiki](wp?wiki.md) | [Xorg](http://x.org) |
+|        H1       <|         H2 h2 | H3                  <|
+|:----------------:|--------------:|:---------------------|
+|    Column A1     |     Column A2 | a                    |
+| a very long cell | **bold text** | b                    |
+|    hyperlinks    |   [[wp?wiki]] | [Xorg](http://x.org) |
 
 ## Multiformatting **bold**
 

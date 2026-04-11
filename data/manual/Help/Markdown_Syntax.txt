@@ -29,8 +29,12 @@ Zim supports:
 * strike through using "''~~''" like "''~~deleted~~''" for ~~deleted~~
 * Underline/mark using "''__''" like "''__marked__''" - this breaks the spec which determines "''_''" as an alternative to "''*''"
 
+==== Links ====
+Zim supports wiki links as "''[[Page]]''" or "''[[Page|Link text]]''". These are intended only for page links, as these can only be resolved using knowledge of the notebook and therefore do not translate 1-on-1 to file links. When exporting markdown, they will be converted to a regular link.
+
+
 ==== Lists ====
-* Zim supports letters instead of numbers for numbered lists like:
+Zim supports letters instead of numbers for numbered lists like:
 
 	a. item 1
 	b. item 2
@@ -45,6 +49,4 @@ Zim supports attibutes using "''{...}''" like pandoc does for:
 * Let a fenced code block become an inline object
 
 ==== Tabels ====
-* Zim supports tables using the [[Plugins:Table Editor|table editor plugin]]
-
-
+Zim supports tables using the [[Plugins:Table Editor|table editor plugin]]

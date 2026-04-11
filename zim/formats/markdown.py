@@ -15,10 +15,9 @@ import logging
 logger = logging.getLogger('zim.formats.markdown')
 
 from zim.parse import convert_space_to_tab, fix_unicode_whitespace
-from zim.parse.encode import escape_string, url_encode, URL_ENCODE_DATA, \
-	split_escaped_string, unescape_string, encode_xml_attrib, decode_xml
+from zim.parse.encode import escape_string, split_escaped_string, unescape_string, encode_xml_attrib, decode_xml
 from zim.parse.regexparser import Rule, RegexParser
-from zim.parse.links import is_url_link, match_url_link, url_link_re, link_type, is_path_re
+from zim.parse.links import is_url_link, match_url_link, is_wiki_link, url_link_re, is_path_re
 
 from zim.formats import *
 from zim.formats.plain import Dumper as TextDumper
@@ -147,6 +146,7 @@ class MarkdownParser(object):
 			Rule(LINK, r'<([a-zA-Z][a-zA-Z0-9.+-]*:[^\s>]+)>', process=self.parse_autolink)
 			| Rule(LINK, r'<([a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>', process=self.parse_autolink) # email autolink
 			| Rule(LINK, url_link_re, process=self.parse_url)
+			| Rule(LINK, r'\[\[(?!\[)(.*?\]*)\]\]', process=self.parse_wiki_link)
 			| Rule(IMAGE,   r'!\[([^\]]*)\]\(([^)]+)\)(\{[^}]*\})?', process=self.parse_image)
 			| Rule(LINK, r'\[([^\]]*)\]\((\S+)\)', process=self.parse_link)
 			| Rule(ANCHOR, r'\{\#(\w[\w-]*)\}', process=self.parse_anchor)
@@ -473,12 +473,47 @@ class MarkdownParser(object):
 
 	# --- Inline handlers ---
 
+	def parse_wiki_link(self, builder, text):
+		text = text.strip('|') # old bug producing "[[|link]]", or "[[link|]]" or "[[||]]"
+		if not text or text.isspace():
+			return
+
+		href = None
+		if '|' in text:
+			href, text = text.split('|', 1)
+			text = text.strip('|') # stuff like "[[foo||bar]]"
+
+		if text.endswith(']'):
+			delta = text.count(']') - text.count('[')
+			if delta > 0:
+				self.inline_parser.backup_parser_offset(delta)
+				text = text[:-delta]
+
+		if href is None:
+			builder.append(LINK, {'href': text}, text)
+		else:
+			builder.start(LINK, {'href': href})
+			self.nested_inline_parser_below_link(builder, text)
+			builder.end(LINK)
+
 	def parse_link(self, builder, text, href):
 		'''Parse [text](href) links'''
 		if '(' in href or ')' in href:
-			href = self._parse_href_parenthesis(href)
+			orig_href = href
+			while ')' in href and not _has_valid_href_parenthesis(href):
+				i = href.rfind(')')
+				href = href[:i]
 
-		href = self._parse_href(href.strip())
+			if not _has_valid_href_parenthesis(href):
+				builder.text('[')
+				self.inline_parser.backup_parser_offset(len(orig_href) + len(text) + len(']()'))
+				return
+			else:
+				self.inline_parser.backup_parser_offset(len(orig_href) - len(href))
+
+			href = href.replace('\\(', '(').replace('\\)', ')')
+
+		href = href.strip()
 		text = text.strip()
 
 		if text and text != href:
@@ -488,32 +523,6 @@ class MarkdownParser(object):
 		else:
 			builder.append(LINK, {'href': href}, text or href)
 
-	def _parse_href_parenthesis(self, href):
-		while ')' in href and not _has_valid_href_parenthesis(href):
-			i = href.rfind(')')
-			self.inline_parser.backup_parser_offset(len(href) - i)
-			href = href[:i]
-
-		return href.replace('\\(', '(').replace('\\)', ')')
-
-	def _parse_href(self, href):
-		# Detect if this is an internal page link
-		if not is_url_link(href) and not href.startswith('#'):
-			_, ext = os.path.splitext(href.split('?')[0])
-			if ext and ext.lower() != '.md':
-				# Non-wiki file reference (e.g. document.pdf).
-				# Ensure href looks like a path so link_type() returns 'file'
-				# and the indexer does not create a placeholder page.
-				if not is_path_re.match(href):
-					href = './' + href
-			else:
-				# Internal page link: strip .md and convert separators to page names
-				if href.lower().endswith('.md'):
-					href = href[:-3]
-				href = href.replace('/', ':').replace('%20', ' ')
-
-		return href
-
 	def parse_image(self, builder, alt, src, props_str=None, href=None):
 		'''Parse ![alt](src){props} images'''
 		attrib = {'src': src.strip()}
@@ -522,8 +531,6 @@ class MarkdownParser(object):
 			attrib['alt'] = alt
 
 		href = href.strip() if href else None
-		if href:
-			attrib['href'] = self._parse_href(href)
 
 		# Parse Pandoc-style properties: {#id width=500px height=20px}
 		if props_str:
@@ -751,34 +758,18 @@ class Dumper(TextDumper):
 		text = ''.join(strings) if strings else ''
 
 		if self.linker:
-			# Export mode: resolve links through linker
+			# Export mode: resolve links through linker and export as standard markdown
 			href = self.linker.link(href)
 			text = text or href
-			if href == text and url_link_re.match(href):
-				return ['<', href, '>']
-			# else continue below
-		else:
-			# Native / file mode: use raw href
-			# For page links (not URLs), convert to relative .md path
-			if is_url_link(href) or href.startswith('#'):
-				# External URL or anchor reference
-				text = text or href
-				if href == text and url_link_re.match(href):
-					return ['<', href, '>']
-				# else continue below
-			else:
-				# Internal page link - convert : to / and add .md
-				# But if the href already has a non-.md file extension (e.g. "document.pdf"),
-				# treat it as a file reference and leave it as-is.
-				href = href.replace(':', '/').replace(' ', '%20')
-				_, ext = os.path.splitext(href)
-				if ext and ext.lower() != '.md':
-					pass
-				elif not href.lower().endswith('.md'):
-					href = href + '.md'
+		elif is_wiki_link(href):
+			# Wiki link that cannot be resolved by other applications --> wiki link extension
+			return ('[[', href, '|', text, ']]') if text and text != href else ('[[', href, ']]')
 
 		if href == text:
-			text = ''
+			if is_url_link(href):
+				return ('<', href, '>')
+			else:
+				text = ''
 
 		if not _has_valid_href_parenthesis(href):
 			href = href.replace('(', '\\(').replace(')', '\\)')

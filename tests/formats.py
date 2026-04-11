@@ -1215,7 +1215,7 @@ class TestMarkdownNativeFormat(tests.TestCase, TestFormatMixin):
 			'\n'
 			'## Links\n'
 			'\n'
-			'[Internal Page](Internal%20Page.md)\n'
+			'[[Internal Page]]\n'
 			'\n'
 			'<http://example.com>\n'
 			'\n'
@@ -1309,11 +1309,19 @@ dus ja
 			('[](./foo(part1).pdf)', '<p><link href="./foo(part1).pdf">./foo(part1).pdf</link></p>'), # balanced pair of ()
 			('[](./foo(part1).pdf) and (this)', '<p><link href="./foo(part1).pdf">./foo(part1).pdf</link> and (this)</p>'), # balanced pair of ()
 			('[](./foo\\(part1.pdf)', '<p><link href="./foo(part1.pdf">./foo(part1.pdf</link></p>'), # escaped (
+			('[](./foo%20part1.pdf)', '<p><link href="./foo%20part1.pdf">./foo%20part1.pdf</link></p>'),
 			('<http://example.com>', '<p><link href="http://example.com">http://example.com</link></p>'),
-			('[Page](Page.md)', '<p><link href="Page">Page</link></p>'),
-			('[display](Other%20Page.md)', '<p><link href="Other Page">display</link></p>'),
+			('[[Page]]', '<p><link href="Page">Page</link></p>'),
+			('[[Other Page|display]]', '<p><link href="Other Page">display</link></p>'),
 		):
 			self.assertParseAndDumpEquals(markdown, xml)
+
+		for markdown, xml in (
+			# Some test cases that should parse, but dump differently
+			('[Page](Page)', '<p><link href="Page">Page</link></p>'),
+			('[display](Other%20Page)', '<p><link href="Other%20Page">display</link></p>'),
+		):
+			self.assertParseEquals(markdown, xml)
 
 	def testImages(self):
 		for markdown, xml in (
