@@ -62,7 +62,7 @@ def prompt_notebook():
 		fields = _run_dialog_with_mainloop(AddNotebookDialog(None))
 		if fields:
 			dir = LocalFolder(fields['folder'])
-			init_notebook(dir, name=fields['name'], page_template=fields['template'])
+			init_notebook(dir, name=fields['name'], page_template=fields['default_page_template'])
 			list.append(NotebookInfo(dir.uri, name=fields['name']))
 			list.write()
 			return NotebookInfo(dir.uri, name=fields['name'])
@@ -382,7 +382,7 @@ class NotebookDialog(Dialog):
 			dir = LocalFolder(fields['folder'])
 			init_notebook(
 				dir, name=fields['name'],
-				page_template=fields['template'],
+				page_template=fields['default_page_template'],
 				file_format=fields.get('file_format', 'zim-wiki'),
 			)
 			model = self.treeview.get_model()
@@ -439,12 +439,12 @@ class AddNotebookDialog(Dialog):
 			('name', 'string', _('Name')), # T: input field in 'Add Notebook' dialog
 			('folder', 'dir', _('Folder')), # T: input field in 'Add Notebook' dialog
 			('format', 'choice', _('Default file format') + ' ('+_('Experimental')+')', format_options), # T: choice field in 'Add Notebook' dialog
-			('template', 'choice', _('Page template'), templates),  # T: choice field in 'Add Notebook' dialog
+			('default_page_template', 'choice', _('Page template'), templates),  # T: choice field in 'Add Notebook' dialog
 		), {
 			'name': name,
 			'folder': folder,
 			'format': format_options[0],
-			'template': 'Default',
+			'default_page_template': 'Default',
 		})
 
 		self.add_help_text(_('''\
@@ -515,7 +515,7 @@ Of course you can also select an existing zim notebook folder.
 			self.result = {
 				'name': name,
 				'folder': folder,
-				'template': self.form['template'],
+				'default_page_template': self.form['default_page_template'],
 				'file_format': file_format,
 			}
 			return True
