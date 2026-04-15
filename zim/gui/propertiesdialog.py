@@ -12,6 +12,7 @@ from zim.plugins import PluginManager
 from zim.gui.widgets import Dialog, get_window, InputForm
 from zim.parse.links import is_interwiki_keyword_re
 from zim.templates import list_templates
+from zim.formats import list_formats, NATIVE_FORMAT
 
 
 class PropertiesDialog(Dialog):
@@ -20,8 +21,9 @@ class PropertiesDialog(Dialog):
 		('name', 'string', _('Name')), # T: label for properties dialog
 		('interwiki', 'string', _('Interwiki Keyword'), lambda v: not v or is_interwiki_keyword_re.search(v)), # T: label for properties dialog
 		('icon', 'image', _('Icon')), # T: label for properties dialog
-		#('default_file_format', 'choice', _('Default file format') + ' ('+ _('Experimantal') + ')', ['zim-wiki', 'markdown']), # T: label for properties dialog
+		#('default_file_format', 'choice', _('Default file format') + ' ('+ _('Experimantal') + ')', list_formats(NATIVE_FORMAT)), # T: label for properties dialog
 			## Only unhide option here once we can support multiple formats at once - else changing it makes notebook un-useable ##
+			## AND make sure to update the default_file_extension based on get_format().info['extension'] but IF and ONLY IF format is indeed changed ##
 		('default_page_template', 'choice', _('Page template'), []),  # T: label for properties dialog
 		('home', 'page', _('Home Page')), # T: label for properties dialog
 		('document_root', 'dir', _('Document Root')), # T: label for properties dialog

@@ -75,6 +75,8 @@ Index Options:
 Convert Notebook Options !!!EXPERIMENTAL MAKE A BACKUP FIRST!!!:
   -F, --format      change the source format and re-write all pages in
                     the new format ('zim-wiki', 'markdown')
+  --extension       optional file extension for the new pages, defaults
+                    to e.g. '.txt' for zim-wiki and '.md' for markdown
 
 Try 'zim --manual' for more help.
 '''

@@ -78,9 +78,9 @@ class FilesLayout(NotebookLayout):
 		assert isinstance(folder, Folder)
 		self.root = folder
 		self.endofline = endofline
-		self.update_format(default_format, default_extension)
+		self.set_format(default_format, default_extension)
 	
-	def update_format(self, default_format, default_extension):
+	def set_format(self, default_format, default_extension):
 		if not default_extension.startswith('.'):
 			default_extension = '.' + default_extension
 
@@ -155,11 +155,9 @@ class FilesLayout(NotebookLayout):
 		return self.map_file(self.root.file(path))
 
 	def resolve_conflict(self, *filepaths):
-		'''Decide which is the real page file when multiple files
-		map to the same page.
+		'''Decide which is the real page file when multiple files map to the same page
 		@param filepaths: 2 or more L{FilePath} objects
-		@returns: L{FilePath} that should take precedent as te page
-		source
+		@returns: L{FilePath} that should take precedent as te page source
 		'''
 		filepaths.sort(key=lambda p: (p.ctime(), p.basename))
 		return filepaths[0]
