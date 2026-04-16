@@ -24,6 +24,7 @@ class PropertiesDialog(Dialog):
 		#('default_file_format', 'choice', _('Default file format') + ' ('+ _('Experimantal') + ')', list_formats(NATIVE_FORMAT)), # T: label for properties dialog
 			## Only unhide option here once we can support multiple formats at once - else changing it makes notebook un-useable ##
 			## AND make sure to update the default_file_extension based on get_format().info['extension'] but IF and ONLY IF format is indeed changed ##
+			## AND make sure to flush the index, flush page cache and reload current page --> better do this as a tool with restart? ##
 		('default_page_template', 'choice', _('Page template'), []),  # T: label for properties dialog
 		('home', 'page', _('Home Page')), # T: label for properties dialog
 		('document_root', 'dir', _('Document Root')), # T: label for properties dialog

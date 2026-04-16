@@ -30,6 +30,7 @@ info = {
 	'desc': 'Markdown Text (pandoc)',
 	'mimetype': 'text/markdown',
 	'extension': 'md',
+	'extensions': ('md', 'markdown'),
 	'native': True,
 	'import': True,
 	'export': True,

@@ -46,7 +46,7 @@ os.environ['LANGUAGE'] = 'C.UTF-8'
 gettext.install('zim', names=('_', 'gettext', 'ngettext'))
 
 FAST_TEST = False #: determines whether we skip slow tests or not
-FULL_TEST = False #: determine whether we mock filesystem tests or not
+FULL_TEST = False #: determine whether we mock filesystem tests or not, and whether we run extremely slow tests
 
 # This list also determines the order in which tests will executed
 __all__ = [
@@ -225,6 +225,17 @@ def slowTest(obj):
 	'''
 	if FAST_TEST:
 		wrapper = skip('Slow test')
+		return wrapper(obj)
+	else:
+		return obj
+
+
+def verySlowTest(obj):
+	'''Decorator for *very* slow tests
+	Like C{slowTest()} but skips by default unless "--full" is used
+	'''
+	if not FULL_TEST:
+		wrapper = skip('Very slow test - use "--full" to run')
 		return wrapper(obj)
 	else:
 		return obj

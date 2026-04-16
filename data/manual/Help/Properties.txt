@@ -11,8 +11,6 @@ The notebook **Interwiki Keyword** can be used to link to this notebook for othe
 
 The notebook **Icon** is an image that is used together with the name to identify the notebook.
 
-The **Default file format** sets the file format used for new pages in the notebook. The default is "zim-wiki" (the native zim wiki format). Selecting "markdown" stores pages as Markdown files (`.md`) with YAML front matter - this feature is currently experimental for testing.
-
 The **Page template** gives the default template for new pages
 
 The **Home Page** is the first page to open in a notebook if you have no history yet. It can be accessed with the icon button for the home page and the <Alt><Home> key binding. Typically the home page should be an index page linking to other pages.

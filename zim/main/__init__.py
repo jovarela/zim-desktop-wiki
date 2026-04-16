@@ -102,7 +102,7 @@ Index Options:
   -f, --flush       flush the index first and force re-building
 
 Convert Notebook Options !!!EXPERIMENTAL MAKE A BACKUP FIRST!!!:
-  -F, --format      change the source format and re-write all pages in
+  --format          change the source format and re-write all pages in
                     the new format ('zim-wiki', 'markdown')
   --extension       optional file extension for the new pages, defaults
                     to e.g. '.txt' for zim-wiki and '.md' for markdown
@@ -667,7 +667,7 @@ class ConvertNotebookCommand(NotebookCommand):
 
 	arguments = ('NOTEBOOK',)
 	options = (
-		('format=', 'F', 'Target format: "markdown" or "zim-wiki"'),
+		('format=', '', 'Target format: "markdown" or "zim-wiki"'),
 		('extension=', '', 'Target file extesion, optional'),
 	)
 
@@ -688,11 +688,13 @@ class ConvertNotebookCommand(NotebookCommand):
 			raise UsageError('Unknown format "%s". Use e.g. "markdown" or "zim-wiki".' % target_format)
 
 		target_extension = self.opts.get('extension', target_format.info['extension'])
+		target_extension = '.' + target_extension.lstrip('.')
 
 		notebook, x = self.build_notebook(ensure_uptodate=True)
 
 		current_format_name = notebook.config['Notebook']['default_file_format']
 		current_extension = notebook.config['Notebook']['default_file_extension']
+		current_extension = '.' + current_extension.lstrip('.')
 
 		if current_format_name == target_format_name:
 			logger.info('Notebook is already in %s format', target_format_name)

@@ -253,9 +253,9 @@ class Notebook(ConnectorMixin, SignalEmitter):
 		if config['Notebook']['notebook_layout'] == 'files':
 			layout = FilesLayout(
 				folder,
-				config['Notebook']['endofline'],
-				config['Notebook']['default_file_format'],
-				config['Notebook']['default_file_extension']
+				default_format=config['Notebook']['default_file_format'],
+				default_extension=config['Notebook']['default_file_extension'],
+				endofline=config['Notebook']['endofline']
 			)
 		else:
 			# FUTURE extend here to support more classes
