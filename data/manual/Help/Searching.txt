@@ -188,18 +188,18 @@ This keyword does not match e.g. object attributes or the link target for links 
 
 The following rules are applied:
 
-* a "*" optionally matches any non-whitespace character
-* a space " " matches any combination of whitespace, or begin or end of the string
-* by default matches begin at a word boundary, unless they start with "*" or a chinese character
-* a space " " at the start does nothing but the default behavior, unless the first character is chinese
-* by default matches can end anywhere in a word, unless they end with a space " "
-* a "*" at the end does nothing but the default behavior
+* a "*" optionally matches any character except whitespace
+* a space " " matches any combination of whitespace or characters that are not letters or numbers
+* by default, matches anywhere in the text, so implying "*" at the start and end of the word
+* however, if a "*" is used, begin and end will automatically match word boundaries, unless the search term starts or ends with "*"
+* a space " " at the start or the end forces a word bounderay, " word " only matches the whole word
+* if the option "Whole Word" is set, word boundaries are always added automatically, and a "*" is required to match elsewhere
+* by default matches case insensitive, unless the "equal" operator is used or the "Match case" option is set
 
-For example "day" matches "day", "Day", and "days" and is equivalent with "day*". The value "*day" matches "Monday", "Tuesday", "Teusdays" but also "day" and "days", it is equivalent to "*day*".
+For example the query "day" matches "day", "Day", "days", and "monday" and is equivalent with "*day*". The query " day " only matches "day" and "Day".
+The query "*day" matches "day" and "monday" but not "mondays". And "day*" matches "day" and "daylight" but not "monday".
 
-To make this keyword search case-sensitive, you can use "''Content:=''".
-
-For example "''Content: Monday''" matches "monday", "Monday", "MONDAY" etc. while "''Content:= Monday''" only matches "Monday" with exact case as spelled in the query
+To make this keyword search case-sensitive, you can use the equals operator, like this: "''Content:=''". For example "''Content: Monday''" matches "monday", "Monday", "MONDAY" etc. while "''Content:= Monday''" only matches "Monday" with exact case as spelled in the query
 
 The "''Text:''" keyword is an alias for "''Content:''".
 
@@ -208,12 +208,9 @@ The "''Name:''" keyword matches anywhere in the full page name. This is the full
 
 Since links can be CamelCase or consist of multiple words without whitespace, the word start heuristic as applied for text content is dropped here.
 
-The following rules are applied:
+In addition to the rules for a Content search, the following rules apply:
 
-* a "*" optionally matches any character
-* a space " " matches any combination of whitespace
-* by default matches anywhere in the name, without word boundries, since page names can be CamelCase
-* a "*" at the start or the end does nothing but the default behavior
+* a "*" glob does not cross name segments, it does stop at the ":" separator
 * a ":" matches the start or end of a name segment
 * a "::" at the start matches start at the top-level of the notebook
 * a "::" at the end excludes sub-pages
@@ -252,11 +249,11 @@ The keyword "''Tags:''" can be used to match multiple tags
 
 Since tags can be CamelCase or consist of multiple words without whitespace, the word start heuristic as applied for text content is dropped here.
 
-The following rules are applied:
-* a "*" optionally matches any character
-* a "*" at the start or the end does nothing but the default behavior
+In addition to the rules for a Content search, the following rules apply:
+
 * if the term starts with a "@" it will only match from the start of the name
 * if the term ends with a "@" it will only match from the end of the name
+* tags are always case in-sensitive, so the "Match case" option does nothing
 
 For example "''Tags: @project'' matches any tag starting with project, like @projectA, @projectB etc. And "''Tags: project''" will also match @computer_project. The query "''Tags: @project@''" will only match @project, this is the same as "''Tag: project''".
 
