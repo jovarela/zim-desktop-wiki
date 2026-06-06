@@ -123,8 +123,9 @@ class PageSearchProvider():
 		self.flags = flags
 
 	@classmethod
-	def get_find_regex(cls, term: SearchQueryTerm, flags: SearchFlag=SearchFlag(0)) -> str|None:
-		'''Get a regex pattern to match this term in content or C{None}, only applicable for content terms
+	def get_find_string(cls, term: SearchQueryTerm) -> str|None:
+		'''Get a string to match this term in content or C{None}, only applicable for content terms
+		Used to translate a query to a string for the findbar in the textview
 		Since this method does not get the SEARCH_CASE_SENSITIVE or SEARCH_WHOLE_WORD flags, assume standard behavior.
 		The flags are applied in the wrapper.
 		'''
@@ -216,6 +217,10 @@ class ContentSearchProvider(PageSearchProvider):
 		for r in source:
 			if check(r):
 				yield r
+
+	@classmethod
+	def get_find_string(cls, term):
+		return term.value
 
 
 class PageNameProvider(IndexedSearchProvider):
@@ -310,16 +315,11 @@ class TagsProvider(IndexedSearchProvider):
 				self.generate = lambda: [] # do nothing
 
 	@classmethod
-	def get_find_regex(cls, term, flags):
+	def get_find_string(cls, term):
 		if term.keyword == 'tag' or re.match('^@\\w+@$', term.value):
-			return '@' + re.escape(term.value.strip('@')) + '\\b'
+			return '@%s ' % term.value.strip('@')
 		else:
-			pattern = search_query_tags_term_to_regex(term, flags).pattern
-			if not pattern:
-				return None
-			elif pattern.startswith('\\b'):
-				pattern = pattern[2:]
-			return '@' + pattern
+			return '@' + term.value.strip('@')
 
 	def generate_exact(self):
 		tag = self.term.value.strip('@')
@@ -351,10 +351,6 @@ class TextProvider(ContentSearchProvider):
 		super().__init__(notebook, term, flags, ui_callback)
 		self.regex = search_query_term_to_regex(term, self.flags)
 		self.ui_callback_counter = 0
-
-	@classmethod
-	def get_find_regex(cls, term, flags):
-		return search_query_term_to_regex(term, flags).pattern
 
 	def checker(self):
 		return self.check_content
@@ -658,7 +654,7 @@ class PageSearch(object):
 		'''Turn a C{SearchQuery} into a C{FindQuery}
 		All positive terms that match content are taken into account
 		'''
-		from zim.gui.pageview.find import FindQuery, FIND_CASE_SENSITIVE, FIND_WHOLE_WORD, FIND_REGEX
+		from zim.gui.pageview.find import FindQuery
 
 		seen = set()
 		def is_double(r):
@@ -668,26 +664,19 @@ class PageSearch(object):
 				seen.add(r)
 				return False
 
-		regexes = list(r for r in self._walk_search_query_for_find(query, SearchFlag(0)) if not is_double(r))
-		if regexes and len(regexes) == 1:
-			if re.escape(regexes[0]) == regexes[0]: # no special characters
-				return FindQuery(regexes[0])
-			else:
-				return FindQuery(regexes[0], FIND_REGEX)
-		elif regexes:
-			return FindQuery('|'.join(regexes), FIND_REGEX)
+		strings = list(r for r in self._walk_search_query_for_find(query) if not is_double(r))
+		if strings:
+			return FindQuery('|'.join(strings), query.flags)
 		else:
 			return None
 
-	def _walk_search_query_for_find(self, query, flags):
-		flags = query.flags if query.flags else flags # allow to override in sub-groups
-
+	def _walk_search_query_for_find(self, query):
 		for term in query:
 			if term.negate:
 				continue # skip negated content (and ignore double negated...)
 
 			if isinstance(term, SearchQuery):
-				yield from self._walk_search_query_for_find(term, flags) # recurs
+				yield from self._walk_search_query_for_find(term) # recurs
 			else: # SearchQueryTerm
 				if 'expand_terms' in self.KEYWORDS[term.keyword]:
 					## HACK to prevent a big ..|..|.. match, just do content matching for "any" term ##
@@ -698,10 +687,9 @@ class PageSearch(object):
 					#	q.add(t)
 					#yield from self._walk_search_query_for_find(q) # recurs
 
-					regex = TextProvider.get_find_regex(term, flags)
+					yield TextProvider.get_find_string(term)
 				else:
 					cls = self.KEYWORDS[term.keyword]['provider']
-					regex = cls.get_find_regex(term, flags)
-
-				if regex:
-					yield regex
+					string = cls.get_find_string(term)
+					if string:
+						yield string

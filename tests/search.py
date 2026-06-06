@@ -6,7 +6,7 @@ from zim.parse.searchquery import *
 from zim.search import *
 from zim.notebook import Path
 from zim.plugins import PluginManager, indexed_fts
-from zim.gui.pageview.find import FindQuery, FIND_CASE_SENSITIVE, FIND_WHOLE_WORD, FIND_REGEX
+from zim.gui.pageview.find import FindQuery
 
 
 # some aliases to define queries
@@ -200,7 +200,7 @@ class TestSearchQueryTermToRegex(tests.TestCase):
 		for value, regex, regex_word in (
 			('foo', 'foo', '\\bfoo\\b'),
 			('*foo', 'foo\\b', 'foo\\b'),
-			('foo bar', 'foo[^\\w]+bar', '\\bfoo[^\\w]+bar\\b'),
+			('foo bar', 'foo\\W+bar', '\\bfoo\\W+bar\\b'),
 			('foo*bar', '\\bfoo\\S*bar\\b', '\\bfoo\\S*bar\\b'),
 			('foo*', '\\bfoo', '\\bfoo'),
 			('*foo*', 'foo', 'foo'),
@@ -208,13 +208,13 @@ class TestSearchQueryTermToRegex(tests.TestCase):
 			(' foo', '\\bfoo', '\\bfoo\\b'),
 			('foo ', 'foo\\b', '\\bfoo\\b'),
 			(' foo ', '\\bfoo\\b', '\\bfoo\\b'),
-			(' foo bar ', '\\bfoo[^\\w]+bar\\b', '\\bfoo[^\\w]+bar\\b'),
+			(' foo bar ', '\\bfoo\\W+bar\\b', '\\bfoo\\W+bar\\b'),
 			('\u4e00foo*', '\u4e00foo', '\\b\u4e00foo'), # chinese char never wants implicit word boundary
 			('*\u4e00foo', '\u4e00foo\\b', '\u4e00foo\\b'),
 			(' \u4e00foo', '\\b\u4e00foo', '\\b\u4e00foo\\b'),
 			('+foo*', '\\+foo', '\\+foo'), # no word boundery at non-word character
-			('Lorem ip* dolor', '\\bLorem[^\\w]+ip\\S*[^\\w]+dolor\\b', '\\bLorem[^\\w]+ip\\S*[^\\w]+dolor\\b'),
-			('Lorem *sum dolor', '\\bLorem[^\\w]+\\S*sum[^\\w]+dolor\\b', '\\bLorem[^\\w]+\\S*sum[^\\w]+dolor\\b'),
+			('Lorem ip* dolor', '\\bLorem\\W+ip\\S*\\W+dolor\\b', '\\bLorem\\W+ip\\S*\\W+dolor\\b'),
+			('Lorem *sum dolor', '\\bLorem\\W+\\S*sum\\W+dolor\\b', '\\bLorem\\W+\\S*sum\\W+dolor\\b'),
 		):
 			self.assertEqual(search_query_term_to_regex(_t('kw', value)), re.compile(regex, re.I), msg="Query: %r" % value)
 			self.assertEqual(search_query_term_to_regex(_t('kw', value), flags=SEARCH_WHOLE_WORD), re.compile(regex_word, re.I), msg="Query: %r" % value)
@@ -230,13 +230,13 @@ class TestSearchQueryPageNameTermToRegex(tests.TestCase):
 			('foo', 'foo', '\\bfoo\\b'),
 			(' foo', '\\bfoo', '\\bfoo\\b'),
 			('*foo', 'foo\\b', 'foo\\b'),
-			('foo bar', 'foo[^\\w]+bar', '\\bfoo[^\\w]+bar\\b'),
+			('foo bar', 'foo\\W+bar', '\\bfoo\\W+bar\\b'),
 			('foo*', '\\bfoo', '\\bfoo'),
 			('foo+', 'foo\\+', '\\bfoo\\+'),
 			('foo ', 'foo\\b', '\\bfoo\\b'),
 			(' foo ', '\\bfoo\\b', '\\bfoo\\b'),
 			('*foo*', 'foo', 'foo'),
-			(' foo bar ', '\\bfoo[^\\w]+bar\\b', '\\bfoo[^\\w]+bar\\b'),
+			(' foo bar ', '\\bfoo\\W+bar\\b', '\\bfoo\\W+bar\\b'),
 			(' foo*bar ', '\\bfoo[^\\s:]*bar\\b', '\\bfoo[^\\s:]*bar\\b'),
 			(':foo:', '(^:?|:)foo(:|:?$)', '(^:?|:)foo(:|:?$)'),
 			('::foo::', '^:?foo:?$', '^:?foo:?$'),
@@ -276,27 +276,27 @@ class TestSearchQueryToFindQuery(tests.TestCase):
 		notebook = self.setUpNotebook()
 		page_search = PageSearch(notebook)
 
-		for string, value, options in (
-			('Foo', 'Foo', 0),
-			('*Foo*', 'Foo', 0),
-			('" Foo "', '\\bFoo\\b', FIND_REGEX),
-			('Foo Bar', 'Foo|Bar', FIND_REGEX),
-			('Foo -Bar', 'Foo', 0), # Bar negated
-			('Links: Foo', None, None), # no content match in this query
-			('Tag: Foo', '@Foo\\b', FIND_REGEX),
-			('@Foo', '@Foo', 0),
-			('@Foo Bar', '@Foo|Bar', FIND_REGEX),
-			('Foo... Bar', 'Foo\\.\\.\\.|Bar', FIND_REGEX),
-			('"Foo... Bar"', 'Foo\\.\\.\\.[^\\w]+Bar', FIND_REGEX),
-			('NOT foo', None, None),
-			('Foo*Bar', '\\bFoo\\S*Bar\\b', FIND_REGEX),
-			('*Foo*Bar*', 'Foo\\S*Bar', FIND_REGEX),
-			('Foo AND (Bar OR Dus)', 'Foo|Bar|Dus', FIND_REGEX),
-			('Foo AND NOT (Bar OR Dus)', 'Foo', 0),
+		for string, value in (
+			('Foo', 'Foo'),
+			('*Foo*', '*Foo*'),
+			('" Foo "', ' Foo '),
+			('Foo Bar', 'Foo|Bar'),
+			('Foo -Bar', 'Foo'), # Bar negated
+			('Links: Foo', None), # no content match in this query
+			('Tag: Foo', '@Foo '),
+			('@Foo', '@Foo'),
+			('@Foo Bar', '@Foo|Bar'),
+			('Foo... Bar', 'Foo...|Bar'),
+			('"Foo... Bar"', 'Foo... Bar'),
+			('NOT foo', None),
+			('Foo*Bar', 'Foo*Bar'),
+			('*Foo*Bar*', '*Foo*Bar*'),
+			('Foo AND (Bar OR Dus)', 'Foo|Bar|Dus'),
+			('Foo AND NOT (Bar OR Dus)', 'Foo'),
 		):
 			squery = page_search.parse_page_search_query(string)
 			fquery = page_search.find_query_from_search_query(squery)
-			self.assertEqual(fquery, FindQuery(value, options) if value else None, msg="Query: %r" % string)
+			self.assertEqual(fquery.string if fquery else fquery, value, msg="Query: %r" % string)
 
 
 class TestPageSearchProviders(tests.TestCase):
@@ -610,10 +610,10 @@ class TestPageSearch(tests.TestCase):
 		# Has seperate test case with more queries, test here to make sure
 		# plugin tests deriving from this class also check it
 		page_search = PageSearch(self.notebook)
-		query = page_search.parse_page_search_query('foo bar')
+		query = page_search.parse_page_search_query('foo bar', SEARCH_CASE_SENSITIVE)
 		self.assertEqual(query, _and(_t('any', 'foo'), _t('any', 'bar')))
 		fquery = page_search.find_query_from_search_query(query)
-		self.assertEqual(fquery, FindQuery('foo|bar', FIND_REGEX))
+		self.assertEqual(fquery, FindQuery('foo|bar', SEARCH_CASE_SENSITIVE))
 
 
 @tests.slowTest
@@ -642,8 +642,7 @@ class TestPageSearchIndexed(TestPageSearch):
 		TestPageSearchProviders().testTextProvider(cls=indexed_fts.FTSSearchProvider)
 
 		term = _t('content', 'foo')
-		pattern = indexed_fts.FTSSearchProvider.get_find_regex(term)
-		self.assertEqual(pattern, 'foo')
+		self.assertEqual(indexed_fts.FTSSearchProvider.get_find_string(term), 'foo')
 
 
 class TestUnicodeSearchTerms(tests.TestCase):

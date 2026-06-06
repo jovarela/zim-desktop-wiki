@@ -156,8 +156,8 @@ class FTSSearchProvider(IndexedSearchProvider):
 		return glob.strip()
 
 	@classmethod
-	def get_find_regex(cls, term, flags=SearchFlag(0)):
-		return search_query_term_to_regex(term, flags).pattern
+	def get_find_string(cls, term):
+		return term.value
 
 	def generate_word(self):
 		if not self.glob:

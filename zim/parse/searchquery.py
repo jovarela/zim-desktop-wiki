@@ -84,13 +84,15 @@ _keyword_operators_strings = {v: k for k, v in _keyword_operators.items()}
 class SearchFlag(enum.Flag):
 	CASE_SENSITIVE = 1
 	WHOLE_WORD = 2
+	REGEX = 4
 
 	letter_codes = enum.nonmember( {
 		CASE_SENSITIVE: 'C',
 		WHOLE_WORD: 'W',
+		REGEX: 'R'
 	} )
 	letter_codes_re = enum.nonmember(
-		re.compile('^\\?([CW]+)\\:$')
+		re.compile('^\\?([CWR]+)\\:$')
 	)
 
 	def to_letters(self) -> str:
@@ -111,7 +113,7 @@ class SearchFlag(enum.Flag):
 
 SEARCH_CASE_SENSITIVE = SearchFlag.CASE_SENSITIVE #: Constant to find case sensitive
 SEARCH_WHOLE_WORD = SearchFlag.WHOLE_WORD #: Constant to find whole words only
-
+SEARCH_REGEX =  SearchFlag.REGEX #: Constant for regex search
 
 _word_re = re.compile(r'''
 	(	'(\\'|[^'])*' |  # single quoted word
@@ -441,6 +443,31 @@ def _process_operators(tokens: list) -> SearchQuery:
 			return SearchQuery(OPERATOR_AND, tokens, flags=flags)
 
 
+def find_string_to_regex(string: str, flags: SearchFlag = SearchFlag(0)) -> re.Pattern|None:
+	'''Returns a regex object for a string match for in page find
+	
+	Applies the same rules as L{search_query_term_to_regex()} with additional support for
+	regex searches and supports the pipe caharacter (`|`) as inline "OR"
+	'''
+	if SEARCH_REGEX in flags:
+		regex = string
+
+		if SEARCH_WHOLE_WORD in flags:
+			if re.match(r'^\s*\w', string, re.U):
+				regex = r'\b' + regex
+
+			if re.search(r'(?<!\\)\w\s*$', string, re.U): # match ending in char, but not in escape char
+				regex = regex + r'\b'
+	else:
+		parts = [
+			_search_query_term_to_regex(SearchQueryTerm('text', p), flags, capture_glob=True)
+				for p in string.split('|') 
+		]
+		regex = '|'.join(p for p in parts if p)
+
+	return re.compile(regex, re.U) if SEARCH_CASE_SENSITIVE in flags else re.compile(regex, re.U | re.I)
+
+
 def search_query_term_to_regex(term: SearchQueryTerm, flags: SearchFlag = SearchFlag(0)) -> re.Pattern|None:
 	'''Returns a regex object for a simple string match of a L{SearchQueryTerm}
 
@@ -468,7 +495,7 @@ def search_query_term_to_regex(term: SearchQueryTerm, flags: SearchFlag = Search
 		return re.compile(regex, re.U | re.I)
 
 
-def _search_query_term_to_regex(term: SearchQueryTerm, flags: SearchFlag = SearchFlag(0)) -> str:
+def _search_query_term_to_regex(term: SearchQueryTerm, flags: SearchFlag = SearchFlag(0), capture_glob=False) -> str:
 	# Inner logic for search_query_term_to_regex() and related functions
 
 	if not term.value.replace('*', '').strip():
@@ -478,7 +505,7 @@ def _search_query_term_to_regex(term: SearchQueryTerm, flags: SearchFlag = Searc
 	parts = []
 	for p in term.value.strip().strip('*').split('*'):
 		sub_parts = re.split('\\s+', p)
-		parts.append(r'[^\w]+'.join(map(re.escape, sub_parts)))
+		parts.append(r'\W+'.join(map(re.escape, sub_parts)))
 	regex = r'\S*'.join(parts)
 
 	# Add word delimiters to regex
@@ -503,6 +530,13 @@ def _search_query_term_to_regex(term: SearchQueryTerm, flags: SearchFlag = Searc
 
 		if re.search(r'\w\s+$', term.value, re.U):
 			regex = regex + r'\b'
+
+	if capture_glob:
+		if term.value.startswith('*'):
+			regex = r'\S*' + regex
+
+		if term.value.endswith('*'):
+			regex += r'\S*'
 
 	return regex
 
