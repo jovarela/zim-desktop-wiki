@@ -80,24 +80,15 @@ _keyword_operators = {
 }
 _keyword_operators_strings = {v: k for k, v in _keyword_operators.items()}
 
-# Query options - for SearchQuery.flags
+# Query options
 class SearchFlag(enum.Flag):
 	CASE_SENSITIVE = 1
 	WHOLE_WORD = 2
 	REGEX = 4
 
-	letter_codes = enum.nonmember( {
-		CASE_SENSITIVE: 'C',
-		WHOLE_WORD: 'W',
-		REGEX: 'R'
-	} )
-	letter_codes_re = enum.nonmember(
-		re.compile('^\\?([CWR]+)\\:$')
-	)
-
 	def to_letters(self) -> str:
 		string = ''
-		for k, v in self.letter_codes.items():
+		for k, v in self._letter_codes.items():
 			if SearchFlag(k) in self:
 				string += v
 		return string
@@ -105,10 +96,18 @@ class SearchFlag(enum.Flag):
 	@classmethod
 	def from_letters(cls, string: str) -> 'SearchFlag':
 		flags = cls(0)
-		for k, v in cls.letter_codes.items():
+		for k, v in cls._letter_codes.items():
 			if v in string:
 				flags |= cls(k)
 		return flags
+
+# hack to add "nonmember" attributes to enum class
+SearchFlag._letter_codes = {
+	SearchFlag.CASE_SENSITIVE.value: 'C',
+	SearchFlag.WHOLE_WORD.value: 'W',
+	SearchFlag.REGEX.value: 'R'
+}
+SearchFlag.from_letters_re = re.compile('^\\?([%s]+)\\:$' % ''.join(SearchFlag._letter_codes.values()))
 
 
 SEARCH_CASE_SENSITIVE = SearchFlag.CASE_SENSITIVE #: Constant to find case sensitive
@@ -311,7 +310,7 @@ def _tokenize_search_query(string: str, keywords: dict, default_keyword: str='an
 				term = m_key.group(1) + m_key.group(2)
 				keyword = match_implicit_keyword(term)
 				tokens.append(SearchQueryTerm(keyword, term))
-		elif tokens and tokens[-1] == '(' and SearchFlag.letter_codes_re.match(w):
+		elif tokens and tokens[-1] == '(' and SearchFlag.from_letters_re.match(w):
 			tokens.append(SearchFlag.from_letters(w))
 		else:
 			keyword = match_implicit_keyword(w)
