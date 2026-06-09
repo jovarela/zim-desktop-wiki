@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-14 15:34+0100\n"
+"POT-Creation-Date: 2026-06-09 18:44+0200\n"
 "PO-Revision-Date: 2025-04-19 12:52+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/zim/develop/ta/>\n"
@@ -53,7 +53,7 @@ msgid "Default"
 msgstr "இயல்புநிலை"
 
 #. Translate to "calendar:week_start:0" if you want Sunday to be the first day of the week or to "calendar:week_start:1" if you want Monday to be the first day of the week
-#: zim/datetimetz.py:98
+#: zim/datetimetz.py:102
 msgid "calendar:week_start:0"
 msgstr "காலண்டர்: வீக்_ச்டார்ட்: 0"
 
@@ -63,20 +63,20 @@ msgid "Looks like you found a bug"
 msgstr "நீங்கள் ஒரு பிழையைக் கண்டுபிடித்ததாகத் தெரிகிறது"
 
 #. message for FileUnicodeError (%s is the file name)
-#: zim/fs.py:275 zim/newfs/base.py:66
+#: zim/fs.py:275 zim/newfs/base.py:67
 #, python-format
 msgid "Could not read: %s"
 msgstr "படிக்க முடியவில்லை: %s"
 
 #. message for FileUnicodeError
-#: zim/fs.py:277 zim/newfs/base.py:68
+#: zim/fs.py:277 zim/newfs/base.py:69
 msgid "This usually means the file contains invalid characters"
 msgstr "இதன் பொருள் கோப்பில் தவறான எழுத்துக்கள் உள்ளன"
 
 #. label for detailed error | 
 #. section for version details in "save version" dialog
-#: zim/fs.py:279 zim/newfs/base.py:70
-#: zim/plugins/versioncontrol/__init__.py:772
+#: zim/fs.py:279 zim/newfs/base.py:71
+#: zim/plugins/versioncontrol/__init__.py:791
 msgid "Details"
 msgstr "விவரங்கள்"
 
@@ -201,9 +201,9 @@ msgstr "கணினி இயல்புநிலை"
 #. Input label in the 'rename page' dialog for the new name | 
 #. label for file name
 #: zim/gui/applications.py:1286 zim/gui/customtools.py:674
-#: zim/gui/notebookdialog.py:423 zim/gui/pageview/dialogs.py:849
-#: zim/gui/preferencesdialog.py:346 zim/gui/propertiesdialog.py:16
-#: zim/gui/templateeditordialog.py:159 zim/gui/uiactions.py:591
+#: zim/gui/notebookdialog.py:437 zim/gui/pageview/dialogs.py:852
+#: zim/gui/preferencesdialog.py:346 zim/gui/propertiesdialog.py:21
+#: zim/gui/templateeditordialog.py:159 zim/gui/uiactions.py:605
 #: zim/plugins/attachmentbrowser/filebrowser.py:441
 msgid "Name"
 msgstr "பெயர்"
@@ -252,7 +252,7 @@ msgstr "விவரம்"
 
 #. Input in "Edit Custom Tool" dialog | 
 #. label for properties dialog
-#: zim/gui/customtools.py:690 zim/gui/propertiesdialog.py:19
+#: zim/gui/customtools.py:690 zim/gui/propertiesdialog.py:23
 msgid "Icon"
 msgstr "படவுரு"
 
@@ -311,13 +311,13 @@ msgid "Exporting notebook"
 msgstr "நோட்புக் ஏற்றுமதி"
 
 #. message heading
-#: zim/gui/exportdialog.py:143
+#: zim/gui/exportdialog.py:140
 #, python-format
 msgid "Folder exists: %s"
 msgstr "கோப்புறை உள்ளது: %s"
 
 #. detailed message, answers are Yes and No
-#: zim/gui/exportdialog.py:144
+#: zim/gui/exportdialog.py:141
 msgid ""
 "Folder already exists and has content, exporting to this folder may "
 "overwrite existing files. Do you want to continue?"
@@ -326,12 +326,12 @@ msgstr ""
 "செய்வது ஏற்கனவே உள்ள கோப்புகளை மேலெழுதக்கூடும். நீங்கள் தொடர விரும்புகிறீர்களா?"
 
 #. message heading
-#: zim/gui/exportdialog.py:157
+#: zim/gui/exportdialog.py:154
 msgid "File exists"
 msgstr "கோப்பு உள்ளது"
 
 #. detailed message, answers are Yes and No
-#: zim/gui/exportdialog.py:158
+#: zim/gui/exportdialog.py:155
 msgid ""
 "This file already exists.\n"
 "Do you want to overwrite it?"
@@ -340,18 +340,18 @@ msgstr ""
 " அதை மேலெழுத விரும்புகிறீர்களா?"
 
 #. title of step in export dialog
-#: zim/gui/exportdialog.py:169
+#: zim/gui/exportdialog.py:166
 msgid "Select the pages to export"
 msgstr "ஏற்றுமதி செய்ய பக்கங்களைத் தேர்ந்தெடுக்கவும்"
 
 #. Option in export dialog to export complete notebook | 
 #. Option in versions dialog to show version for complete notebook
-#: zim/gui/exportdialog.py:175 zim/plugins/versioncontrol/__init__.py:820
+#: zim/gui/exportdialog.py:172 zim/plugins/versioncontrol/__init__.py:839
 msgid "Complete _notebook"
 msgstr "முழுமையான _நோட்ட்புக்"
 
 #. Option in export dialog to export selection
-#: zim/gui/exportdialog.py:180
+#: zim/gui/exportdialog.py:177
 msgid "Single _page"
 msgstr "ஒற்றை பக்கம்"
 
@@ -359,115 +359,116 @@ msgstr "ஒற்றை பக்கம்"
 #. label in word count dialog | 
 #. Column header | 
 #. Column header search dialog | 
+#. text entry field; used if new_page is false. | 
 #. header in selection drop down | 
 #. Column header Task List dialog | 
 #. page label
-#: zim/gui/exportdialog.py:183 zim/gui/pageview/dialogs.py:711
-#: zim/gui/recentchangesdialog.py:59 zim/gui/searchdialog.py:169
-#: zim/plugins/quicknote.py:221 zim/plugins/tasklist/gui.py:755
-#: zim/plugins/tasklist/gui.py:965 zim/plugins/tasklist/gui.py:1243
+#: zim/gui/exportdialog.py:180 zim/gui/pageview/dialogs.py:714
+#: zim/gui/recentchangesdialog.py:59 zim/gui/searchdialog.py:189
+#: zim/plugins/quicknote.py:241 zim/plugins/tasklist/gui.py:748
+#: zim/plugins/tasklist/gui.py:1032 zim/plugins/tasklist/gui.py:1285
 msgid "Page"
 msgstr "பக்கம்"
 
 #. Input field in export dialog
-#: zim/gui/exportdialog.py:184
+#: zim/gui/exportdialog.py:181
 msgid "Include subpages"
 msgstr "துணைப்பிரிவுகளைச் சேர்க்கவும்"
 
 #. title of step in export dialog
-#: zim/gui/exportdialog.py:211
+#: zim/gui/exportdialog.py:208
 msgid "Select the export format"
 msgstr "ஏற்றுமதி வடிவமைப்பைத் தேர்ந்தெடுக்கவும்"
 
 #. Option in drop down menu to specify another file
-#: zim/gui/exportdialog.py:213
+#: zim/gui/exportdialog.py:210
 msgid "Other..."
 msgstr "மற்றவை ..."
 
 #. Input label in the export dialog | 
 #. label in "insert date" dialog
-#: zim/gui/exportdialog.py:225 zim/gui/pageview/dialogs.py:64
+#: zim/gui/exportdialog.py:221 zim/gui/pageview/dialogs.py:64
 msgid "Format"
 msgstr "வடிவம்"
 
 #. Input label in the export dialog | 
 #. Field in web server gui for webpage template
-#: zim/gui/exportdialog.py:226 zim/gui/server.py:106
+#: zim/gui/exportdialog.py:222 zim/gui/server.py:106
 msgid "Template"
 msgstr "வார்ப்புரு"
 
 #. radio option in export dialog
-#: zim/gui/exportdialog.py:229
+#: zim/gui/exportdialog.py:225
 msgid "Link files under document root with full file path"
 msgstr "ஆவணத்தின் கீழ் கோப்புகளை முழு கோப்பு பாதையுடன் இணைக்கவும்"
 
 #. radio option in export dialog
-#: zim/gui/exportdialog.py:230
+#: zim/gui/exportdialog.py:226
 msgid "Map document root to URL"
 msgstr "வரைபட ஆவண ரூட் முகவரி க்கு"
 
 #. label for button with URL
-#: zim/gui/exportdialog.py:239 zim/gui/templateeditordialog.py:70
+#: zim/gui/exportdialog.py:235 zim/gui/templateeditordialog.py:70
 msgid "Get more templates online"
 msgstr "ஆன்லைனில் அதிக வார்ப்புருக்களைப் பெறுங்கள்"
 
 #. title of step in export dialog
-#: zim/gui/exportdialog.py:312
+#: zim/gui/exportdialog.py:307
 msgid "Select the output file or folder"
 msgstr "வெளியீட்டு கோப்பு அல்லது கோப்புறையைத் தேர்ந்தெடுக்கவும்"
 
 #. Label for option in export dialog
-#: zim/gui/exportdialog.py:318
+#: zim/gui/exportdialog.py:313
 msgid "Export each page to a separate file"
 msgstr "ஒவ்வொரு பக்கத்தையும் ஒரு தனி கோப்பில் ஏற்றுமதி செய்யுங்கள்"
 
 #. Label for option in export dialog
-#: zim/gui/exportdialog.py:320
+#: zim/gui/exportdialog.py:315
 msgid "Export all pages to a single file"
 msgstr "அனைத்து பக்கங்களையும் ஒரே கோப்பில் ஏற்றுமதி செய்யுங்கள்"
 
 #. Label for folder selection in export dialog
-#: zim/gui/exportdialog.py:323
+#: zim/gui/exportdialog.py:318
 msgid "Output folder"
 msgstr "வெளியீட்டு கோப்புறை"
 
 #. Label for setting a name for the index of exported pages
-#: zim/gui/exportdialog.py:325
+#: zim/gui/exportdialog.py:320
 msgid "Index page"
 msgstr "குறியீட்டு பக்கம்"
 
 #. Label for file selection in export dialog
-#: zim/gui/exportdialog.py:328
+#: zim/gui/exportdialog.py:323
 msgid "Output file"
 msgstr "வெளியீட்டு கோப்பு"
 
 #. label in export dialog
-#: zim/gui/exportdialog.py:417
+#: zim/gui/exportdialog.py:412
 #, python-format
 msgid "%(n_error)i errors and %(n_warning)i warnings occurred, see log"
 msgstr ""
 "%(n_error)i பிழைகள் மற்றும் %(n_warning)i எச்சரிக்கைகள் நிகழ்ந்தன, பதிவைப் பார்க்கவும்"
 
 #. label in export dialog
-#: zim/gui/exportdialog.py:420
+#: zim/gui/exportdialog.py:415
 #, python-format
 msgid "%i errors occurred, see log"
 msgstr "%i நான் பிழைகள் நிகழ்ந்தன, பதிவைப் பார்க்கவும்"
 
 #. label in export dialog
-#: zim/gui/exportdialog.py:423
+#: zim/gui/exportdialog.py:418
 #, python-format
 msgid "%i warnings occurred, see log"
 msgstr "%i நான் எச்சரிக்கைகள் நிகழ்ந்தன, பதிவைப் பார்க்கவும்"
 
 #. label in export dialog
-#: zim/gui/exportdialog.py:428
+#: zim/gui/exportdialog.py:423
 msgid "Export completed"
 msgstr "ஏற்றுமதி முடிந்தது"
 
 #. button in export dialog | 
 #. button in e.g. equation editor dialog
-#: zim/gui/exportdialog.py:431 zim/plugins/base/imagegenerator.py:445
+#: zim/gui/exportdialog.py:426 zim/plugins/base/imagegenerator.py:444
 msgid "View _Log"
 msgstr "_Log ஐக் காண்க"
 
@@ -526,8 +527,8 @@ msgstr "செருகவும் (_I)"
 #. Menu title | 
 #. input label | 
 #. Menu item
-#: zim/gui/mainwindow.py:53 zim/gui/searchdialog.py:39
-#: zim/plugins/tasklist/gui.py:562
+#: zim/gui/mainwindow.py:53 zim/gui/searchdialog.py:40
+#: zim/plugins/tasklist/gui.py:555
 msgid "_Search"
 msgstr "தேடல் (_S)"
 
@@ -548,7 +549,7 @@ msgstr "_ கோ"
 
 #. Menu title | 
 #. Button label
-#: zim/gui/mainwindow.py:57 zim/gui/widgets.py:3084
+#: zim/gui/mainwindow.py:57 zim/gui/widgets.py:3076
 msgid "_Help"
 msgstr "உதவி (_H)"
 
@@ -627,22 +628,22 @@ msgstr "தகவல்தொடர்புகளில் கவனம் ச�
 
 #. Menu item | 
 #. Button label
-#: zim/gui/mainwindow.py:634 zim/gui/widgets.py:3035
+#: zim/gui/mainwindow.py:633 zim/gui/widgets.py:3027
 msgid "_Close"
 msgstr "மூடு (_C)"
 
 #. label for View->Menubar menu item
-#: zim/gui/mainwindow.py:703
+#: zim/gui/mainwindow.py:702
 msgid "Menubar"
 msgstr "மெனுபார்"
 
 #. short question on open-page if file exists
-#: zim/gui/mainwindow.py:822 zim/gui/uiactions.py:493
+#: zim/gui/mainwindow.py:816 zim/gui/uiactions.py:493
 msgid "File exists, do you want to import?"
 msgstr "கோப்பு உள்ளது, நீங்கள் இறக்குமதி செய்ய விரும்புகிறீர்களா?"
 
 #. longer question on open-page if file exists
-#: zim/gui/mainwindow.py:823 zim/gui/uiactions.py:494
+#: zim/gui/mainwindow.py:817 zim/gui/uiactions.py:494
 #, python-format
 msgid ""
 "The file \"%s\" exists but is not a wiki page.\n"
@@ -652,70 +653,70 @@ msgstr ""
 " நீங்கள் அதை இறக்குமதி செய்ய விரும்புகிறீர்களா?"
 
 #. page status for title bar
-#: zim/gui/mainwindow.py:878 zim/gui/mainwindow.py:1053
+#: zim/gui/mainwindow.py:872 zim/gui/mainwindow.py:1047
 #: zim/plugins/windowtitleeditor.py:16
 msgid "readonly"
 msgstr "படிக்கமட்டும்"
 
 #. Menu item
-#: zim/gui/mainwindow.py:906
+#: zim/gui/mainwindow.py:900
 msgid "_Jump To..."
 msgstr "_ சம்ப் ..."
 
 #. Menu item | 
 #. Button label
-#: zim/gui/mainwindow.py:911 zim/gui/widgets.py:3960
+#: zim/gui/mainwindow.py:905 zim/gui/widgets.py:3949
 msgid "_Back"
 msgstr "_ பேக்"
 
 #. tooltip for navigation button
-#: zim/gui/mainwindow.py:913
+#: zim/gui/mainwindow.py:907
 msgid "Go back"
 msgstr "திரும்பிச் செல்லுங்கள்"
 
 #. Menu item | 
 #. Button label
-#: zim/gui/mainwindow.py:924 zim/gui/widgets.py:3964
+#: zim/gui/mainwindow.py:918 zim/gui/widgets.py:3953
 msgid "_Forward"
 msgstr "_ FORWARD"
 
 #. tooltip for navigation button
-#: zim/gui/mainwindow.py:926
+#: zim/gui/mainwindow.py:920
 msgid "Go forward"
 msgstr "முன்னோக்கிச் செல்லுங்கள்"
 
 #. Menu item
-#: zim/gui/mainwindow.py:936
+#: zim/gui/mainwindow.py:930
 msgid "_Parent"
 msgstr "_ பெற்றோர்"
 
 #. Menu item
-#: zim/gui/mainwindow.py:945
+#: zim/gui/mainwindow.py:939
 msgid "_Child"
 msgstr "_சில்ட்"
 
 #. Menu item
-#: zim/gui/mainwindow.py:961
+#: zim/gui/mainwindow.py:955
 msgid "_Previous in Index"
 msgstr "குறியீட்டில் முன்னுரிமை"
 
 #. Menu item
-#: zim/gui/mainwindow.py:970
+#: zim/gui/mainwindow.py:964
 msgid "_Next in Index"
 msgstr "குறியெண் குறியீட்டில் நெக்ச்ட்"
 
 #. Menu item
-#: zim/gui/mainwindow.py:979
+#: zim/gui/mainwindow.py:973
 msgid "_Home"
 msgstr "_ஓம்"
 
 #. Menu item
-#: zim/gui/mainwindow.py:979
+#: zim/gui/mainwindow.py:973
 msgid "Go to home page"
 msgstr "முகப்பு பக்கத்திற்குச் செல்லுங்கள்"
 
 #. Label for button with backlinks in statusbar
-#: zim/gui/mainwindow.py:1001
+#: zim/gui/mainwindow.py:995
 #, python-format
 msgid "%i _Backlink"
 msgid_plural "%i _Backlinks"
@@ -723,71 +724,611 @@ msgstr[0] "%i _backlink"
 msgstr[1] "%i _backlinks"
 
 #. Dialog title
-#: zim/gui/mainwindow.py:1168
+#: zim/gui/mainwindow.py:1162
 msgid "Jump to"
 msgstr "குதிக்கவும்"
 
 #. Button label
-#: zim/gui/mainwindow.py:1169
+#: zim/gui/mainwindow.py:1163
 msgid "_Jump"
 msgstr "தாண்டு"
 
 #. Label for page input
-#: zim/gui/mainwindow.py:1174
+#: zim/gui/mainwindow.py:1168
 msgid "Jump to Page"
 msgstr "தாவு பெறுநர் Page"
 
 #. Column heading in 'open notebook' dialog | 
 #. Field in web server gui | 
 #. Field to select Notebook from drop down list
-#: zim/gui/notebookdialog.py:192 zim/gui/propertiesdialog.py:59
-#: zim/gui/server.py:102 zim/plugins/quicknote.py:196
+#: zim/gui/notebookdialog.py:200 zim/gui/propertiesdialog.py:70
+#: zim/gui/server.py:102 zim/plugins/quicknote.py:213
 msgid "Notebook"
 msgstr "நோட்புக்"
 
 #. dialog title
-#: zim/gui/notebookdialog.py:299
+#: zim/gui/notebookdialog.py:307
 msgid "Open Notebook"
 msgstr "நோட்புக் திறந்த"
 
 #. Button label
-#: zim/gui/notebookdialog.py:328
+#: zim/gui/notebookdialog.py:336
 msgid "_Add"
 msgstr "_ADD"
 
 #. Button label
-#: zim/gui/notebookdialog.py:332 zim/gui/templateeditordialog.py:52
+#: zim/gui/notebookdialog.py:340 zim/gui/templateeditordialog.py:52
 msgid "_Remove"
 msgstr "_ அகற்று"
 
 #. Input label in 'open notebook' dialog
-#: zim/gui/notebookdialog.py:348
+#: zim/gui/notebookdialog.py:356
 msgid "Default notebook"
 msgstr "இயல்புநிலை நோட்புக்"
 
 #. Dialog window title
-#: zim/gui/notebookdialog.py:406
+#: zim/gui/notebookdialog.py:418
 msgid "Add Notebook"
 msgstr "நோட்புக் சேர்க்கவும்"
 
 #. Label in Add Notebook dialog
-#: zim/gui/notebookdialog.py:408
+#: zim/gui/notebookdialog.py:420
 msgid "Please select a name and a folder for the notebook."
 msgstr "நோட்புக்குக்கு ஒரு பெயர் மற்றும் ஒரு கோப்புறையைத் தேர்ந்தெடுக்கவும்."
 
 #. input field in 'Add Notebook' dialog
-#: zim/gui/notebookdialog.py:424
+#: zim/gui/notebookdialog.py:438
 msgid "Folder"
 msgstr "கோப்புறை"
 
+#. choice field in 'Add Notebook' dialog
+#: zim/gui/notebookdialog.py:439
+#, fuzzy
+#| msgid "Default text"
+msgid "Default file format"
+msgstr "இயல்புநிலை உரை"
+
+#. choice field in 'Add Notebook' dialog
+#: zim/gui/notebookdialog.py:439
+msgid "Experimental"
+msgstr ""
+
+#. choice field in 'Add Notebook' dialog | 
+#. label for properties dialog
+#: zim/gui/notebookdialog.py:440 zim/gui/propertiesdialog.py:28
+#, fuzzy
+#| msgid "Page Template"
+msgid "Page template"
+msgstr "பக்க வார்ப்புரு"
+
 #. help text in the 'Add Notebook' dialog
-#: zim/gui/notebookdialog.py:430
+#: zim/gui/notebookdialog.py:448
 msgid ""
 "To create a new notebook you need to select an empty folder.\n"
 "Of course you can also select an existing zim notebook folder.\n"
 msgstr ""
 "புதிய நோட்புக்கை உருவாக்க நீங்கள் வெற்று கோப்புறையைத் தேர்ந்தெடுக்க வேண்டும்.\n"
 " நிச்சயமாக நீங்கள் ஏற்கனவே இருக்கும் சிம் நோட்புக் கோப்புறையையும் தேர்ந்தெடுக்கலாம்.\n"
+
+#. Menu title
+#: zim/gui/pageview/__init__.py:76
+msgid "New _Attachment"
+msgstr "புதிய _attachment"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:84
+msgid "Show edit bar along bottom of editor"
+msgstr "எடிட்டரின் கீழே திருத்து பட்டியைக் காட்டு"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:87
+msgid ""
+"Use the <Enter> key to follow links\n"
+"(If disabled you can still use <Alt><Enter>)"
+msgstr ""
+"இணைப்புகளைப் பின்தொடர <nert> விசையைப் பயன்படுத்தவும்\n"
+" (முடக்கப்பட்டால் நீங்கள் இன்னும் <alt> <enter> ஐப் பயன்படுத்தலாம்)"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:90
+msgid "Preview link destination in overlay"
+msgstr "மேலடுக்கில் இணைப்பு இலக்கை முன்னோட்டமிடுங்கள்"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:93
+msgid "Show the cursor also for pages that can not be edited"
+msgstr "திருத்த முடியாத பக்கங்களுக்கும் கர்சரைக் காட்டு"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:96
+msgid "Automatically turn \"CamelCase\" words into links"
+msgstr "\"ஒட்டக கேச்\" சொற்களை தானாகவே இணைப்புகளாக மாற்றவும்"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:99
+msgid "Automatically turn wiki page names into links"
+msgstr "விக்கி பக்க பெயர்களை தானாகவே இணைப்புகளாக மாற்றவும்"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:102
+msgid "Automatically turn identifiers starting with \"#\" into links"
+msgstr "\"#\" உடன் தொடங்கி அடையாளங்காட்டிகளை தானாகவே இணைப்புகளாக மாற்றவும்"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:105
+msgid "Automatically turn interwiki names into links"
+msgstr "இன்டர்விகி பெயர்களை தானாகவே இணைப்புகளுக்கு மாற்றவும்"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:108
+msgid "Automatically turn file paths into links"
+msgstr "கோப்பு பாதைகளை தானாகவே இணைப்புகளாக மாற்றவும்"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:111
+msgid "Automatically select the current word when you apply formatting"
+msgstr "நீங்கள் வடிவமைப்பைப் பயன்படுத்தும்போது தற்போதைய வார்த்தையை தானாகவே தேர்ந்தெடுக்கவும்"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:114
+msgid ""
+"Unindent on <BackSpace>\n"
+"(If disabled you can still use <Shift><Tab>)"
+msgstr ""
+"<BackSpace>இல் வெளிதள்ளல்\n"
+"(முடக்கப்பட்டிருந்தாலும் நீங்கள் இன்னும் பயன்படுத்தலாம் <Shift><Tab>)"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:117
+msgid "Repeated clicking a checkbox cycles through the checkbox states"
+msgstr ""
+"தேர்வுப்பெட்டி நிலைகள் வழியாகத் தேர்வுப்பெட்டி சுழற்சிகளைக் சொடுக்கு செய்வதை மீண்டும் "
+"சொடுக்கு"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:120
+msgid "(Un-)indenting a list item also changes any sub-items"
+msgstr "(அன்-) ஒரு பட்டியல் உருப்படியைக் குறைப்பது எந்த துணை உருப்படிகளையும் மாற்றுகிறது"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:123
+msgid "Checking a checkbox also changes any sub-items"
+msgstr "ஒரு தேர்வுப்பெட்டியைச் சரிபார்ப்பது எந்த துணை உருப்படிகளையும் மாற்றுகிறது"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:126
+msgid "Reformat wiki markup on the fly"
+msgstr "பறக்கும்போது விக்கி மார்க்அப்"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:129
+msgid "Default format for copying text to the clipboard"
+msgstr "இடைநிலைப்பலகைக்கு உரையை நகலெடுப்பதற்கான இயல்புநிலை வடிவம்"
+
+#. option in preferences dialog
+#: zim/gui/pageview/__init__.py:132
+msgid "Folder with templates for attachment files"
+msgstr "இணைப்பு கோப்புகளுக்கான வார்ப்புருக்கள் கொண்ட கோப்புறை"
+
+#. Heading of error dialog
+#: zim/gui/pageview/__init__.py:264
+#, python-format
+msgid "Could not save page: %s"
+msgstr "பக்கத்தை சேமிக்க முடியவில்லை: %s"
+
+#. text in error dialog when saving page failed
+#: zim/gui/pageview/__init__.py:268
+msgid ""
+"To continue you can save a copy of this page or discard\n"
+"any changes. If you save a copy changes will be also\n"
+"discarded, but you can restore the copy later."
+msgstr ""
+"தொடர நீங்கள் இந்த பக்கத்தின் நகலைச் சேமிக்கலாம் அல்லது நிராகரிக்கலாம்\n"
+" எந்த மாற்றங்களும். நீங்கள் ஒரு நகலைச் சேமித்தால் மாற்றங்களும் இருக்கும்\n"
+" நிராகரிக்கப்பட்டது, ஆனால் நீங்கள் பின்னர் நகலை மீட்டெடுக்கலாம்."
+
+#. Button label
+#: zim/gui/pageview/__init__.py:287 zim/gui/pageview/dialogs.py:324
+#: zim/gui/searchdialog.py:52 zim/gui/widgets.py:92
+msgid "_Cancel"
+msgstr "_CANCEL"
+
+#. Button in error dialog
+#: zim/gui/pageview/__init__.py:292
+msgid "_Discard Changes"
+msgstr "_ டிச்கார்ட் மாற்றங்கள்"
+
+#. Button in error dialog
+#: zim/gui/pageview/__init__.py:297
+msgid "_Save Copy"
+msgstr "_சேவ் நகல்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:506
+msgid "Heading _1"
+msgstr "தலைப்பு _1"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:507
+msgid "Heading _2"
+msgstr "தலைப்பு _2"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:508
+msgid "Heading _3"
+msgstr "தலைப்பு _3"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:509
+msgid "Heading _4"
+msgstr "தலைப்பு _4"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:510
+msgid "Heading _5"
+msgstr "தலைப்பு _5"
+
+#. Menu item | 
+#. menu item for formatting
+#: zim/gui/pageview/__init__.py:511 zim/gui/pageview/__init__.py:526
+msgid "_Strong"
+msgstr "_ச்ட்ராங்"
+
+#. Menu item | 
+#. menu item for formatting
+#: zim/gui/pageview/__init__.py:512 zim/gui/pageview/__init__.py:527
+msgid "_Emphasis"
+msgstr "முக்கியத்துவம்"
+
+#. Menu item | 
+#. menu item for formatting
+#: zim/gui/pageview/__init__.py:513 zim/gui/pageview/__init__.py:528
+msgid "_Mark"
+msgstr "குறி (_M)"
+
+#. Menu item | 
+#. menu item for formatting
+#: zim/gui/pageview/__init__.py:514 zim/gui/pageview/__init__.py:529
+msgid "_Strike"
+msgstr "_ ச்ட்ரைக்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:515
+msgid "_Subscript"
+msgstr "_சப்ச்கிரிப்ட்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:516
+msgid "_Superscript"
+msgstr "சூப்பர்ச்கிரிப்ட்"
+
+#. Menu item | 
+#. menu item for formatting
+#: zim/gui/pageview/__init__.py:517 zim/gui/pageview/__init__.py:530
+msgid "_Verbatim"
+msgstr "_Vervall"
+
+#. menu item for formatting
+#: zim/gui/pageview/__init__.py:531
+msgid "Su_perscript"
+msgstr "அருமைஉரை"
+
+#. menu item for formatting
+#: zim/gui/pageview/__init__.py:532
+msgid "Su_bscript"
+msgstr "சந்தா"
+
+#. error when unknown interwiki link is clicked
+#: zim/gui/pageview/__init__.py:1279
+#, python-format
+msgid "No such wiki defined: %s"
+msgstr "அத்தகைய விக்கி வரையறுக்கப்படவில்லை: %s"
+
+#. error when anchor location in page not found
+#: zim/gui/pageview/__init__.py:1332
+#, python-format
+msgid "Id \"%s\" not found on the current page"
+msgstr "ஐடி \"%s\" தற்போதைய பக்கத்தில் காணப்படவில்லை"
+
+#. menu item for context menu of editor
+#: zim/gui/pageview/__init__.py:1390
+msgid "Copy _As..."
+msgstr "நகல் _as ..."
+
+#. menu item for context menu of editor
+#: zim/gui/pageview/__init__.py:1396
+msgid "Paste As _Verbatim"
+msgstr "_Verbatim ஆக ஒட்டவும்"
+
+#. Context menu item for pageview to move selected text to new/other page | 
+#. Menu item
+#: zim/gui/pageview/__init__.py:1404 zim/gui/pageview/__init__.py:2072
+msgid "Move Selected Text..."
+msgstr "தேர்ந்தெடுக்கப்பட்ட உரையை நகர்த்தவும் ..."
+
+#. menu item to copy link to achor location in page | 
+#. menu item
+#: zim/gui/pageview/__init__.py:1427 zim/plugins/tableofcontents.py:445
+msgid "Copy _link to this location"
+msgstr "இந்த இடத்திற்கு இணைப்பை நகலெடுக்கவும்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1468 zim/gui/pageview/__init__.py:1733
+msgid "_Remove Link"
+msgstr "_ இணைப்பை அகற்றவும்"
+
+#. menu item in context menu for image
+#: zim/gui/pageview/__init__.py:1475
+msgid "_Edit Properties"
+msgstr "_ திருத்து பண்புகள்"
+
+#. menu item in context menu
+#: zim/gui/pageview/__init__.py:1477
+msgid "_Edit Link"
+msgstr "தொகு (_E) இணைப்பு"
+
+#. context menu item
+#: zim/gui/pageview/__init__.py:1502
+msgid "Copy _Link"
+msgstr "நகல் _ லிங்க்"
+
+#. context menu item
+#: zim/gui/pageview/__init__.py:1503
+msgid "Cut Lin_k"
+msgstr "வெட்டு LIN_K"
+
+#. context menu item
+#: zim/gui/pageview/__init__.py:1516
+msgid "Copy Email Address"
+msgstr "மின்னஞ்சல் முகவரியை நகலெடுக்கவும்"
+
+#. menu item to open containing folder of files
+#: zim/gui/pageview/__init__.py:1531
+msgid "Open Folder"
+msgstr "திறந்த கோப்புறை"
+
+#. menu item for sub menu with applications | 
+#. menu item
+#: zim/gui/pageview/__init__.py:1540 zim/gui/pageview/__init__.py:1551
+#: zim/plugins/attachmentbrowser/filebrowser.py:400
+msgid "Open With..."
+msgstr "உடன் திறந்திருக்கும் ..."
+
+#. menu item to open a link | 
+#. Menu item | 
+#. menu item
+#: zim/gui/pageview/__init__.py:1561 zim/gui/uiactions.py:131
+#: zim/plugins/backlinkpane.py:143 zim/plugins/tableofcontents.py:453
+msgid "Open in New _Window"
+msgstr "புதிய சாளரத்தில் திற (_W)"
+
+#. menu item to open a link or file | 
+#. Button label | 
+#. menu item to open file or folder
+#: zim/gui/pageview/__init__.py:1571 zim/gui/widgets.py:3627
+#: zim/plugins/attachmentbrowser/filebrowser.py:407
+msgid "_Open"
+msgstr "_OPEN"
+
+#. popup menu menuitem
+#: zim/gui/pageview/__init__.py:1586
+msgid "Check Checkbox '<'"
+msgstr "சரிபார்ப்பு பெட்டியை '<'"
+
+#. popup menu menuitem
+#: zim/gui/pageview/__init__.py:1587
+msgid "Check Checkbox '>'"
+msgstr "சரிபார்ப்பு பெட்டியை '>'"
+
+#. popup menu menuitem
+#: zim/gui/pageview/__init__.py:1588
+msgid "Check Checkbox 'X'"
+msgstr "'ஃச்' என்ற தேர்வுப்பெட்டியை சரிபார்க்கவும்"
+
+#. popup menu menuitem
+#: zim/gui/pageview/__init__.py:1589
+msgid "Check Checkbox 'V'"
+msgstr "தேர்வுப்பெட்டியை சரிபார்க்கவும் 'வி'"
+
+#. popup menu menuitem | 
+#. Menu item
+#: zim/gui/pageview/__init__.py:1590 zim/gui/pageview/__init__.py:1653
+msgid "Un-check Checkbox"
+msgstr "சரிபார்க்கவும் தேர்வுப்பெட்டி"
+
+#. Menu item | 
+#. Button label | 
+#. button label
+#: zim/gui/pageview/__init__.py:1599 zim/gui/widgets.py:3629
+#: zim/plugins/versioncontrol/__init__.py:771
+msgid "_Save"
+msgstr "_சேவ்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1609
+msgid "_Reload"
+msgstr "மறுஏற்றம் (_R)"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1619
+msgid "_Undo"
+msgstr "செயல்தவிர்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1626
+msgid "_Redo"
+msgstr "_ ரெடோ"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1633
+msgid "Cu_t"
+msgstr "Cu_t"
+
+#. Menu item | 
+#. Button label | 
+#. menu label
+#: zim/gui/pageview/__init__.py:1638 zim/gui/templateeditordialog.py:46
+#: zim/plugins/tasklist/gui.py:1257
+msgid "_Copy"
+msgstr "_ கோபி"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1643
+msgid "_Paste"
+msgstr "_ பேச்ட்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1648
+msgid "_Delete"
+msgstr "_Delete"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1659
+msgid "Toggle Checkbox 'V'"
+msgstr "'வி' என்ற தேர்வுப்பெட்டியை மாற்றவும்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1668
+msgid "Toggle Checkbox 'X'"
+msgstr "'ஃச்' என்ற தேர்வுப்பெட்டியை மாற்றவும்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1677
+msgid "Toggle Checkbox '>'"
+msgstr "தேர்வுப்பெட்டியை மாற்று '>'"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1686
+msgid "Toggle Checkbox '<'"
+msgstr "தேர்வுப்பெட்டியை மாற்று '<'"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1695
+msgid "_Edit Link or Object..."
+msgstr "தொகு (_E) இணைப்பு அல்லது பொருள் ..."
+
+#. menu item to copy current line to clipboard
+#: zim/gui/pageview/__init__.py:1751
+msgid "Copy Line"
+msgstr "நகல் வரி"
+
+#. menu item to cut current line to clipboard
+#: zim/gui/pageview/__init__.py:1767
+msgid "Cut Line"
+msgstr "வெட்டு வரி"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1780
+msgid "Date and Time..."
+msgstr "தேதி மற்றும் நேரம் ..."
+
+#. Menu item for Insert menu
+#: zim/gui/pageview/__init__.py:1795
+msgid "Horizontal _Line"
+msgstr "கிடைமட்ட கோடு"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1804
+msgid "_Image..."
+msgstr "_Image ..."
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1811
+msgid "_Attachment..."
+msgstr "_Attachment ..."
+
+#. Menu item | 
+#. Menu item,
+#: zim/gui/pageview/__init__.py:1826 zim/gui/pageview/__init__.py:1853
+msgid "Bulle_t List"
+msgstr "புல்லட் பட்டியல்"
+
+#. Menu item | 
+#. Menu item,
+#: zim/gui/pageview/__init__.py:1831 zim/gui/pageview/__init__.py:1858
+msgid "_Numbered List"
+msgstr "எண் பட்டியல்"
+
+#. Menu item | 
+#. Menu item,
+#: zim/gui/pageview/__init__.py:1836 zim/gui/pageview/__init__.py:1863
+msgid "Checkbo_x List"
+msgstr "தேர்வுப்பெட்டி பட்டியல்"
+
+#. Menu item,
+#: zim/gui/pageview/__init__.py:1868
+msgid "_Remove List"
+msgstr "_ அகற்று பட்டியல்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1896
+msgid "Text From _File..."
+msgstr "கோப்பிலிருந்து உரை ..."
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:1943
+msgid "_Link..."
+msgstr "_ லிங்க் ..."
+
+#. message when no file templates are found in ~/Templates
+#: zim/gui/pageview/__init__.py:1970
+msgid "No templates installed"
+msgstr "வார்ப்புருக்கள் எதுவும் நிறுவப்படவில்லை"
+
+#. Menu item in "Insert > New File Attachment" submenu
+#: zim/gui/pageview/__init__.py:2019
+msgid "File _Templates..."
+msgstr "கோப்பு _TEMPLATES ..."
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:2027
+msgid "_Clear Formatting"
+msgstr "_ கிளையர் வடிவமைப்பு"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:2033
+msgid "_Remove Heading"
+msgstr "_ ரோமோவ் தலைப்பு"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:2077
+msgid "_Find..."
+msgstr "தேடு..."
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:2094
+msgid "Find Ne_xt"
+msgstr "Ne_st ஐக் கண்டறியவும்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:2102
+msgid "Find Pre_vious"
+msgstr "Pre_ived ஐக் கண்டறியவும்"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:2108
+msgid "_Replace..."
+msgstr "மாற்று..."
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:2115
+msgid "Word Count..."
+msgstr "சொல் எண்ணிக்கை ..."
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:2120
+msgid "_Zoom In"
+msgstr "_சூம் உள்ளே"
+
+#. Menu item
+#: zim/gui/pageview/__init__.py:2125
+msgid "Zoom _Out"
+msgstr "பெரிதாக்கவும்"
+
+#. Menu item to reset zoom
+#: zim/gui/pageview/__init__.py:2153
+msgid "_Normal Size"
+msgstr "_ இயல்பான அளவு"
 
 #. Dialog title
 #: zim/gui/pageview/dialogs.py:34
@@ -796,7 +1337,7 @@ msgstr "தேதி மற்றும் நேரத்தை செருக
 
 #. label in "insert date" dialog | 
 #. Column header versions dialog
-#: zim/gui/pageview/dialogs.py:50 zim/plugins/versioncontrol/__init__.py:1065
+#: zim/gui/pageview/dialogs.py:50 zim/plugins/versioncontrol/__init__.py:1084
 msgid "Date"
 msgstr "திகதி"
 
@@ -864,12 +1405,6 @@ msgid "Overwrite"
 msgstr "மேலெழுதும்"
 
 #. Button label
-#: zim/gui/pageview/dialogs.py:324 zim/gui/pageview/__init__.py:284
-#: zim/gui/searchdialog.py:51 zim/gui/widgets.py:92
-msgid "_Cancel"
-msgstr "_CANCEL"
-
-#. Button label
 #: zim/gui/pageview/dialogs.py:325 zim/gui/widgets.py:93
 msgid "_OK"
 msgstr "_Ok"
@@ -881,721 +1416,215 @@ msgstr "படத்தைத் திருத்து"
 
 #. Input in 'edit image' dialog | 
 #. Input label for the section to move a page to
-#: zim/gui/pageview/dialogs.py:384 zim/gui/uiactions.py:593
+#: zim/gui/pageview/dialogs.py:385 zim/gui/uiactions.py:607
 msgid "Location"
 msgstr "இடம்"
 
 #. Input in 'edit image' dialog | 
 #. Input in 'insert link' dialog
-#: zim/gui/pageview/dialogs.py:385 zim/gui/pageview/dialogs.py:554
+#: zim/gui/pageview/dialogs.py:386 zim/gui/pageview/dialogs.py:557
 msgid "Link to"
 msgstr "இணைப்பு"
 
 #. Input in 'edit image' dialog
-#: zim/gui/pageview/dialogs.py:386
+#: zim/gui/pageview/dialogs.py:387
+#, fuzzy
+#| msgid "Default text"
+msgid "Alternate text"
+msgstr "இயல்புநிலை உரை"
+
+#. Input in 'edit image' dialog
+#: zim/gui/pageview/dialogs.py:388
 msgid "Width"
 msgstr "அகலம்"
 
 #. Input in 'edit image' dialog
-#: zim/gui/pageview/dialogs.py:387
+#: zim/gui/pageview/dialogs.py:389
 msgid "Height"
 msgstr "உயரம்"
 
 #. tooltip label for image with anchor id | 
 #. input label for object ID
-#: zim/gui/pageview/dialogs.py:388 zim/gui/pageview/textview.py:1089
-#: zim/plugins/sourceview.py:402
+#: zim/gui/pageview/dialogs.py:390 zim/gui/pageview/textview.py:1103
+#: zim/plugins/sourceview.py:405
 msgid "Id"
 msgstr "ஐடி"
 
 #. Button in 'edit image' dialog
-#: zim/gui/pageview/dialogs.py:398
+#: zim/gui/pageview/dialogs.py:400
 msgid "_Reset Size"
 msgstr "_ ரெசெட் அளவு"
 
 #. Dialog title
-#: zim/gui/pageview/dialogs.py:518
+#: zim/gui/pageview/dialogs.py:521
 msgid "Insert Text From File"
 msgstr "கோப்பிலிருந்து உரையைச் செருகவும்"
 
 #. Dialog title
-#: zim/gui/pageview/dialogs.py:545
+#: zim/gui/pageview/dialogs.py:548
 msgid "Edit Link"
 msgstr "இணைப்பைத் திருத்து"
 
 #. Dialog title
-#: zim/gui/pageview/dialogs.py:547
+#: zim/gui/pageview/dialogs.py:550
 msgid "Insert Link"
 msgstr "இணைப்பைச் செருகவும்"
 
 #. Dialog button
-#: zim/gui/pageview/dialogs.py:549
+#: zim/gui/pageview/dialogs.py:552
 msgid "_Link"
 msgstr "_ லிங்க்"
 
 #. Input in 'insert link' dialog | 
 #. toolbar style
-#: zim/gui/pageview/dialogs.py:555 zim/plugins/toolbar.py:20
+#: zim/gui/pageview/dialogs.py:558 zim/plugins/toolbar.py:20
 msgid "Text"
 msgstr "உரை"
 
 #. Input in 'insert link' dialog | 
 #. Input in 'move text' dialog
-#: zim/gui/pageview/dialogs.py:556 zim/gui/pageview/dialogs.py:783
+#: zim/gui/pageview/dialogs.py:559 zim/gui/pageview/dialogs.py:786
 msgid "Prefer short link names for pages"
 msgstr "பக்கங்களுக்கான குறுகிய இணைப்பு பெயர்களை விரும்புங்கள்"
 
 #. Dialog title
-#: zim/gui/pageview/dialogs.py:669
+#: zim/gui/pageview/dialogs.py:672
 msgid "Word Count"
 msgstr "சொல் எண்ணிக்கை"
 
 #. label in word count dialog
-#: zim/gui/pageview/dialogs.py:712
+#: zim/gui/pageview/dialogs.py:715
 msgid "Paragraph"
 msgstr "பத்தி"
 
 #. label in word count dialog
-#: zim/gui/pageview/dialogs.py:713
+#: zim/gui/pageview/dialogs.py:716
 msgid "Selection"
 msgstr "தேர்வு"
 
 #. label in word count dialog
-#: zim/gui/pageview/dialogs.py:714
+#: zim/gui/pageview/dialogs.py:717
 msgid "Words"
 msgstr "சொற்கள்"
 
 #. label in word count dialog
-#: zim/gui/pageview/dialogs.py:715
+#: zim/gui/pageview/dialogs.py:718
 msgid "Lines"
 msgstr "வரிகள்"
 
 #. label in word count dialog
-#: zim/gui/pageview/dialogs.py:716
+#: zim/gui/pageview/dialogs.py:719
 msgid "Characters"
 msgstr "எழுத்துக்கள்"
 
 #. label in word count dialog
-#: zim/gui/pageview/dialogs.py:717
+#: zim/gui/pageview/dialogs.py:720
 msgid "Characters excluding spaces"
 msgstr "இடங்களைத் தவிர்த்து எழுத்துக்கள்"
 
 #. Dialog title
-#: zim/gui/pageview/dialogs.py:768
+#: zim/gui/pageview/dialogs.py:771
 msgid "Move Text to Other Page"
 msgstr "உரையை மற்ற பக்கத்திற்கு நகர்த்தவும்"
 
 #. Button label
-#: zim/gui/pageview/dialogs.py:769
+#: zim/gui/pageview/dialogs.py:772
 msgid "_Move"
 msgstr "_மோவ்"
 
 #. Input in 'move text' dialog
-#: zim/gui/pageview/dialogs.py:781
+#: zim/gui/pageview/dialogs.py:784
 msgid "Move text to"
 msgstr "உரையை நகர்த்தவும்"
 
 #. Input in 'move text' dialog
-#: zim/gui/pageview/dialogs.py:782
+#: zim/gui/pageview/dialogs.py:785
 msgid "Leave link to new page"
 msgstr "புதிய பக்கத்திற்கு இணைப்பை விடுங்கள்"
 
 #. Input in 'move text' dialog
-#: zim/gui/pageview/dialogs.py:784
+#: zim/gui/pageview/dialogs.py:787
 msgid "Open new page"
 msgstr "புதிய பக்கத்தைத் திறக்கவும்"
 
 #. error message in "move selected text" action
-#: zim/gui/pageview/dialogs.py:807
+#: zim/gui/pageview/dialogs.py:810
 msgid "No text selected"
 msgstr "உரை எதுவும் தேர்ந்தெடுக்கப்படவில்லை"
 
 #. Dialog title
-#: zim/gui/pageview/dialogs.py:847
+#: zim/gui/pageview/dialogs.py:850
 msgid "New File"
 msgstr "புதிய கோப்பு"
 
 #. button in find bar and find & replace dialog
-#: zim/gui/pageview/find.py:512
+#: zim/gui/pageview/find.py:571
 msgid "_Next"
 msgstr "அடுத்தது (_N)"
 
 #. button in find bar and find & replace dialog
-#: zim/gui/pageview/find.py:518
+#: zim/gui/pageview/find.py:577
 msgid "_Previous"
 msgstr "முன்தைய (_P)"
 
 #. checkbox option in find bar and find & replace dialog
-#: zim/gui/pageview/find.py:524
+#: zim/gui/pageview/find.py:583
 msgid "Match _case"
 msgstr "போட்டி வழக்கு"
 
-#. checkbox option in find bar and find & replace dialog
-#: zim/gui/pageview/find.py:529
+#. checkbox option in find bar and find & replace dialog | 
+#. checkbox option in search dialog
+#: zim/gui/pageview/find.py:588 zim/gui/searchdialog.py:61
 msgid "Whole _word"
 msgstr "முழு _ சொல்"
 
 #. checkbox option in find bar and find & replace dialog
-#: zim/gui/pageview/find.py:534
+#: zim/gui/pageview/find.py:593
 msgid "_Regular expression"
 msgstr "வழக்கமான வெளிப்பாடு"
 
 #. checkbox option in find bar and find & replace dialog
-#: zim/gui/pageview/find.py:539
+#: zim/gui/pageview/find.py:598
 msgid "_Highlight"
 msgstr "_ ஐ லைட்"
 
 #. label for input in find bar on bottom of page
-#: zim/gui/pageview/find.py:619
+#: zim/gui/pageview/find.py:678
 msgid "Find"
 msgstr "கண்டுபிடி"
 
 #. Dialog title
-#: zim/gui/pageview/find.py:654
+#: zim/gui/pageview/find.py:722
 msgid "Find and Replace"
 msgstr "கண்டுபிடித்து மாற்றவும்"
 
 #. input label in find & replace dialog
-#: zim/gui/pageview/find.py:664
+#: zim/gui/pageview/find.py:732
 msgid "Find what"
 msgstr "என்ன கண்டுபிடிக்கவும்"
 
 #. input label in find & replace dialog
-#: zim/gui/pageview/find.py:674
+#: zim/gui/pageview/find.py:742
 msgid "Replace with"
 msgstr "மாற்றவும்"
 
 #. Button in search & replace dialog
-#: zim/gui/pageview/find.py:688
+#: zim/gui/pageview/find.py:756
 msgid "_Replace"
 msgstr "மறுசீரமைப்பு (_R)"
 
 #. Button in search & replace dialog
-#: zim/gui/pageview/find.py:693
+#: zim/gui/pageview/find.py:761
 msgid "Replace _All"
 msgstr "_All ஐ மாற்றவும்"
 
-#. Menu title
-#: zim/gui/pageview/__init__.py:73
-msgid "New _Attachment"
-msgstr "புதிய _attachment"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:81
-msgid "Show edit bar along bottom of editor"
-msgstr "எடிட்டரின் கீழே திருத்து பட்டியைக் காட்டு"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:84
-msgid ""
-"Use the <Enter> key to follow links\n"
-"(If disabled you can still use <Alt><Enter>)"
-msgstr ""
-"இணைப்புகளைப் பின்தொடர <nert> விசையைப் பயன்படுத்தவும்\n"
-" (முடக்கப்பட்டால் நீங்கள் இன்னும் <alt> <enter> ஐப் பயன்படுத்தலாம்)"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:87
-msgid "Preview link destination in overlay"
-msgstr "மேலடுக்கில் இணைப்பு இலக்கை முன்னோட்டமிடுங்கள்"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:90
-msgid "Show the cursor also for pages that can not be edited"
-msgstr "திருத்த முடியாத பக்கங்களுக்கும் கர்சரைக் காட்டு"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:93
-msgid "Automatically turn \"CamelCase\" words into links"
-msgstr "\"ஒட்டக கேச்\" சொற்களை தானாகவே இணைப்புகளாக மாற்றவும்"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:96
-msgid "Automatically turn wiki page names into links"
-msgstr "விக்கி பக்க பெயர்களை தானாகவே இணைப்புகளாக மாற்றவும்"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:99
-msgid "Automatically turn identifiers starting with \"#\" into links"
-msgstr "\"#\" உடன் தொடங்கி அடையாளங்காட்டிகளை தானாகவே இணைப்புகளாக மாற்றவும்"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:102
-msgid "Automatically turn interwiki names into links"
-msgstr "இன்டர்விகி பெயர்களை தானாகவே இணைப்புகளுக்கு மாற்றவும்"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:105
-msgid "Automatically turn file paths into links"
-msgstr "கோப்பு பாதைகளை தானாகவே இணைப்புகளாக மாற்றவும்"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:108
-msgid "Automatically select the current word when you apply formatting"
-msgstr "நீங்கள் வடிவமைப்பைப் பயன்படுத்தும்போது தற்போதைய வார்த்தையை தானாகவே தேர்ந்தெடுக்கவும்"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:111
-msgid ""
-"Unindent on <BackSpace>\n"
-"(If disabled you can still use <Shift><Tab>)"
-msgstr ""
-"<BackSpace>இல் வெளிதள்ளல்\n"
-"(முடக்கப்பட்டிருந்தாலும் நீங்கள் இன்னும் பயன்படுத்தலாம் <Shift><Tab>)"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:114
-msgid "Repeated clicking a checkbox cycles through the checkbox states"
-msgstr ""
-"தேர்வுப்பெட்டி நிலைகள் வழியாகத் தேர்வுப்பெட்டி சுழற்சிகளைக் சொடுக்கு செய்வதை மீண்டும் "
-"சொடுக்கு"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:117
-msgid "(Un-)indenting a list item also changes any sub-items"
-msgstr "(அன்-) ஒரு பட்டியல் உருப்படியைக் குறைப்பது எந்த துணை உருப்படிகளையும் மாற்றுகிறது"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:120
-msgid "Checking a checkbox also changes any sub-items"
-msgstr "ஒரு தேர்வுப்பெட்டியைச் சரிபார்ப்பது எந்த துணை உருப்படிகளையும் மாற்றுகிறது"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:123
-msgid "Reformat wiki markup on the fly"
-msgstr "பறக்கும்போது விக்கி மார்க்அப்"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:126
-msgid "Default format for copying text to the clipboard"
-msgstr "இடைநிலைப்பலகைக்கு உரையை நகலெடுப்பதற்கான இயல்புநிலை வடிவம்"
-
-#. option in preferences dialog
-#: zim/gui/pageview/__init__.py:129
-msgid "Folder with templates for attachment files"
-msgstr "இணைப்பு கோப்புகளுக்கான வார்ப்புருக்கள் கொண்ட கோப்புறை"
-
-#. Heading of error dialog
-#: zim/gui/pageview/__init__.py:261
-#, python-format
-msgid "Could not save page: %s"
-msgstr "பக்கத்தை சேமிக்க முடியவில்லை: %s"
-
-#. text in error dialog when saving page failed
-#: zim/gui/pageview/__init__.py:265
-msgid ""
-"To continue you can save a copy of this page or discard\n"
-"any changes. If you save a copy changes will be also\n"
-"discarded, but you can restore the copy later."
-msgstr ""
-"தொடர நீங்கள் இந்த பக்கத்தின் நகலைச் சேமிக்கலாம் அல்லது நிராகரிக்கலாம்\n"
-" எந்த மாற்றங்களும். நீங்கள் ஒரு நகலைச் சேமித்தால் மாற்றங்களும் இருக்கும்\n"
-" நிராகரிக்கப்பட்டது, ஆனால் நீங்கள் பின்னர் நகலை மீட்டெடுக்கலாம்."
-
-#. Button in error dialog
-#: zim/gui/pageview/__init__.py:289
-msgid "_Discard Changes"
-msgstr "_ டிச்கார்ட் மாற்றங்கள்"
-
-#. Button in error dialog
-#: zim/gui/pageview/__init__.py:294
-msgid "_Save Copy"
-msgstr "_சேவ் நகல்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:503
-msgid "Heading _1"
-msgstr "தலைப்பு _1"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:504
-msgid "Heading _2"
-msgstr "தலைப்பு _2"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:505
-msgid "Heading _3"
-msgstr "தலைப்பு _3"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:506
-msgid "Heading _4"
-msgstr "தலைப்பு _4"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:507
-msgid "Heading _5"
-msgstr "தலைப்பு _5"
-
-#. Menu item | 
-#. menu item for formatting
-#: zim/gui/pageview/__init__.py:508 zim/gui/pageview/__init__.py:523
-msgid "_Strong"
-msgstr "_ச்ட்ராங்"
-
-#. Menu item | 
-#. menu item for formatting
-#: zim/gui/pageview/__init__.py:509 zim/gui/pageview/__init__.py:524
-msgid "_Emphasis"
-msgstr "முக்கியத்துவம்"
-
-#. Menu item | 
-#. menu item for formatting
-#: zim/gui/pageview/__init__.py:510 zim/gui/pageview/__init__.py:525
-msgid "_Mark"
-msgstr "குறி (_M)"
-
-#. Menu item | 
-#. menu item for formatting
-#: zim/gui/pageview/__init__.py:511 zim/gui/pageview/__init__.py:526
-msgid "_Strike"
-msgstr "_ ச்ட்ரைக்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:512
-msgid "_Subscript"
-msgstr "_சப்ச்கிரிப்ட்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:513
-msgid "_Superscript"
-msgstr "சூப்பர்ச்கிரிப்ட்"
-
-#. Menu item | 
-#. menu item for formatting
-#: zim/gui/pageview/__init__.py:514 zim/gui/pageview/__init__.py:527
-msgid "_Verbatim"
-msgstr "_Vervall"
-
-#. menu item for formatting
-#: zim/gui/pageview/__init__.py:528
-msgid "Su_perscript"
-msgstr "அருமைஉரை"
-
-#. menu item for formatting
-#: zim/gui/pageview/__init__.py:529
-msgid "Su_bscript"
-msgstr "சந்தா"
-
-#. error when unknown interwiki link is clicked
-#: zim/gui/pageview/__init__.py:1268
-#, python-format
-msgid "No such wiki defined: %s"
-msgstr "அத்தகைய விக்கி வரையறுக்கப்படவில்லை: %s"
-
-#. error when anchor location in page not found
-#: zim/gui/pageview/__init__.py:1321
-#, python-format
-msgid "Id \"%s\" not found on the current page"
-msgstr "ஐடி \"%s\" தற்போதைய பக்கத்தில் காணப்படவில்லை"
-
-#. menu item for context menu of editor
-#: zim/gui/pageview/__init__.py:1380
-msgid "Copy _As..."
-msgstr "நகல் _as ..."
-
-#. menu item for context menu of editor
-#: zim/gui/pageview/__init__.py:1386
-msgid "Paste As _Verbatim"
-msgstr "_Verbatim ஆக ஒட்டவும்"
-
-#. Context menu item for pageview to move selected text to new/other page | 
-#. Menu item
-#: zim/gui/pageview/__init__.py:1394 zim/gui/pageview/__init__.py:2062
-msgid "Move Selected Text..."
-msgstr "தேர்ந்தெடுக்கப்பட்ட உரையை நகர்த்தவும் ..."
-
-#. menu item to copy link to achor location in page | 
-#. menu item
-#: zim/gui/pageview/__init__.py:1417 zim/plugins/tableofcontents.py:443
-msgid "Copy _link to this location"
-msgstr "இந்த இடத்திற்கு இணைப்பை நகலெடுக்கவும்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1458 zim/gui/pageview/__init__.py:1723
-msgid "_Remove Link"
-msgstr "_ இணைப்பை அகற்றவும்"
-
-#. menu item in context menu for image
-#: zim/gui/pageview/__init__.py:1465
-msgid "_Edit Properties"
-msgstr "_ திருத்து பண்புகள்"
-
-#. menu item in context menu
-#: zim/gui/pageview/__init__.py:1467
-msgid "_Edit Link"
-msgstr "தொகு (_E) இணைப்பு"
-
-#. context menu item
-#: zim/gui/pageview/__init__.py:1492
-msgid "Copy _Link"
-msgstr "நகல் _ லிங்க்"
-
-#. context menu item
-#: zim/gui/pageview/__init__.py:1493
-msgid "Cut Lin_k"
-msgstr "வெட்டு LIN_K"
-
-#. context menu item
-#: zim/gui/pageview/__init__.py:1506
-msgid "Copy Email Address"
-msgstr "மின்னஞ்சல் முகவரியை நகலெடுக்கவும்"
-
-#. menu item to open containing folder of files
-#: zim/gui/pageview/__init__.py:1521
-msgid "Open Folder"
-msgstr "திறந்த கோப்புறை"
-
-#. menu item for sub menu with applications | 
-#. menu item
-#: zim/gui/pageview/__init__.py:1530 zim/gui/pageview/__init__.py:1541
-#: zim/plugins/attachmentbrowser/filebrowser.py:400
-msgid "Open With..."
-msgstr "உடன் திறந்திருக்கும் ..."
-
-#. menu item to open a link | 
-#. Menu item | 
-#. menu item
-#: zim/gui/pageview/__init__.py:1551 zim/gui/uiactions.py:131
-#: zim/plugins/backlinkpane.py:143 zim/plugins/tableofcontents.py:451
-msgid "Open in New _Window"
-msgstr "புதிய சாளரத்தில் திற (_W)"
-
-#. menu item to open a link or file | 
-#. Button label | 
-#. menu item to open file or folder
-#: zim/gui/pageview/__init__.py:1561 zim/gui/widgets.py:3638
-#: zim/plugins/attachmentbrowser/filebrowser.py:407
-msgid "_Open"
-msgstr "_OPEN"
-
-#. popup menu menuitem
-#: zim/gui/pageview/__init__.py:1576
-msgid "Check Checkbox '<'"
-msgstr "சரிபார்ப்பு பெட்டியை '<'"
-
-#. popup menu menuitem
-#: zim/gui/pageview/__init__.py:1577
-msgid "Check Checkbox '>'"
-msgstr "சரிபார்ப்பு பெட்டியை '>'"
-
-#. popup menu menuitem
-#: zim/gui/pageview/__init__.py:1578
-msgid "Check Checkbox 'X'"
-msgstr "'ஃச்' என்ற தேர்வுப்பெட்டியை சரிபார்க்கவும்"
-
-#. popup menu menuitem
-#: zim/gui/pageview/__init__.py:1579
-msgid "Check Checkbox 'V'"
-msgstr "தேர்வுப்பெட்டியை சரிபார்க்கவும் 'வி'"
-
-#. popup menu menuitem | 
-#. Menu item
-#: zim/gui/pageview/__init__.py:1580 zim/gui/pageview/__init__.py:1643
-msgid "Un-check Checkbox"
-msgstr "சரிபார்க்கவும் தேர்வுப்பெட்டி"
-
-#. Menu item | 
-#. Button label | 
-#. button label
-#: zim/gui/pageview/__init__.py:1589 zim/gui/widgets.py:3640
-#: zim/plugins/versioncontrol/__init__.py:752
-msgid "_Save"
-msgstr "_சேவ்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1599
-msgid "_Reload"
-msgstr "மறுஏற்றம் (_R)"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1609
-msgid "_Undo"
-msgstr "செயல்தவிர்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1616
-msgid "_Redo"
-msgstr "_ ரெடோ"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1623
-msgid "Cu_t"
-msgstr "Cu_t"
-
-#. Menu item | 
-#. Button label | 
-#. menu label
-#: zim/gui/pageview/__init__.py:1628 zim/gui/templateeditordialog.py:46
-#: zim/plugins/tasklist/gui.py:1215
-msgid "_Copy"
-msgstr "_ கோபி"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1633
-msgid "_Paste"
-msgstr "_ பேச்ட்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1638
-msgid "_Delete"
-msgstr "_Delete"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1649
-msgid "Toggle Checkbox 'V'"
-msgstr "'வி' என்ற தேர்வுப்பெட்டியை மாற்றவும்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1658
-msgid "Toggle Checkbox 'X'"
-msgstr "'ஃச்' என்ற தேர்வுப்பெட்டியை மாற்றவும்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1667
-msgid "Toggle Checkbox '>'"
-msgstr "தேர்வுப்பெட்டியை மாற்று '>'"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1676
-msgid "Toggle Checkbox '<'"
-msgstr "தேர்வுப்பெட்டியை மாற்று '<'"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1685
-msgid "_Edit Link or Object..."
-msgstr "தொகு (_E) இணைப்பு அல்லது பொருள் ..."
-
-#. menu item to copy current line to clipboard
-#: zim/gui/pageview/__init__.py:1741
-msgid "Copy Line"
-msgstr "நகல் வரி"
-
-#. menu item to cut current line to clipboard
-#: zim/gui/pageview/__init__.py:1757
-msgid "Cut Line"
-msgstr "வெட்டு வரி"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1770
-msgid "Date and Time..."
-msgstr "தேதி மற்றும் நேரம் ..."
-
-#. Menu item for Insert menu
-#: zim/gui/pageview/__init__.py:1785
-msgid "Horizontal _Line"
-msgstr "கிடைமட்ட கோடு"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1794
-msgid "_Image..."
-msgstr "_Image ..."
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1801
-msgid "_Attachment..."
-msgstr "_Attachment ..."
-
-#. Menu item | 
-#. Menu item,
-#: zim/gui/pageview/__init__.py:1816 zim/gui/pageview/__init__.py:1843
-msgid "Bulle_t List"
-msgstr "புல்லட் பட்டியல்"
-
-#. Menu item | 
-#. Menu item,
-#: zim/gui/pageview/__init__.py:1821 zim/gui/pageview/__init__.py:1848
-msgid "_Numbered List"
-msgstr "எண் பட்டியல்"
-
-#. Menu item | 
-#. Menu item,
-#: zim/gui/pageview/__init__.py:1826 zim/gui/pageview/__init__.py:1853
-msgid "Checkbo_x List"
-msgstr "தேர்வுப்பெட்டி பட்டியல்"
-
-#. Menu item,
-#: zim/gui/pageview/__init__.py:1858
-msgid "_Remove List"
-msgstr "_ அகற்று பட்டியல்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1886
-msgid "Text From _File..."
-msgstr "கோப்பிலிருந்து உரை ..."
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:1933
-msgid "_Link..."
-msgstr "_ லிங்க் ..."
-
-#. message when no file templates are found in ~/Templates
-#: zim/gui/pageview/__init__.py:1960
-msgid "No templates installed"
-msgstr "வார்ப்புருக்கள் எதுவும் நிறுவப்படவில்லை"
-
-#. Menu item in "Insert > New File Attachment" submenu
-#: zim/gui/pageview/__init__.py:2009
-msgid "File _Templates..."
-msgstr "கோப்பு _TEMPLATES ..."
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:2017
-msgid "_Clear Formatting"
-msgstr "_ கிளையர் வடிவமைப்பு"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:2023
-msgid "_Remove Heading"
-msgstr "_ ரோமோவ் தலைப்பு"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:2067
-msgid "_Find..."
-msgstr "தேடு..."
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:2085
-msgid "Find Ne_xt"
-msgstr "Ne_st ஐக் கண்டறியவும்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:2093
-msgid "Find Pre_vious"
-msgstr "Pre_ived ஐக் கண்டறியவும்"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:2099
-msgid "_Replace..."
-msgstr "மாற்று..."
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:2106
-msgid "Word Count..."
-msgstr "சொல் எண்ணிக்கை ..."
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:2111
-msgid "_Zoom In"
-msgstr "_சூம் உள்ளே"
-
-#. Menu item
-#: zim/gui/pageview/__init__.py:2116
-msgid "Zoom _Out"
-msgstr "பெரிதாக்கவும்"
-
-#. Menu item to reset zoom
-#: zim/gui/pageview/__init__.py:2144
-msgid "_Normal Size"
-msgstr "_ இயல்பான அளவு"
-
 #. tooltip for button in anchor popover
-#: zim/gui/pageview/textview.py:826
+#: zim/gui/pageview/textview.py:827
 msgid "Copy link to clipboard"
 msgstr "இடைநிலைப்பலகைக்கு இணைப்பை நகலெடுக்கவும்"
 
 #. tooltip label for image with href
-#: zim/gui/pageview/textview.py:1087
+#: zim/gui/pageview/textview.py:1101
 msgid "Link"
 msgstr "இணைப்பு"
 
@@ -1720,7 +1749,7 @@ msgstr "விரும்பினால்"
 
 #. Heading in plugins tab of preferences dialog | 
 #. Column header versions dialog
-#: zim/gui/preferencesdialog.py:369 zim/plugins/versioncontrol/__init__.py:1066
+#: zim/gui/preferencesdialog.py:369 zim/plugins/versioncontrol/__init__.py:1085
 msgid "Author"
 msgstr "நூலாசிரியர்"
 
@@ -1788,36 +1817,36 @@ msgid "Key Binding"
 msgstr "விசை பிணைப்பு"
 
 #. label for properties dialog
-#: zim/gui/propertiesdialog.py:17
+#: zim/gui/propertiesdialog.py:22
 msgid "Interwiki Keyword"
 msgstr "முக்கிய சொல் இன்டர்விகி"
 
 #. label for properties dialog
-#: zim/gui/propertiesdialog.py:18
+#: zim/gui/propertiesdialog.py:29
 msgid "Home Page"
 msgstr "முகப்பு பக்கம்"
 
 #. label for properties dialog
-#: zim/gui/propertiesdialog.py:20
+#: zim/gui/propertiesdialog.py:30
 msgid "Document Root"
 msgstr "ஆவண வேர்"
 
 #. label for properties dialog
-#: zim/gui/propertiesdialog.py:21
+#: zim/gui/propertiesdialog.py:31
 msgid "Prefer short names for page links"
 msgstr "பக்க இணைப்புகளுக்கான குறுகிய பெயர்களை விரும்புங்கள்"
 
 #. label for properties dialog
-#: zim/gui/propertiesdialog.py:22
+#: zim/gui/propertiesdialog.py:32
 msgid "Do not use system trash for this notebook"
 msgstr "இந்த நோட்புக்குக்கு கணினி குப்பைகளைப் பயன்படுத்த வேண்டாம்"
 
-#: zim/gui/propertiesdialog.py:23
+#: zim/gui/propertiesdialog.py:33
 msgid "Filename template for pasted images"
 msgstr "ஒட்டப்பட்ட படங்களுக்கான கோப்பு பெயர் வார்ப்புரு"
 
 #. Dialog title
-#: zim/gui/propertiesdialog.py:31
+#: zim/gui/propertiesdialog.py:38
 msgid "Properties"
 msgstr "பண்புகள்"
 
@@ -1851,32 +1880,39 @@ msgstr ""
 " மற்றும், அல்லது இல்லை. மேலும் விவரங்களுக்கு உதவி பக்கத்தைப் பார்க்கவும்."
 
 #. Dialog title
-#: zim/gui/searchdialog.py:31
+#: zim/gui/searchdialog.py:32
 msgid "Search"
 msgstr "தேடல்"
 
 #. Button label
-#: zim/gui/searchdialog.py:45
+#: zim/gui/searchdialog.py:46
 msgid "_Find"
 msgstr "_ ஃபைண்ட்"
 
 #. checkbox option in search dialog
-#: zim/gui/searchdialog.py:54
+#: zim/gui/searchdialog.py:55
 msgid "_Limit search to the current page and sub-pages"
 msgstr "_ தற்போதைய பக்கம் மற்றும் துணை பக்கங்களைத் தேடுங்கள்"
 
+#. checkbox option in search dialog
+#: zim/gui/searchdialog.py:60
+#, fuzzy
+#| msgid "Match _case"
+msgid "Match c_ase"
+msgstr "போட்டி வழக்கு"
+
 #. placeholder label when search has started
-#: zim/gui/searchdialog.py:67
+#: zim/gui/searchdialog.py:73
 msgid "Searching ..."
 msgstr "தேடுகிறது ..."
 
 #. placeholder label when search has no results
-#: zim/gui/searchdialog.py:68
+#: zim/gui/searchdialog.py:74
 msgid "No results"
 msgstr "முடிவுகள் இல்லை"
 
 #. Column header search dialog
-#: zim/gui/searchdialog.py:170
+#: zim/gui/searchdialog.py:190
 msgid "Score"
 msgstr "கெலிப்பெண்"
 
@@ -2164,27 +2200,27 @@ msgstr "உரை கோப்புகள்"
 
 #. File filter for '*.md'
 #: zim/gui/uiactions.py:536
-msgid "Markdown Files"
+msgid "Markdown Files (.md)"
 msgstr ""
 
 #. Dialog title of file save dialog
-#: zim/gui/uiactions.py:558
+#: zim/gui/uiactions.py:559
 msgid "Save Copy"
 msgstr "நகலை சேமிக்கவும்"
 
 #. Dialog title
-#: zim/gui/uiactions.py:570
+#: zim/gui/uiactions.py:584
 msgid "Rename or Move Page"
 msgstr "பக்கத்தை மறுபெயரிடுங்கள் அல்லது நகர்த்தவும்"
 
 #. Heading in 'move page' dialog - %s is the page name
-#: zim/gui/uiactions.py:575
+#: zim/gui/uiactions.py:589
 #, python-format
 msgid "Rename page \"%s\""
 msgstr "\"%s\" என்ற பக்கத்தை மறுபெயரிடுங்கள்"
 
 #. label in MovePage dialog - %i is number of backlinks
-#: zim/gui/uiactions.py:586
+#: zim/gui/uiactions.py:600
 #, python-format
 msgid "Update %i page linking to this page"
 msgid_plural "Update %i pages linking to this page"
@@ -2192,34 +2228,34 @@ msgstr[0] "இந்தப் பக்கத்துடன் இணைக்�
 msgstr[1] "இந்தப் பக்கத்துடன் இணைக்கும் %i பக்கங்களைப் புதுப்பி"
 
 #. option in 'move page' dialog
-#: zim/gui/uiactions.py:595
+#: zim/gui/uiactions.py:609
 msgid "Update the heading of this page"
 msgstr "இந்த பக்கத்தின் தலைப்பைப் புதுப்பிக்கவும்"
 
 #. label for progress dialog
-#: zim/gui/uiactions.py:630
+#: zim/gui/uiactions.py:644
 msgid "Updating Links"
 msgstr "இணைப்புகளைப் புதுப்பித்தல்"
 
 #. label in DeletePageDialog
-#: zim/gui/uiactions.py:668
+#: zim/gui/uiactions.py:682
 #, python-format
 msgid "Remove links to %s"
 msgstr "%s க்கான இணைப்புகளை அகற்று"
 
 #. Dialog title
-#: zim/gui/uiactions.py:712
+#: zim/gui/uiactions.py:726
 msgid "Trash Page"
 msgstr "குப்பை பக்கம்"
 
 #. Heading in 'trash page' dialog - %s is the page name
-#: zim/gui/uiactions.py:713
+#: zim/gui/uiactions.py:727
 #, python-format
 msgid "Move page \"%s\" to trash?"
 msgstr "பக்கத்தை \"%s\" குப்பைக்கு நகர்த்தவா?"
 
 #. Text in 'trash page' dialog - %s is the page name
-#: zim/gui/uiactions.py:715
+#: zim/gui/uiactions.py:729
 #, python-format
 msgid ""
 "Page \"%s\" and all of it's sub-pages and\n"
@@ -2233,7 +2269,7 @@ msgstr ""
 " பின்னர் செயல்தவிர்க்க, உங்கள் கணினியின் குப்பைத்தொட்டிக்குச் செல்லுங்கள்."
 
 #. label in the TrashPage dialog to warn user of attachments being deleted
-#: zim/gui/uiactions.py:719
+#: zim/gui/uiactions.py:733
 #, python-format
 msgid "%i file will be trashed"
 msgid_plural "%i files will be trashed"
@@ -2241,23 +2277,23 @@ msgstr[0] "%i கோப்பு குப்பைக்கு ஏற்பட�
 msgstr[1] "%i கோப்புகள் குப்பைக்கு ஏற்படும்"
 
 #. Title of progressbar dialog
-#: zim/gui/uiactions.py:729 zim/gui/uiactions.py:769
+#: zim/gui/uiactions.py:743 zim/gui/uiactions.py:783
 msgid "Removing Links"
 msgstr "இணைப்புகளை நீக்குதல்"
 
 #. Dialog title
-#: zim/gui/uiactions.py:754
+#: zim/gui/uiactions.py:768
 msgid "Delete Page"
 msgstr "பக்கத்தை நீக்கு"
 
 #. Heading in 'delete page' dialog - %s is the page name
-#: zim/gui/uiactions.py:755
+#: zim/gui/uiactions.py:769
 #, python-format
 msgid "Delete page \"%s\"?"
 msgstr "\"%s\" என்ற பக்கத்தை நீக்கவா?"
 
 #. Text in 'delete page' dialog - %s is the page name
-#: zim/gui/uiactions.py:757
+#: zim/gui/uiactions.py:771
 #, python-format
 msgid ""
 "Page \"%s\" and all of it's sub-pages and\n"
@@ -2271,7 +2307,7 @@ msgstr ""
 " இந்த நீக்குதல் நிரந்தரமானது மற்றும் செய்ய முடியாது."
 
 #. label in the DeletePage dialog to warn user of attachments being deleted
-#: zim/gui/uiactions.py:761
+#: zim/gui/uiactions.py:775
 #, python-format
 msgid "%i file will be deleted"
 msgid_plural "%i files will be deleted"
@@ -2279,12 +2315,12 @@ msgstr[0] "%i கோப்பு நீக்கப்படும்"
 msgstr[1] "%i கோப்புகள் நீக்கப்படும்"
 
 #. General description of zim itself
-#: zim/gui/uiactions.py:791
+#: zim/gui/uiactions.py:805
 msgid "A desktop wiki"
 msgstr "ஒரு டெச்க்டாப் விக்கி"
 
 #. This string needs to be translated with names of the translators for this language
-#: zim/gui/uiactions.py:799
+#: zim/gui/uiactions.py:813
 msgid "translator-credits"
 msgstr "மொழிபெயர்ப்பாளர்-வரவு"
 
@@ -2377,7 +2413,7 @@ msgid "_All Panes"
 msgstr "Allanal அனைத்து பேன்களும்"
 
 #. generic error dialog text
-#: zim/gui/widgets.py:3389
+#: zim/gui/widgets.py:3378
 msgid ""
 "When reporting this bug please include\n"
 "the information from the text box below"
@@ -2386,49 +2422,49 @@ msgstr ""
 " கீழே உள்ள உரை பெட்டியிலிருந்து செய்தி"
 
 #. Filter in open file dialog, shows all files (*)
-#: zim/gui/widgets.py:3771
+#: zim/gui/widgets.py:3760
 msgid "All Files"
 msgstr "அனைத்து கோப்புகள்"
 
 #. Filter in open file dialog, shows image files only
-#: zim/gui/widgets.py:3798
+#: zim/gui/widgets.py:3787
 msgid "Images"
 msgstr "படங்கள்"
 
 #. lable in progressbar giving number of items and total
-#: zim/gui/widgets.py:3894
+#: zim/gui/widgets.py:3883
 #, python-brace-format
 msgid "{count} of {total}"
 msgstr "{count} ஆவது {total} இல்"
 
 #. dialog title for log view dialog - e.g. for Equation Editor
-#: zim/gui/widgets.py:3916
+#: zim/gui/widgets.py:3905
 msgid "Log file"
 msgstr "பதிவு கோப்பு"
 
 #. Error verbose description
-#: zim/main/__init__.py:131
+#: zim/main/__init__.py:137
 msgid "Could not find the file or folder for this notebook"
 msgstr "இந்த நோட்புக்கிற்கான கோப்பு அல்லது கோப்புறையை கண்டுபிடிக்க முடியவில்லை"
 
 #. Error when looking up a notebook
-#: zim/main/__init__.py:164 zim/main/__init__.py:198
+#: zim/main/__init__.py:170 zim/main/__init__.py:204
 msgid "Please specify a notebook"
 msgstr "ஒரு நோட்புக்கைக் குறிப்பிடவும்"
 
 #. error message
-#: zim/main/__init__.py:171
+#: zim/main/__init__.py:177
 #, python-format
 msgid "Could not find notebook: %s"
 msgstr "நோட்புக் கண்டுபிடிக்க முடியவில்லை: %s"
 
 #. error in export command
-#: zim/main/__init__.py:460
+#: zim/main/__init__.py:466
 msgid "Output location needed for export"
 msgstr "ஏற்றுமதிக்கு வெளியீட்டு இடம் தேவை"
 
 #. error message for export
-#: zim/main/__init__.py:472
+#: zim/main/__init__.py:478
 msgid ""
 "Output folder exists and not empty, specify \"--overwrite\" to force export"
 msgstr ""
@@ -2436,17 +2472,17 @@ msgstr ""
 "என்று குறிப்பிடவும்"
 
 #. error message for export
-#: zim/main/__init__.py:476
+#: zim/main/__init__.py:482
 msgid "Output file exists, specify \"--overwrite\" to force export"
 msgstr "வெளியீட்டு கோப்பு உள்ளது, ஏற்றுமதியை கட்டாயப்படுத்த \"-ஓவர்ரைட்\" ஐக் குறிப்பிடவும்"
 
 #. error message for export
-#: zim/main/__init__.py:481
+#: zim/main/__init__.py:487
 msgid "Need output file to export MHTML"
 msgstr "MHTML ஐ ஏற்றுமதி செய்ய வெளியீட்டு கோப்பு தேவை"
 
 #. error message for export
-#: zim/main/__init__.py:515
+#: zim/main/__init__.py:521
 msgid "Need output folder to export full notebook"
 msgstr "முழு நோட்புக்கை ஏற்றுமதி செய்ய வெளியீட்டு கோப்புறை தேவை"
 
@@ -2490,36 +2526,36 @@ msgid "Updating index"
 msgstr "புதுப்பித்தல் குறியீடு"
 
 #. message for PageNotFoundError
-#: zim/notebook/notebook.py:114
+#: zim/notebook/notebook.py:115
 #, python-format
 msgid "No such page: %s"
 msgstr "அத்தகைய பக்கம் இல்லை: %s"
 
 #. message for PageNotAllowedError
-#: zim/notebook/notebook.py:118
+#: zim/notebook/notebook.py:119
 #, python-format
 msgid "Page not allowed: %s"
 msgstr "பக்கம் அனுமதிக்கப்படவில்லை: %s"
 
 #. description for PageNotAllowedError
-#: zim/notebook/notebook.py:119
+#: zim/notebook/notebook.py:120
 msgid ""
 "This page name cannot be used due to technical limitations of the storage"
 msgstr "சேமிப்பகத்தின் தொழில்நுட்ப வரம்புகள் காரணமாக இந்த பக்க பெயரைப் பயன்படுத்த முடியாது"
 
 #. message for PageNotAvailableError
-#: zim/notebook/notebook.py:124
+#: zim/notebook/notebook.py:125
 #, python-format
 msgid "Page not available: %s"
 msgstr "பக்கம் கிடைக்கவில்லை: %s"
 
 #. description for PageNotAvailableError
-#: zim/notebook/notebook.py:125
+#: zim/notebook/notebook.py:126
 msgid "This page name cannot be used due to a conflicting file in the storage"
 msgstr "சேமிப்பகத்தில் முரண்பட்ட கோப்பு காரணமாக இந்த பக்க பெயரை பயன்படுத்த முடியாது"
 
 #. message for PageExistsError
-#: zim/notebook/notebook.py:134
+#: zim/notebook/notebook.py:135
 #, python-format
 msgid "Page already exists: %s"
 msgstr "பக்கம் ஏற்கனவே உள்ளது: %s"
@@ -2566,6 +2602,57 @@ msgstr "வெளியீட்டு துல்லியம்"
 #: zim/plugins/arithmetic.py:38
 msgid "_Arithmetic"
 msgstr "_Arthimmetic"
+
+#. plugin name
+#: zim/plugins/attachmentbrowser/__init__.py:69
+msgid "Attachment Browser"
+msgstr "இணைப்பு உலாவி"
+
+#. plugin description
+#: zim/plugins/attachmentbrowser/__init__.py:70
+msgid ""
+"This plugin shows the attachments folder of the current page as an\n"
+"icon view at bottom pane.\n"
+msgstr ""
+"இந்த சொருகி தற்போதைய பக்கத்தின் இணைப்புகள் கோப்புறையை ஒரு எனக் காட்டுகிறது\n"
+" கீழே உள்ள பலகத்தில் படவுரு பார்வை.\n"
+
+#. option for plugin preferences | 
+#. preferences option
+#: zim/plugins/attachmentbrowser/__init__.py:82 zim/plugins/backlinkpane.py:35
+#: zim/plugins/journal.py:116 zim/plugins/pageindex/__init__.py:61
+#: zim/plugins/tableofcontents.py:107 zim/plugins/tags.py:47
+#: zim/plugins/tasklist/__init__.py:51 zim/plugins/toolbar.py:55
+msgid "Position in the window"
+msgstr "சாளரத்தில் நிலை"
+
+#. option for plugin preferences
+#: zim/plugins/attachmentbrowser/__init__.py:84
+msgid "Use thumbnails"
+msgstr "சிறுபடங்களைப் பயன்படுத்துங்கள்"
+
+#. option for plugin preferences
+#: zim/plugins/attachmentbrowser/__init__.py:86
+msgid "Support thumbnails for SVG"
+msgstr "எச்.வி.சி.க்கு சிறுபடங்களை ஆதரிக்கவும்"
+
+#. label for attachment browser pane
+#: zim/plugins/attachmentbrowser/__init__.py:130
+msgid "Atta_chments"
+msgstr "இணைப்புகள்"
+
+#. placeholder label for sidepane
+#: zim/plugins/attachmentbrowser/__init__.py:147
+msgid "No attachments"
+msgstr "இணைப்புகள் இல்லை"
+
+#. Label for the statusbar, %i is the number of attachments for the current page
+#: zim/plugins/attachmentbrowser/__init__.py:198
+#, python-format
+msgid "%i Atta_chment"
+msgid_plural "%i Atta_chments"
+msgstr[0] "%i atta_chment"
+msgstr[1] "%i atta_chments"
 
 #. text in confirmation dialog on deleting a file
 #: zim/plugins/attachmentbrowser/filebrowser.py:61
@@ -2639,57 +2726,6 @@ msgid "File name should not contain path declaration."
 msgstr "கோப்பு பெயரில் பாதை அறிவிப்பு இருக்கக்கூடாது."
 
 #. plugin name
-#: zim/plugins/attachmentbrowser/__init__.py:69
-msgid "Attachment Browser"
-msgstr "இணைப்பு உலாவி"
-
-#. plugin description
-#: zim/plugins/attachmentbrowser/__init__.py:70
-msgid ""
-"This plugin shows the attachments folder of the current page as an\n"
-"icon view at bottom pane.\n"
-msgstr ""
-"இந்த சொருகி தற்போதைய பக்கத்தின் இணைப்புகள் கோப்புறையை ஒரு எனக் காட்டுகிறது\n"
-" கீழே உள்ள பலகத்தில் படவுரு பார்வை.\n"
-
-#. option for plugin preferences | 
-#. preferences option
-#: zim/plugins/attachmentbrowser/__init__.py:82 zim/plugins/backlinkpane.py:35
-#: zim/plugins/journal.py:116 zim/plugins/pageindex/__init__.py:61
-#: zim/plugins/tableofcontents.py:107 zim/plugins/tags.py:47
-#: zim/plugins/tasklist/__init__.py:51 zim/plugins/toolbar.py:55
-msgid "Position in the window"
-msgstr "சாளரத்தில் நிலை"
-
-#. option for plugin preferences
-#: zim/plugins/attachmentbrowser/__init__.py:84
-msgid "Use thumbnails"
-msgstr "சிறுபடங்களைப் பயன்படுத்துங்கள்"
-
-#. option for plugin preferences
-#: zim/plugins/attachmentbrowser/__init__.py:86
-msgid "Support thumbnails for SVG"
-msgstr "எச்.வி.சி.க்கு சிறுபடங்களை ஆதரிக்கவும்"
-
-#. label for attachment browser pane
-#: zim/plugins/attachmentbrowser/__init__.py:130
-msgid "Atta_chments"
-msgstr "இணைப்புகள்"
-
-#. placeholder label for sidepane
-#: zim/plugins/attachmentbrowser/__init__.py:147
-msgid "No attachments"
-msgstr "இணைப்புகள் இல்லை"
-
-#. Label for the statusbar, %i is the number of attachments for the current page
-#: zim/plugins/attachmentbrowser/__init__.py:198
-#, python-format
-msgid "%i Atta_chment"
-msgid_plural "%i Atta_chments"
-msgstr[0] "%i atta_chment"
-msgstr[1] "%i atta_chments"
-
-#. plugin name
 #: zim/plugins/backlinkpane.py:22
 msgid "BackLinks Pane"
 msgstr "பின்னிணைப்பு பலகம்"
@@ -2736,23 +2772,23 @@ msgstr[0] "%i _backlink"
 msgstr[1] "%i _backlinks"
 
 #. context menu for inserted objects
-#: zim/plugins/base/imagegenerator.py:382
+#: zim/plugins/base/imagegenerator.py:381
 msgid "_Edit..."
 msgstr "தொகு (_E) ..."
 
 #. dialog title, %s is the object name like "Equation"
-#: zim/plugins/base/imagegenerator.py:411
+#: zim/plugins/base/imagegenerator.py:410
 #, python-format
 msgid "Edit %s"
 msgstr "திருத்து %s"
 
 #. button in e.g. equation editor dialog
-#: zim/plugins/base/imagegenerator.py:436
+#: zim/plugins/base/imagegenerator.py:435
 msgid "_Preview"
 msgstr "முன்னோட்டம்"
 
 #. Question prompt when e.g. equation editor encountered an error generating the image to insert
-#: zim/plugins/base/imagegenerator.py:499
+#: zim/plugins/base/imagegenerator.py:498
 msgid ""
 "An error occurred while generating the image.\n"
 "Do you want to save the source text anyway?"
@@ -2928,7 +2964,7 @@ msgstr "அதிகபட்ச பக்க அகலம்"
 
 #. plugin preference | 
 #. preference option for sourceview plugin
-#: zim/plugins/distractionfree.py:38 zim/plugins/sourceview.py:99
+#: zim/plugins/distractionfree.py:38 zim/plugins/sourceview.py:101
 msgid "Border width"
 msgstr "எல்லை அகலம்"
 
@@ -3000,6 +3036,21 @@ msgid "Equation"
 msgstr "சமன்பாடு"
 
 #. plugin name
+#: zim/plugins/gnu_r_ploteditor.py:35
+msgid "Insert GNU R Plot"
+msgstr "குனு ஆர் சூழ்ச்சி செருகவும்"
+
+#. plugin description
+#: zim/plugins/gnu_r_ploteditor.py:36
+msgid "This plugin provides a plot editor for zim based on GNU R.\n"
+msgstr "இந்த சொருகி குனு ஆர்.\n"
+
+#. menu item
+#: zim/plugins/gnu_r_ploteditor.py:52
+msgid "GNU R Plot"
+msgstr "குனு ஆர் சூழ்ச்சி"
+
+#. plugin name
 #: zim/plugins/gnuplot_ploteditor.py:32
 msgid "Insert Gnuplot"
 msgstr "குனுப்லாட்டை செருகவும்"
@@ -3016,27 +3067,12 @@ msgid "Gnuplot"
 msgstr "குனுப்லாட்"
 
 #. plugin name
-#: zim/plugins/gnu_r_ploteditor.py:35
-msgid "Insert GNU R Plot"
-msgstr "குனு ஆர் சூழ்ச்சி செருகவும்"
-
-#. plugin description
-#: zim/plugins/gnu_r_ploteditor.py:36
-msgid "This plugin provides a plot editor for zim based on GNU R.\n"
-msgstr "இந்த சொருகி குனு ஆர்.\n"
-
-#. menu item
-#: zim/plugins/gnu_r_ploteditor.py:52
-msgid "GNU R Plot"
-msgstr "குனு ஆர் சூழ்ச்சி"
-
-#. plugin name
-#: zim/plugins/indexed_fts.py:44
+#: zim/plugins/indexed_fts.py:48
 msgid "Indexed Full-Text Search"
 msgstr "குறியிடப்பட்ட முழு உரை தேடல்"
 
 #. plugin description
-#: zim/plugins/indexed_fts.py:45
+#: zim/plugins/indexed_fts.py:49
 msgid ""
 "This plugin provides full-text indexing of\n"
 "page contents for fast full-text search,\n"
@@ -3048,11 +3084,11 @@ msgstr ""
 " fts5 மெய்நிகர் அட்டவணை தொகுதியின் அடிப்படையில்\n"
 " sqlite.\n"
 
-#: zim/plugins/indexed_fts.py:57
+#: zim/plugins/indexed_fts.py:61
 msgid "Remove diacritics before indexing"
 msgstr "குறியீட்டுக்கு முன் டயாக்ரிடிக்சை அகற்று"
 
-#: zim/plugins/indexed_fts.py:58
+#: zim/plugins/indexed_fts.py:62
 msgid "Additional token characters"
 msgstr "கூடுதல் கிள்ளாக்கு எழுத்துக்கள்"
 
@@ -3227,7 +3263,7 @@ msgid "_Duplicate Line"
 msgstr "_DUPLICATE வரி"
 
 #. Menu item
-#: zim/plugins/linesorter.py:194
+#: zim/plugins/linesorter.py:198
 msgid "_Remove Line"
 msgstr "_ அகற்று வரி"
 
@@ -3338,18 +3374,25 @@ msgstr "கிடைமட்ட உருள் பட்டியைப் ப
 msgid "Use tooltips"
 msgstr "உதவிக்குறிப்புகளைப் பயன்படுத்தவும்"
 
+#. preferences option
+#: zim/plugins/pageindex/__init__.py:73 zim/plugins/tags.py:57
+#, fuzzy
+#| msgid "_Sort lines"
+msgid "Show tree lines"
+msgstr "_சார்ட் கோடுகள்"
+
 #. menu item
-#: zim/plugins/pageindex/__init__.py:129
+#: zim/plugins/pageindex/__init__.py:132
 msgid "Collapse Page Index"
 msgstr "பக்க குறியீட்டை வீழ்த்துங்கள்"
 
 #. menu item
-#: zim/plugins/pageindex/__init__.py:133
+#: zim/plugins/pageindex/__init__.py:136
 msgid "Reveal Current Page in Page Index"
 msgstr "பக்க குறியீட்டில் தற்போதைய பக்கத்தை வெளிப்படுத்துங்கள்"
 
 #. tab label for side pane
-#: zim/plugins/pageindex/__init__.py:147
+#: zim/plugins/pageindex/__init__.py:150
 msgid "Inde_x"
 msgstr "குறியீட்டு"
 
@@ -3439,12 +3482,12 @@ msgid "Print tasklist to browser"
 msgstr "டாச்க்ச்லிச்ட்டை உலாவிக்கு அச்சிடுக"
 
 #. plugin name
-#: zim/plugins/quicknote.py:143 zim/plugins/quicknote.py:178
+#: zim/plugins/quicknote.py:161 zim/plugins/quicknote.py:195
 msgid "Quick Note"
 msgstr "விரைவான குறிப்பு"
 
 #. plugin description
-#: zim/plugins/quicknote.py:144
+#: zim/plugins/quicknote.py:162
 msgid ""
 "This plugin adds a dialog to quickly drop some text or clipboard\n"
 "content into a zim page.\n"
@@ -3457,32 +3500,34 @@ msgstr ""
 " இது சிம்முடன் ஒரு முக்கிய சொருகி கப்பல்.\n"
 
 #. menu item
-#: zim/plugins/quicknote.py:161
+#: zim/plugins/quicknote.py:179
 msgid "Quick Note..."
 msgstr "விரைவான குறிப்பு ..."
 
-#. text entry field
-#: zim/plugins/quicknote.py:222
-msgid "Page section"
-msgstr "பக்க பிரிவு"
-
-#. checkbox in Quick Note dialog
-#: zim/plugins/quicknote.py:223
+#. checkbox; if a new page should be created or not.
+#: zim/plugins/quicknote.py:242
 msgid "Create a new page for each note"
 msgstr "ஒவ்வொரு குறிப்பிற்கும் புதிய பக்கத்தை உருவாக்கவும்"
 
-#. text entry field
-#: zim/plugins/quicknote.py:224 zim/plugins/tableeditor.py:1004
+#. text entry field; section when creating a new page.
+#: zim/plugins/quicknote.py:243
+msgid "Page section"
+msgstr "பக்க பிரிவு"
+
+#. text entry field; title when creating a new page.
+#: zim/plugins/quicknote.py:244 zim/plugins/tableeditor.py:1004
 msgid "Title"
 msgstr "தலைப்பு"
 
-#. Option in quicknote dialog
-#: zim/plugins/quicknote.py:261
-msgid "Open _Page"
+#. checkbox; open page.
+#: zim/plugins/quicknote.py:245
+#, fuzzy
+#| msgid "Open _Page"
+msgid "Open _page"
 msgstr "திறந்த _ பக்கம்"
 
 #. confirm closing quick note dialog
-#: zim/plugins/quicknote.py:325
+#: zim/plugins/quicknote.py:355
 msgid "Discard note?"
 msgstr "குறிப்பை நிராகரிக்கவா?"
 
@@ -3593,12 +3638,12 @@ msgid "Sequence Diagram"
 msgstr "வரிசை வரைபடம்"
 
 #. plugin name
-#: zim/plugins/sourceview.py:70
+#: zim/plugins/sourceview.py:72
 msgid "Source View"
 msgstr "மூல பார்வை"
 
 #. plugin description
-#: zim/plugins/sourceview.py:71
+#: zim/plugins/sourceview.py:73
 msgid ""
 "This plugin allows inserting 'Code Blocks' in the page. These will be\n"
 "shown as embedded widgets with syntax highlighting, line numbers etc.\n"
@@ -3608,97 +3653,97 @@ msgstr ""
 "காட்டப்பட்டுள்ளது.\n"
 
 #. option value
-#: zim/plugins/sourceview.py:80
+#: zim/plugins/sourceview.py:82
 msgid "Never wrap lines"
 msgstr "ஒருபோதும் கோடுகளை மடிக்க வேண்டாம்"
 
 #. option value
-#: zim/plugins/sourceview.py:81
+#: zim/plugins/sourceview.py:83
 msgid "Try wrap at word boundaries or character"
 msgstr "சொல் எல்லைகள் அல்லது தன்மையில் மடக்க முயற்சிக்கவும்"
 
 #. option value
-#: zim/plugins/sourceview.py:82
+#: zim/plugins/sourceview.py:84
 msgid "Always wrap at character"
 msgstr "எப்போதும் கதாபாத்திரத்தில் போர்த்தவும்"
 
 #. option value
-#: zim/plugins/sourceview.py:83
+#: zim/plugins/sourceview.py:85
 msgid "Always wrap at word boundaries"
 msgstr "எப்போதும் சொல் எல்லைகளை மடிக்கவும்"
 
 #. preference option for sourceview plugin
-#: zim/plugins/sourceview.py:87
+#: zim/plugins/sourceview.py:89
 msgid "Auto indenting"
 msgstr "ஆட்டோ இன்டென்டிங்"
 
 #. preference option for sourceview plugin
-#: zim/plugins/sourceview.py:89
+#: zim/plugins/sourceview.py:91
 msgid "Smart Home key"
 msgstr "அறிவுள்ள ஓம் திறவுகோல்"
 
 #. preference option for sourceview plugin
-#: zim/plugins/sourceview.py:91
+#: zim/plugins/sourceview.py:93
 msgid "Highlight current line"
 msgstr "தற்போதைய வரியை முன்னிலைப்படுத்தவும்"
 
 #. preference option for sourceview plugin
-#: zim/plugins/sourceview.py:93
+#: zim/plugins/sourceview.py:95
 msgid "Show right margin"
 msgstr "சரியான விளிம்பைக் காட்டு"
 
 #. preference option for sourceview plugin
-#: zim/plugins/sourceview.py:95
+#: zim/plugins/sourceview.py:97
 msgid "Right margin position"
 msgstr "வலது விளிம்பு நிலை"
 
 #. preference option for sourceview plugin
-#: zim/plugins/sourceview.py:97
+#: zim/plugins/sourceview.py:99
 msgid "Tab width"
 msgstr "தாவல் அகலம்"
 
 #. preference option for sourceview plugin
-#: zim/plugins/sourceview.py:101
+#: zim/plugins/sourceview.py:103
 msgid "Text wrap mode"
 msgstr "உரை மடக்கு முறை"
 
 #. preference option for sourceview plugin
-#: zim/plugins/sourceview.py:103
+#: zim/plugins/sourceview.py:105
 msgid "Theme"
 msgstr "கருப்பொருள்"
 
 #. menu item
-#: zim/plugins/sourceview.py:118
+#: zim/plugins/sourceview.py:120
 msgid "Code Block"
 msgstr "குறியீடு தொகுதி"
 
 #. preference option for sourceview plugin
-#: zim/plugins/sourceview.py:344
+#: zim/plugins/sourceview.py:347
 msgid "Show Line Numbers"
 msgstr "வரி எண்களைக் காட்டு"
 
 #. input label
-#: zim/plugins/sourceview.py:354 zim/plugins/sourceview.py:380
+#: zim/plugins/sourceview.py:357 zim/plugins/sourceview.py:383
 msgid "Syntax"
 msgstr "தொடரியல்"
 
 #. dialog title
-#: zim/plugins/sourceview.py:371
+#: zim/plugins/sourceview.py:374
 msgid "Insert Code Block"
 msgstr "குறியீடு தொகுதியைச் செருகவும்"
 
 #. input checkbox
-#: zim/plugins/sourceview.py:407
+#: zim/plugins/sourceview.py:410
 msgid "Display line numbers"
 msgstr "வரி எண்களைக் காண்பி"
 
 #. plugin name
-#: zim/plugins/spell.py:103
+#: zim/plugins/spell.py:121
 msgid "Spell Checker"
 msgstr "எழுத்துப்பிழை சரிபார்ப்பு"
 
 #. plugin description
-#: zim/plugins/spell.py:104
+#: zim/plugins/spell.py:122
 msgid ""
 "Adds spell checking support using \n"
 "gtkspellchecker, Gspell, or gtkspell libraries.\n"
@@ -3710,24 +3755,24 @@ msgstr ""
 "\n"
 " இது சிம்முடன் ஒரு முக்கிய சொருகி கப்பல்.\n"
 
-#. menu item
-#: zim/plugins/spell.py:166
-msgid "Check _spelling"
-msgstr "எழுத்துப்பிழை சரிபார்க்கவும்"
-
 #. error message
-#: zim/plugins/spell.py:198
+#: zim/plugins/spell.py:176
 msgid "Could not load spell checking"
 msgstr "எழுத்துப்பிழை சோதனை ஏற்ற முடியவில்லை"
 
 #. error message explanation
-#: zim/plugins/spell.py:200
+#: zim/plugins/spell.py:178
 msgid ""
 "This could mean you don't have the proper\n"
 "dictionaries installed"
 msgstr ""
 "இதன் பொருள் உங்களிடம் சரியானது இல்லை\n"
 " அகராதிகள் நிறுவப்பட்டுள்ளன"
+
+#. menu item
+#: zim/plugins/spell.py:187
+msgid "Check _spelling"
+msgstr "எழுத்துப்பிழை சரிபார்க்கவும்"
 
 #. alignment option
 #: zim/plugins/tableeditor.py:55
@@ -3954,28 +3999,28 @@ msgid "Set ToC fontsize"
 msgstr "TOC எழுத்துரு அமைக்கவும்"
 
 #. action to lower level of heading in the text
-#: zim/plugins/tableofcontents.py:429
+#: zim/plugins/tableofcontents.py:431
 msgid "Demote"
 msgstr "பதவி"
 
 #. action to raise level of heading in the text
-#: zim/plugins/tableofcontents.py:431
+#: zim/plugins/tableofcontents.py:433
 msgid "Promote"
 msgstr "ஊக்குவிக்கவும்"
 
 #. widget label
-#: zim/plugins/tableofcontents.py:545
+#: zim/plugins/tableofcontents.py:547
 msgid "T_oC"
 msgstr "T_oc"
 
 #. small label above Table Of Contents
-#: zim/plugins/tableofcontents.py:575
+#: zim/plugins/tableofcontents.py:577
 msgid "ToC"
 msgstr "TOC"
 
 #. plugin name | 
 #. header in selection drop down
-#: zim/plugins/tags.py:37 zim/plugins/tasklist/gui.py:753
+#: zim/plugins/tags.py:37 zim/plugins/tasklist/gui.py:746
 msgid "Tags"
 msgstr "குறிச்சொற்கள்"
 
@@ -3989,142 +4034,24 @@ msgstr ""
 "குறியீட்டை வழங்குகிறது.\n"
 
 #. title for sidepane tab
-#: zim/plugins/tags.py:98
+#: zim/plugins/tags.py:101
 msgid "T_ags"
 msgstr "குறிசொற்கள்"
 
 #. menu option
-#: zim/plugins/tags.py:148
+#: zim/plugins/tags.py:151
 msgid "Show full page name"
 msgstr "முழு பக்க பெயரையும் காட்டு"
 
 #. menu option
-#: zim/plugins/tags.py:153
+#: zim/plugins/tags.py:156
 msgid "Sort pages by tags"
 msgstr "குறிச்சொற்களால் பக்கங்களை வரிசைப்படுத்தவும்"
 
 #. Context menu item for tag cloud
-#: zim/plugins/tags.py:444
+#: zim/plugins/tags.py:447
 msgid "Sort alphabetically"
 msgstr "அகர வரிசைப்படி வரிசைப்படுத்துங்கள்"
-
-#. list with tasks
-#: zim/plugins/tasklist/gui.py:90
-msgid "All Tasks"
-msgstr "அனைத்து பணிகளும்"
-
-#. list with tasks
-#: zim/plugins/tasklist/gui.py:91
-msgid "Active"
-msgstr "செயலில்"
-
-#. list with tasks (GTD style category)
-#: zim/plugins/tasklist/gui.py:92
-msgid "Inbox"
-msgstr "இன்பாக்ச்"
-
-#. list with tasks (GTD style category)
-#: zim/plugins/tasklist/gui.py:93
-msgid "Next Actions"
-msgstr "அடுத்த செயல்கள்"
-
-#. list with tasks (GTD style category)
-#: zim/plugins/tasklist/gui.py:94
-msgid "Projects"
-msgstr "திட்டங்கள்"
-
-#. list with tasks (GTD style category)
-#: zim/plugins/tasklist/gui.py:95
-msgid "Waiting"
-msgstr "காத்திருக்கிறது"
-
-#. placeholder label for sidepane
-#: zim/plugins/tasklist/gui.py:141
-msgid "No tasks"
-msgstr "பணிகள் இல்லை"
-
-#. tooltip
-#: zim/plugins/tasklist/gui.py:167
-msgid "Show tasklist window"
-msgstr "டாச்க்ச்லிச்ட் சாளரத்தைக் காட்டு"
-
-#. label for filtering/searching tasks
-#: zim/plugins/tasklist/gui.py:212
-msgid "Filter tasks"
-msgstr "பணிகளை வடிகட்டவும்"
-
-#. tab label for side pane
-#: zim/plugins/tasklist/gui.py:275
-msgid "Tas_ks"
-msgstr "பணிகள்"
-
-#. Window title for tasklist
-#: zim/plugins/tasklist/gui.py:375 zim/plugins/tasklist/gui.py:380
-msgid "Tasks"
-msgstr "பணிகள்"
-
-#. number of tasks shown in tasklist window
-#: zim/plugins/tasklist/gui.py:454
-#, python-format
-msgid "%s shown"
-msgstr "%s காட்டப்பட்டுள்ளது"
-
-#. selection menu option
-#: zim/plugins/tasklist/gui.py:506
-msgid "Show open tasks"
-msgstr "திறந்த பணிகளைக் காட்டு"
-
-#. selection menu option
-#: zim/plugins/tasklist/gui.py:507
-msgid "Show closed tasks"
-msgstr "மூடிய பணிகளைக் காட்டு"
-
-#. selection menu option
-#: zim/plugins/tasklist/gui.py:508
-msgid "Show cancelled tasks"
-msgstr "ரத்து செய்யப்பட்ட பணிகளைக் காட்டு"
-
-#. selection menu option
-#: zim/plugins/tasklist/gui.py:509
-msgid "Show migrated tasks"
-msgstr "இடம்பெயர்ந்த பணிகளைக் காட்டு"
-
-#. selection menu option
-#: zim/plugins/tasklist/gui.py:510
-msgid "Show trans-migrated tasks"
-msgstr "டிரான்ச் இடம்பெயர்ந்த பணிகளைக் காட்டு"
-
-#. Header for list selection in tasklist window
-#: zim/plugins/tasklist/gui.py:603
-msgid "Lists"
-msgstr "பட்டியல்கள்"
-
-#. selection of tasks without tags
-#: zim/plugins/tasklist/gui.py:696
-msgid "Untagged"
-msgstr "அவிழ்க்கப்படாதது"
-
-#. header in selection drop down
-#: zim/plugins/tasklist/gui.py:751
-msgid "Labels"
-msgstr "சிட்டைகள்"
-
-#. Column header Task List dialog
-#: zim/plugins/tasklist/gui.py:895
-msgid "Task"
-msgstr "பணி"
-
-#. Column header Task List dialog | 
-#. due date for task
-#: zim/plugins/tasklist/gui.py:946 zim/plugins/tasklist/gui.py:1241
-msgid "Due"
-msgstr "காரணமாக"
-
-#. Column header Task List dialog | 
-#. start date for task
-#: zim/plugins/tasklist/gui.py:947 zim/plugins/tasklist/gui.py:1239
-msgid "Start"
-msgstr "தொடங்கு"
 
 #. plugin name | 
 #. menu item
@@ -4237,6 +4164,124 @@ msgstr "தேர்வு பலகத்தில் பக்க பெயர
 #: zim/plugins/tasklist/__init__.py:85
 msgid "Don't count Saturday and Sunday as working days"
 msgstr "காரி மற்றும் ஞாயிற்றுக்கிழமை வேலை நாட்களாக எண்ண வேண்டாம்"
+
+#. list with tasks
+#: zim/plugins/tasklist/gui.py:94
+msgid "All Tasks"
+msgstr "அனைத்து பணிகளும்"
+
+#. list with tasks
+#: zim/plugins/tasklist/gui.py:95
+msgid "Active"
+msgstr "செயலில்"
+
+#. list with tasks (GTD style category)
+#: zim/plugins/tasklist/gui.py:96
+msgid "Inbox"
+msgstr "இன்பாக்ச்"
+
+#. list with tasks (GTD style category)
+#: zim/plugins/tasklist/gui.py:97
+msgid "Next Actions"
+msgstr "அடுத்த செயல்கள்"
+
+#. list with tasks (GTD style category)
+#: zim/plugins/tasklist/gui.py:98
+msgid "Projects"
+msgstr "திட்டங்கள்"
+
+#. list with tasks (GTD style category)
+#: zim/plugins/tasklist/gui.py:99
+msgid "Waiting"
+msgstr "காத்திருக்கிறது"
+
+#. placeholder label for sidepane
+#: zim/plugins/tasklist/gui.py:145
+msgid "No tasks"
+msgstr "பணிகள் இல்லை"
+
+#. tooltip
+#: zim/plugins/tasklist/gui.py:171
+msgid "Show tasklist window"
+msgstr "டாச்க்ச்லிச்ட் சாளரத்தைக் காட்டு"
+
+#. label for filtering/searching tasks
+#: zim/plugins/tasklist/gui.py:216
+msgid "Filter tasks"
+msgstr "பணிகளை வடிகட்டவும்"
+
+#. tab label for side pane
+#: zim/plugins/tasklist/gui.py:279
+msgid "Tas_ks"
+msgstr "பணிகள்"
+
+#. Window title for tasklist
+#: zim/plugins/tasklist/gui.py:371 zim/plugins/tasklist/gui.py:376
+msgid "Tasks"
+msgstr "பணிகள்"
+
+#. number of tasks shown in tasklist window
+#: zim/plugins/tasklist/gui.py:450
+#, python-format
+msgid "%s shown"
+msgstr "%s காட்டப்பட்டுள்ளது"
+
+#. selection menu option
+#: zim/plugins/tasklist/gui.py:502
+msgid "Show open tasks"
+msgstr "திறந்த பணிகளைக் காட்டு"
+
+#. selection menu option
+#: zim/plugins/tasklist/gui.py:503
+msgid "Show closed tasks"
+msgstr "மூடிய பணிகளைக் காட்டு"
+
+#. selection menu option
+#: zim/plugins/tasklist/gui.py:504
+msgid "Show cancelled tasks"
+msgstr "ரத்து செய்யப்பட்ட பணிகளைக் காட்டு"
+
+#. selection menu option
+#: zim/plugins/tasklist/gui.py:505
+msgid "Show migrated tasks"
+msgstr "இடம்பெயர்ந்த பணிகளைக் காட்டு"
+
+#. selection menu option
+#: zim/plugins/tasklist/gui.py:506
+msgid "Show trans-migrated tasks"
+msgstr "டிரான்ச் இடம்பெயர்ந்த பணிகளைக் காட்டு"
+
+#. Header for list selection in tasklist window
+#: zim/plugins/tasklist/gui.py:596
+msgid "Lists"
+msgstr "பட்டியல்கள்"
+
+#. selection of tasks without tags
+#: zim/plugins/tasklist/gui.py:689
+msgid "Untagged"
+msgstr "அவிழ்க்கப்படாதது"
+
+#. header in selection drop down
+#: zim/plugins/tasklist/gui.py:744
+msgid "Labels"
+msgstr "சிட்டைகள்"
+
+#. Column header Task List dialog
+#: zim/plugins/tasklist/gui.py:962
+msgid "Task"
+msgstr "பணி"
+
+#. Column header Task List dialog | 
+#. due date for task
+#: zim/plugins/tasklist/gui.py:1013 zim/plugins/tasklist/gui.py:1283
+msgid "Due"
+msgstr "காரணமாக"
+
+#. Column header Task List dialog | 
+#. start date for task
+#: zim/plugins/tasklist/gui.py:1014 zim/plugins/tasklist/gui.py:1281
+msgid "Start"
+msgstr "தொடங்கு"
 
 #. toolbar style
 #: zim/plugins/toolbar.py:19
@@ -4364,74 +4409,85 @@ msgstr ""
 "\n"
 " இது சிம்முடன் ஒரு முக்கிய சொருகி கப்பல்.\n"
 
-#. Label for plugin preference
+#. Label for plugin preference | 
+#. Label for notebook preference
 #: zim/plugins/versioncontrol/__init__.py:67
+#: zim/plugins/versioncontrol/__init__.py:74
 msgid "Autosave version when the notebook is closed"
 msgstr "ஆட்டோசேவ் பதிப்பு நோட்புக் மூடப்படும் போது"
 
-#. Label for plugin preference
+#. Label for plugin preference | 
+#. Label for notebook preference
 #: zim/plugins/versioncontrol/__init__.py:68
+#: zim/plugins/versioncontrol/__init__.py:75
 msgid "Autosave version on regular intervals"
 msgstr "ஆட்டோசேவ் பதிப்பு வழக்கமான இடைவெளியில்"
 
-#. Label for plugin preference
+#. Label for plugin preference | 
+#. Label for notebook preference
 #: zim/plugins/versioncontrol/__init__.py:69
+#: zim/plugins/versioncontrol/__init__.py:76
 msgid "Autosave interval in minutes"
 msgstr "நிமிடங்களில் ஆட்டோசேவ் இடைவெளி"
 
+#. Label for notebook properties
+#: zim/plugins/versioncontrol/__init__.py:73
+msgid "Override global preferences"
+msgstr ""
+
 #. default version comment for auto-saved versions
-#: zim/plugins/versioncontrol/__init__.py:201
+#: zim/plugins/versioncontrol/__init__.py:220
 msgid "Automatically saved version from zim"
 msgstr "சிம்மிலிருந்து தானாக சேமிக்கப்பட்ட பதிப்பு"
 
 #. menu item
-#: zim/plugins/versioncontrol/__init__.py:209
+#: zim/plugins/versioncontrol/__init__.py:228
 msgid "S_ave Version..."
 msgstr "S_AVE பதிப்பு ..."
 
 #. menu item
-#: zim/plugins/versioncontrol/__init__.py:226
+#: zim/plugins/versioncontrol/__init__.py:245
 msgid "_Versions..."
 msgstr "_Versions ..."
 
 #. verbose error description
-#: zim/plugins/versioncontrol/__init__.py:238
+#: zim/plugins/versioncontrol/__init__.py:257
 msgid ""
 "There are no changes in this notebook since the last version that was saved"
 msgstr "சேமிக்கப்பட்ட கடைசி பதிப்பிலிருந்து இந்த நோட்புக்கில் எந்த மாற்றங்களும் இல்லை"
 
 #. Short error descriotion
-#: zim/plugins/versioncontrol/__init__.py:241
+#: zim/plugins/versioncontrol/__init__.py:260
 msgid "No changes since last version"
 msgstr "கடைசி பதிப்பிலிருந்து மாற்றங்கள் இல்லை"
 
 #. option value
-#: zim/plugins/versioncontrol/__init__.py:257
+#: zim/plugins/versioncontrol/__init__.py:276
 msgid "Bazaar"
 msgstr "கடைவீதி"
 
 #. option value
-#: zim/plugins/versioncontrol/__init__.py:258
+#: zim/plugins/versioncontrol/__init__.py:277
 msgid "Mercurial"
 msgstr "மெர்குரியல்"
 
 #. option value
-#: zim/plugins/versioncontrol/__init__.py:259
+#: zim/plugins/versioncontrol/__init__.py:278
 msgid "Git"
 msgstr "அறிவிலி"
 
 #. option value
-#: zim/plugins/versioncontrol/__init__.py:260
+#: zim/plugins/versioncontrol/__init__.py:279
 msgid "Fossil"
 msgstr "புதைபடிவ"
 
 #. Question dialog
-#: zim/plugins/versioncontrol/__init__.py:720
+#: zim/plugins/versioncontrol/__init__.py:739
 msgid "Enable Version Control?"
 msgstr "பதிப்பு கட்டுப்பாட்டை இயக்கவா?"
 
 #. Detailed question
-#: zim/plugins/versioncontrol/__init__.py:722
+#: zim/plugins/versioncontrol/__init__.py:741
 msgid ""
 "Version control is currently not enabled for this notebook.\n"
 "Do you want to enable it?"
@@ -4440,43 +4496,43 @@ msgstr ""
 " அதை இயக்க விரும்புகிறீர்களா?"
 
 #. option to chose versioncontrol backend
-#: zim/plugins/versioncontrol/__init__.py:733
+#: zim/plugins/versioncontrol/__init__.py:752
 msgid "Backend"
 msgstr "பின்தளத்தில்"
 
 #. dialog title
-#: zim/plugins/versioncontrol/__init__.py:751
+#: zim/plugins/versioncontrol/__init__.py:770
 msgid "Save Version"
 msgstr "பதிப்பை சேமிக்கவும்"
 
 #. Dialog text
-#: zim/plugins/versioncontrol/__init__.py:758
+#: zim/plugins/versioncontrol/__init__.py:777
 msgid "Please enter a comment for this version"
 msgstr "இந்த பதிப்பிற்கு ஒரு கருத்தை உள்ளிடவும்"
 
 #. default version comment in the "save version" dialog
-#: zim/plugins/versioncontrol/__init__.py:764
+#: zim/plugins/versioncontrol/__init__.py:783
 msgid "Saved version from zim"
 msgstr "சிம்மிலிருந்து சேமிக்கப்பட்ட பதிப்பு"
 
 #. dialog title
-#: zim/plugins/versioncontrol/__init__.py:798
-#: zim/plugins/versioncontrol/__init__.py:815
+#: zim/plugins/versioncontrol/__init__.py:817
+#: zim/plugins/versioncontrol/__init__.py:834
 msgid "Versions"
 msgstr "பதிப்புகள்"
 
 #. Option in versions dialog to show version for single page
-#: zim/plugins/versioncontrol/__init__.py:822
+#: zim/plugins/versioncontrol/__init__.py:841
 msgid "_Page"
 msgstr "_ பக்கம்"
 
 #. Button label
-#: zim/plugins/versioncontrol/__init__.py:837
+#: zim/plugins/versioncontrol/__init__.py:856
 msgid "View _Annotated"
 msgstr "_ANNOTATED ஐக் காண்க"
 
 #. Help text in versions dialog
-#: zim/plugins/versioncontrol/__init__.py:842
+#: zim/plugins/versioncontrol/__init__.py:861
 msgid ""
 "Select a version to see changes between that version and the current\n"
 "state. Or select multiple versions to see changes between those versions.\n"
@@ -4487,37 +4543,37 @@ msgstr ""
 "தேர்ந்தெடுக்கவும்.\n"
 
 #. version details
-#: zim/plugins/versioncontrol/__init__.py:867
+#: zim/plugins/versioncontrol/__init__.py:886
 msgid "Comment"
 msgstr "கருத்து"
 
 #. Button label
-#: zim/plugins/versioncontrol/__init__.py:882
+#: zim/plugins/versioncontrol/__init__.py:901
 msgid "_Restore Version"
 msgstr "_ ரெச்டோர் பதிப்பு"
 
 #. button in versions dialog for diff
-#: zim/plugins/versioncontrol/__init__.py:887
+#: zim/plugins/versioncontrol/__init__.py:906
 msgid "Show _Changes"
 msgstr "_ மாற்றங்களைக் காட்டு"
 
 #. button in versions dialog for side by side comparison
-#: zim/plugins/versioncontrol/__init__.py:893
+#: zim/plugins/versioncontrol/__init__.py:912
 msgid "_Side by Side"
 msgstr "பக்கவாட்டில் (_S)"
 
 #. dialog title
-#: zim/plugins/versioncontrol/__init__.py:981
+#: zim/plugins/versioncontrol/__init__.py:1000
 msgid "Annotated Page Source"
 msgstr "சிறுகுறிப்பு பக்க மூல"
 
 #. Confirmation question
-#: zim/plugins/versioncontrol/__init__.py:990
+#: zim/plugins/versioncontrol/__init__.py:1009
 msgid "Restore page to saved version?"
 msgstr "சேமித்த பதிப்பிற்கு பக்கத்தை மீட்டெடுக்கவா?"
 
 #. Detailed question, "%(page)s" is replaced by the page, "%(version)s" by the version id
-#: zim/plugins/versioncontrol/__init__.py:991
+#: zim/plugins/versioncontrol/__init__.py:1010
 #, python-format
 msgid ""
 "Do you want to restore page: %(page)s\n"
@@ -4531,12 +4587,12 @@ msgstr ""
 " கடைசியாக சேமிக்கப்பட்ட பதிப்பிலிருந்து அனைத்து மாற்றங்களும் இழக்கப்படும்!"
 
 #. dialog title
-#: zim/plugins/versioncontrol/__init__.py:1006
+#: zim/plugins/versioncontrol/__init__.py:1025
 msgid "Changes"
 msgstr "மாற்றங்கள்"
 
 #. Column header versions dialog
-#: zim/plugins/versioncontrol/__init__.py:1064
+#: zim/plugins/versioncontrol/__init__.py:1083
 msgid "Rev"
 msgstr "ரெவ்"
 
