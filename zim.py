@@ -107,8 +107,14 @@ def init_macOS():
 
 def main():
 	# Run these functions before importing any application modules
-	installdir = os.path.dirname(os.path.abspath(__file__))
-		# Either the folder of the python script, or the frozen executable
+	if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'): # we are running in a bundle
+		if os.path.basename(sys._MEIPASS) == '_internal': # default as of PyInstaller v6.0
+			installdir = os.path.dirname(sys._MEIPASS)
+		else:
+			installdir = sys._MEIPASS
+	else:
+		installdir = os.path.dirname(os.path.abspath(__file__))
+
 	init_environment(installdir)
 	init_logging()
 	init_macOS()
