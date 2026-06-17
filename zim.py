@@ -73,7 +73,10 @@ def init_logging():
 	# See http://www.py2exe.org/index.cgi/StderrLog
 	# Do the same for other platforms if not running from a terminal
 	py2exe = os.name == "nt" and (sys.argv[0].endswith('.exe') or sys.executable.endswith('pythonw.exe'))
-	if py2exe or not (sys.stdout.isatty() and sys.stderr.isatty()):
+	if py2exe or not (
+		sys.stdout and sys.stdout.isatty() and
+		sys.stderr and sys.stderr.isatty()
+	):
 		import zim
 		import zim.newfs
 		dir = zim.newfs.get_tmpdir()
